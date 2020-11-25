@@ -3,10 +3,6 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { setFirestore, getmailList } from "./firebase";
-
-// setFirestore();
-getmailList();
 
 ReactDOM.render(
   <React.StrictMode>
