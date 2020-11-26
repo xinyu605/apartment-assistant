@@ -1,0 +1,92 @@
+@import "./../common";
+
+.untakenMailList {
+  width: 980px;
+  padding: 10px;
+  margin: auto;
+}
+
+.img {
+  width: 100%;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .titleContainer {
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+
+    .titleImg {
+      width: 50px;
+      height: 50px;
+    }
+
+    .title {
+      margin: 10px;
+      font-size: 1.2em;
+      font-weight: 600;
+    }
+  }
+
+  .buttonBox {
+    width: 140px;
+    height: 25px;
+    // padding: 6px;
+    margin: 10px 50px;
+    border: 1px solid $base-border-color;
+    border-radius: $base-border-radius;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 0;
+    position: relative;
+    .button {
+      margin: 6px;
+      padding: 6px;
+      z-index: 2;
+    }
+    .current {
+      color: #fff;
+    }
+    .buttonBackground {
+      width: 70px;
+      height: 25px;
+      border-radius: $base-border-radius;
+      position: absolute;
+      left: 0;
+      z-index: 1;
+      background-color: $base-button-background-color;
+    }
+  }
+}
+
+.mailList {
+  width: 96%;
+  margin: 20px auto;
+  padding: 10px 5px;
+  border: 1px solid $base-border-color;
+  border-radius: $list-border-radius;
+  box-shadow: $list-box-shadow;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+
+  .tableTitle,
+  .list {
+    padding: 10px 0;
+    grid-column: 1/9;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    justify-items: center;
+    align-items: center;
+  }
+
+  .tableTitle {
+    font-size: 1.2em;
+    font-weight: 600;
+  }
+}

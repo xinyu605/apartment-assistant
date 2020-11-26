@@ -14,35 +14,42 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 
-// export function setFirestore() {
-//   let ref = db.collection("mailbox").doc("mail");
-
-//   ref
-//     .set({
-//       date: "2020-11-25",
-//       receiver: "Xinyu",
-//       test: "test189",
-//     })
-//     .then(() => {
-//       console.log("set data successful");
-//     });
-// }
+/*******************
+ get resident list
+ *******************/
+export function getResidentList() {
+  let ref = db.collection("resident");
+  ref
+    .get()
+    .then((docRef) => {
+      docRef.forEach((doc) => {
+        if (doc.id) {
+          console.log(doc.data());
+        }
+      });
+    })
+    .catch(() => {
+      console.error("something wrong");
+    });
+}
 
 /****************************************
  get untaken mailList and taken mailList
  ****************************************/
 export function getMailList(status = false) {
   let ref = db.collection("mailbox");
-  ref
+  let data;
+  return ref
     .where("status", "==", status) //status= true (taken) | false (untaken)
     .get()
     .then((docRef) => {
       docRef.forEach((doc) => {
         if (doc.id) {
-          console.log(doc.data());
-          return doc.data();
+          data = doc.data();
+          return data;
         }
       });
+      return data;
     })
     .catch(() => {
       console.error("something wrong");
