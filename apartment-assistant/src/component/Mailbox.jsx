@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { SmallCalendar } from "./SmallCalendar";
 import styles from "./Mailbox.module.scss";
 // import PropTypes from "prop-types";
 import { getMailList } from "./../firebase";
 import { showDate } from "./../lib";
 
+/***************************************************************
+ UntakenMailList component: 
+ 1.Get props data (untakenMails) and render the /Mailbox page
+****************************************************************/
 function UntakenMailList(props) {
   console.log(props);
   let list = props.list;
@@ -17,6 +22,7 @@ function UntakenMailList(props) {
 
   return (
     <div className={styles.untakenMailList}>
+      {/* list header */}
       <div className={styles.header}>
         <div className={styles.titleContainer}>
           <div className={styles.titleImg}>img</div>
@@ -30,6 +36,7 @@ function UntakenMailList(props) {
         </div>
         <button>新增</button>
       </div>
+      {/* list body */}
       <div className={styles.mailList}>
         <div className={styles.tableTitle}>
           <div className="mailNumbers">編號</div>
@@ -52,12 +59,86 @@ function UntakenMailList(props) {
           <div className="receiveDate">{receiveDate}</div>
           <div className="place">{list.place}</div>
           <div className="remark">{list.remark}</div>
-          <div className="status">{changeStatus}</div>
+          <button className="status">{changeStatus}</button>
         </div>
       </div>
     </div>
   );
 }
+
+/***************************************************************
+ UpdataMailList component 
+****************************************************************/
+function UpdataMailList() {
+  return (
+    <div className="updateMailList" id="updateMailList">
+      <div className={styles.titleContainer}>
+        <div className={styles.titleImg}>img</div>
+        <h3 className={styles.title}>新增信件包裹</h3>
+      </div>
+      <div className="updateForm">
+        <form>
+          <label>編號</label>
+          <input type="text" placeholder="請輸入編號"></input>
+          <label>戶號</label>
+          <input type="text" placeholder="請輸入戶號"></input>
+          <label>收件人</label>
+          <input type="text" placeholder="請輸入收件人姓名"></input>
+          <label>信件包裹類型</label>
+          <select>
+            <option>普通平信</option>
+            <option>普通掛號信</option>
+            <option>限時掛號信</option>
+            <option>小型包裹</option>
+            <option>大型包裹</option>
+          </select>
+          <SmallCalendar />
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// /***************************************************************
+//  SmallCalendar component
+// ****************************************************************/
+// function SmallCalendar() {
+//   const [isCalendarShowing, setCalendarShowing] = useState(false);
+//   function toggleCalendar() {
+//     isCalendarShowing ? setCalendarShowing(false) : setCalendarShowing(true);
+//   }
+
+//   if (isCalendarShowing) {
+//     return (
+//       <div>
+//         <label>寄達日期</label>
+//         <input
+//           type="button"
+//           value="請選擇日期"
+//           onClick={toggleCalendar}
+//         ></input>
+//         <div>calendar</div>
+//       </div>
+//     );
+//   } else {
+//     return (
+//       <div>
+//         <label>寄達日期</label>
+//         <input
+//           type="button"
+//           value="請選擇日期"
+//           onClick={toggleCalendar}
+//         ></input>
+//       </div>
+//     );
+//   }
+// }
+
+/*****************************
+ Mailbox component:
+ 1.Get data from Firestore
+ 2.Render 
+******************************/
 
 function Mailbox() {
   const [data, setData] = useState({});
@@ -66,12 +147,13 @@ function Mailbox() {
     getMailList(false).then((mailList) => {
       setData(mailList);
     });
-  }, []);
+  }, []); //[]內放需要監聽(有變動就要執行function)的state
 
   return (
     <div>
       <h2>信件包裹紀錄</h2>
       <UntakenMailList list={data} />
+      <UpdataMailList />
     </div>
   );
 }

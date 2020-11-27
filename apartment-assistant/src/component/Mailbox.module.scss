@@ -73,14 +73,14 @@
   border-radius: $list-border-radius;
   box-shadow: $list-box-shadow;
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(3, 1fr) repeat(2, 2fr) repeat(2, 1fr) 2fr;
 
   .tableTitle,
   .list {
     padding: 10px 0;
     grid-column: 1/9;
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    grid-template-columns: repeat(3, 1fr) repeat(2, 2fr) repeat(2, 1fr) 2fr;
     justify-items: center;
     align-items: center;
   }
