@@ -19,14 +19,14 @@ export function showCalendar(element, getMonth) {
   // console.log(element);
   const dateContainer = document.querySelector("#date");
   dateContainer.innerHTML = "";
-  console.log(selectMonth);
+  // console.log(selectMonth);
 
   //3.get time right now
   const thisYear = new Date().getFullYear();
 
   //4.get what day is the first day in the selected month
   const firstDay = dayStart(thisYear, selectMonth);
-  console.log(firstDay); //return 0 means Sunday
+  // console.log(firstDay); //return 0 means Sunday
 
   //5.get the total days in this month
   const totalDaysThisMonth = daysMonth(
@@ -35,7 +35,7 @@ export function showCalendar(element, getMonth) {
     monthOlympic,
     monthNormal
   );
-  console.log(totalDaysThisMonth);
+  // console.log(totalDaysThisMonth);
 
   //6.render
   //在當月第一天前面建立空白的<li>
@@ -46,6 +46,8 @@ export function showCalendar(element, getMonth) {
   //填滿當月日期
   for (let i = 1; i <= totalDaysThisMonth; i++) {
     let date = document.createElement("li");
+    date.id = `date${i}`;
+    date.classList.add("day");
     date.innerHTML = i;
     dateContainer.appendChild(date);
   }

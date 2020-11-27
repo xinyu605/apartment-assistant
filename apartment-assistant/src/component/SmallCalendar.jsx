@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./SmallCalendar.module.scss";
-import { showCalendar } from "./../lib";
+import { showCalendar, changeDateClass } from "./../lib";
 
 /************************
  SmallCalendar component 
@@ -8,7 +8,9 @@ import { showCalendar } from "./../lib";
 export function SmallCalendar() {
   const [isCalendarShowing, setCalendarShowing] = useState(false);
   const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
-  console.log(new Date().getMonth() + 1);
+  // console.log(new Date().getMonth() + 1);
+  const [receiveDate, setReceiveDate] = useState(new Date().getDate());
+
   function toggleCalendar() {
     isCalendarShowing ? setCalendarShowing(false) : setCalendarShowing(true);
   }
@@ -21,8 +23,21 @@ export function SmallCalendar() {
     if (isCalendarShowing) {
       const containerElement = document.querySelector("#calendar");
       showCalendar(containerElement, thisMonth);
+      const selectMonth = containerElement.querySelectorAll("option");
+      selectMonth[thisMonth - 1].setAttribute("selected", true);
+      const selectDay = document.querySelector(`#date${receiveDate}`);
+      // console.log(selectDay);
+      selectDay.classList.add(styles.current);
     }
   }, [isCalendarShowing, thisMonth]);
+
+  // useEffect(() => {
+  //   if (isCalendarShowing) {
+  //     const containerElement = document.querySelector("#calendar");
+
+  //   }
+  // });
+  // }, [receiveDate]);
 
   if (isCalendarShowing) {
     return (

@@ -35,7 +35,6 @@
   .buttonBox {
     width: 140px;
     height: 25px;
-    // padding: 6px;
     margin: 10px 50px;
     border: 1px solid $base-border-color;
     border-radius: $base-border-radius;
@@ -45,14 +44,17 @@
     align-items: center;
     z-index: 0;
     position: relative;
+
     .button {
       margin: 6px;
       padding: 6px;
       z-index: 2;
     }
+
     .current {
       color: #fff;
     }
+
     .buttonBackground {
       width: 70px;
       height: 25px;
