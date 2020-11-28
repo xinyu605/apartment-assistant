@@ -38,14 +38,14 @@ export function getResidentList() {
  ****************************************/
 export function getMailList(status = false) {
   let ref = db.collection("mailbox");
-  let data;
+  let data = [];
   return ref
     .where("status", "==", status) //status= true (taken) | false (untaken)
     .get()
     .then((docRef) => {
       docRef.forEach((doc) => {
         if (doc.id) {
-          data = doc.data();
+          data = [...data, doc.data()];
           return data;
         }
       });
@@ -87,6 +87,22 @@ export function getReceiverInfo(residentNumbers, mailId) {
         .then(() => {
           console.log("success to append familyMembers to receiver info!");
         });
+    })
+    .catch(() => {
+      console.error("something wrong");
+    });
+}
+
+/****************************************
+ upload new mail list to firestore
+ ****************************************/
+export function uploadMailList(data) {
+  console.log(data);
+  let refMailbox = db.collection("mailbox");
+  refMailbox
+    .add(data)
+    .then(() => {
+      console.log("add data successful!");
     })
     .catch(() => {
       console.error("something wrong");

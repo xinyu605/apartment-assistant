@@ -10,10 +10,12 @@ import { getMailList } from "./../firebase";
 ******************************/
 
 function Mailbox() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState([]);
   // useEffect will run only after an initial render, and after an update on data is occurred
   useEffect(() => {
     getMailList(false).then((mailList) => {
+      console.log(mailList);
+      // setData((data) => [...data, mailList]);
       setData(mailList);
     });
   }, []); //[]內放需要監聽(有變動就要執行function)的state

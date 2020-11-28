@@ -4,14 +4,30 @@ import { showDate } from "./../lib";
 
 export function UntakenMailList(props) {
   console.log(props);
-  let list = props.list;
-  let changeStatus;
+  let lists = props.list;
+  // let changeStatus;
   let receiveDate = "";
-  changeStatus = list.status ? "未領取" : "已領取";
+  // changeStatus = list.status ? "未領取" : "已領取";
 
-  if (list.receiveDate) {
-    receiveDate = showDate(list.receiveDate.seconds);
-  }
+  const List = lists.map((list) => {
+    if (list.receiveDate) {
+      receiveDate = showDate(list.receiveDate.seconds);
+    }
+    return (
+      <div className={styles.list} key={`mail${list.mailNumbers}`}>
+        <div className="mailNumbers">{list.mailNumbers}</div>
+        <div className="residentNumber">
+          {list.receiver ? list.receiver.residentNumbers : ""}
+        </div>
+        {list.receiver ? list.receiver.name : ""}
+        <div className="mailType">{list.mailType}</div>
+        <div className="receiveDate">{receiveDate}</div>
+        <div className="place">{list.place}</div>
+        <div className="remark">{list.remark}</div>
+        <button className="status">領取</button>
+      </div>
+    );
+  });
 
   return (
     <div className={styles.untakenMailList}>
@@ -41,19 +57,7 @@ export function UntakenMailList(props) {
           <div className="remark">備註</div>
           <div className="status">狀態變更</div>
         </div>
-        <div className={styles.list}>
-          <div className="mailNumbers">{list.mailNumbers}</div>
-          <div className="residentNumber">
-            {/* {list.receiver && list.receiver.residentNumbers} */}
-            {list.receiver ? list.receiver.residentNumbers : ""}
-          </div>
-          {list.receiver ? list.receiver.name : ""}
-          <div className="mailType">{list.mailType}</div>
-          <div className="receiveDate">{receiveDate}</div>
-          <div className="place">{list.place}</div>
-          <div className="remark">{list.remark}</div>
-          <button className="status">{changeStatus}</button>
-        </div>
+        {List}
       </div>
     </div>
   );

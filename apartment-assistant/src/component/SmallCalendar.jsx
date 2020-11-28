@@ -5,11 +5,21 @@ import { showCalendar } from "./../lib";
 /************************
  SmallCalendar component 
 *************************/
-export function SmallCalendar() {
+export function SmallCalendar(props) {
   const [isCalendarShowing, setCalendarShowing] = useState(false);
   const [thisYear, setThisYear] = useState(new Date().getFullYear());
   const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
   const [receiveDate, setReceiveDate] = useState(new Date().getDate());
+
+  // send initial date to UpdateMailList at beginning
+  useEffect(() => {
+    props.updateReceiveDate(thisYear, thisMonth, receiveDate);
+  }, []);
+
+  // send updated date to UpdateMailList when selected date changing
+  useEffect(() => {
+    props.updateReceiveDate(thisYear, thisMonth, receiveDate);
+  }, [isCalendarShowing, thisYear, thisMonth, receiveDate]);
 
   function toggleCalendar() {
     isCalendarShowing ? setCalendarShowing(false) : setCalendarShowing(true);

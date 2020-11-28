@@ -69,4 +69,15 @@
   .item {
     height: 35px;
   }
+
+  input,
+  select {
+    border: 1px solid $base-border-color;
+    border-radius: $base-border-radius;
+    margin: 10px 0;
+  }
+
+  .focus {
+    box-shadow: $light-box-shadow;
+  }
 }
