@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { SmallCalendar } from "./SmallCalendar";
 import styles from "./UpdateMailList.module.scss";
-import { uploadMailList } from "./../firebase";
+import { uploadMailList, getTimeStamp } from "./../firebase";
 
 export function UpdateMailList() {
   const [mailNumber, setMailNumber] = useState("");
@@ -15,7 +15,7 @@ export function UpdateMailList() {
 
   function updateReceiveDate(year, month, date) {
     // console.log(year, month, date);
-    const seconds = new Date(year, month - 1, date).getTime() / 1000;
+    const seconds = getTimeStamp(year, month, date);
     // console.log(seconds);
     setReceiveDate(seconds);
   }

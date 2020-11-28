@@ -65,6 +65,8 @@
 
 .mailList {
   width: 96%;
+  max-height: 500px;
+  overflow-y: scroll;
   margin: 20px auto;
   padding: 10px 5px;
   // border: 1px solid $base-border-color;

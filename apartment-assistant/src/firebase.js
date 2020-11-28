@@ -39,21 +39,24 @@ export function getResidentList() {
 export function getMailList(status = false) {
   let ref = db.collection("mailbox");
   let data = [];
-  return ref
-    .where("status", "==", status) //status= true (taken) | false (untaken)
-    .get()
-    .then((docRef) => {
-      docRef.forEach((doc) => {
-        if (doc.id) {
-          data = [...data, doc.data()];
-          return data;
-        }
-      });
-      return data;
-    })
-    .catch(() => {
-      console.error("something wrong");
-    });
+  return (
+    ref
+      .where("status", "==", status) //status= true (taken) | false (untaken)
+      // .orderBy("mailNumbers", "asc")
+      .get()
+      .then((docRef) => {
+        docRef.forEach((doc) => {
+          if (doc.id) {
+            data = [...data, doc.data()];
+            return data;
+          }
+        });
+        return data;
+      })
+      .catch(() => {
+        console.error("something wrong");
+      })
+  );
 }
 
 /********************************************************************************************
@@ -107,4 +110,15 @@ export function uploadMailList(data) {
     .catch(() => {
       console.error("something wrong");
     });
+}
+
+/****************************************
+ turn time into firebase timeStamp
+ ****************************************/
+export function getTimeStamp(year, month, date) {
+  const timeStamp = firebase.firestore.Timestamp.fromDate(
+    new Date(year, month - 1, date)
+  );
+  // console.log(timeStamp);
+  return timeStamp;
 }
