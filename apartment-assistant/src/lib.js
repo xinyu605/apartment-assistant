@@ -9,8 +9,7 @@ export function showDate(seconds) {
   return `${year}年${month}月${date}日`;
 }
 
-export function showCalendar(element, getMonth) {
-  let selectMonth = parseInt(getMonth);
+export function showCalendar(element, getYear, getMonth) {
   //1.create months in normal year and olympic year
   const monthNormal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const monthOlympic = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -19,19 +18,15 @@ export function showCalendar(element, getMonth) {
   // console.log(element);
   const dateContainer = document.querySelector("#date");
   dateContainer.innerHTML = "";
-  // console.log(selectMonth);
-
-  //3.get time right now
-  const thisYear = new Date().getFullYear();
 
   //4.get what day is the first day in the selected month
-  const firstDay = dayStart(thisYear, selectMonth);
+  const firstDay = dayStart(getYear, getMonth);
   // console.log(firstDay); //return 0 means Sunday
 
   //5.get the total days in this month
   const totalDaysThisMonth = daysMonth(
-    selectMonth,
-    thisYear,
+    getYear,
+    getMonth,
     monthOlympic,
     monthNormal
   );
@@ -58,7 +53,7 @@ function dayStart(year, month) {
   return tmpDate.getDay();
 }
 
-function daysMonth(month, year, monthOlympic, monthNormal) {
+function daysMonth(year, month, monthOlympic, monthNormal) {
   const tmpYear = year % 4;
   if (tmpYear === 0) {
     return monthOlympic[month - 1]; //回傳閏年的當月天數

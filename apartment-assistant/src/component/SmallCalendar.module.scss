@@ -9,15 +9,21 @@
 
   .title {
     display: flex;
+    justify-content: space-between;
 
     .year {
-      font-size: 1em;
-      margin: 10px;
+      width: 60px;
+      text-align: center;
+      margin-right: auto;
+      border-radius: $base-border-radius;
+      font-size: $font-size-small;
     }
 
     .month {
-      width: 60px;
-      border-radius: 5px;
+      width: 70px;
+      margin-right: 5px;
+      border-radius: $base-border-radius;
+      font-size: $font-size-small;
     }
   }
 
@@ -33,15 +39,19 @@
 
     li {
       margin: 5px;
-      padding: 3px;
+      padding: 4px;
+      text-align: center;
       cursor: pointer;
     }
 
+    .initial,
     .current {
+      width: 17px;
+      height: 17px;
       background-color: cadetblue;
       color: #fff;
       border-radius: 50%;
-      padding: 5px;
+      padding: 3px;
     }
   }
 }
