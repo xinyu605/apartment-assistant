@@ -1,13 +1,9 @@
 @import "./../common";
 
 .untakenMailList {
-  width: 980px;
+  width: 96%;
   padding: 10px;
   margin: auto;
-}
-
-.img {
-  width: 100%;
 }
 
 .header {
@@ -71,7 +67,7 @@
   width: 96%;
   margin: 20px auto;
   padding: 10px 5px;
-  border: 1px solid $base-border-color;
+  // border: 1px solid $base-border-color;
   border-radius: $list-border-radius;
   box-shadow: $list-box-shadow;
   display: grid;

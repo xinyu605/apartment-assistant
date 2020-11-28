@@ -74,14 +74,6 @@ function Resident() {
   );
 }
 
-// function Mailbox() {
-//   return (
-//     <div>
-//       <h2>信件包裹紀錄</h2>
-//     </div>
-//   );
-// }
-
 function Field() {
   return (
     <div>

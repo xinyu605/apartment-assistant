@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./SmallCalendar.module.scss";
-import { showCalendar, changeDateClass } from "./../lib";
+import { showCalendar } from "./../lib";
 
 /************************
  SmallCalendar component 
@@ -66,12 +66,10 @@ export function SmallCalendar() {
   if (isCalendarShowing) {
     return (
       <div>
-        <label>寄達日期</label>
-        <input
-          type="button"
-          value="請選擇日期"
-          onClick={toggleCalendar}
-        ></input>
+        <div className={styles.item}>
+          {thisYear}年{thisMonth}月{receiveDate}日
+        </div>
+
         <div className={styles.calendar} id="calendar">
           <div className={styles.title} id="calendarTitle">
             <input
@@ -116,10 +114,11 @@ export function SmallCalendar() {
   } else {
     return (
       <div>
-        <label>寄達日期</label>
+        {thisYear}年{thisMonth}月{receiveDate}日
         <input
           type="button"
-          value="請選擇日期"
+          className={styles.editBtn}
+          value="修改"
           onClick={toggleCalendar}
         ></input>
       </div>

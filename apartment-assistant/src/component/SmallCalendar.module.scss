@@ -1,7 +1,13 @@
 @import "./../common";
+@import "./UpdateMailList.module.scss";
+
+.editBtn {
+  margin: 8px;
+}
 
 .calendar {
   width: 250px;
+  margin: 10px 0px;
   padding: 10px;
   margin-top: 5px;
   border-radius: $base-border-radius;
