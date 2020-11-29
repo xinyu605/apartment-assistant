@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { SmallCalendar } from "./SmallCalendar";
 import styles from "./UpdateMailList.module.scss";
 import { uploadMailList, getTimeStamp } from "./../firebase";
+import envelope from "./../img/envelope.svg";
 
 export function UpdateMailList() {
   const [mailNumber, setMailNumber] = useState("");
@@ -79,6 +80,7 @@ export function UpdateMailList() {
       message = false;
     } else {
       uploadMailList(data);
+      window.location.href = "/mailbox/untaken";
     }
   }
 
@@ -86,7 +88,9 @@ export function UpdateMailList() {
     <div className={styles.updateMailList} id="updateMailList">
       <div className={styles.header}>
         <div className={styles.titleContainer}>
-          <div className={styles.titleImg}>img</div>
+          <div className={styles.titleImg}>
+            <img src={envelope} />
+          </div>
           <h3 className={styles.title}>新增信件包裹</h3>
         </div>
       </div>

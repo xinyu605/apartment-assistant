@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { UntakenMailList } from "./UntakenMailList";
+import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
 import { getMailList } from "./../firebase";
 
@@ -10,19 +10,44 @@ import { getMailList } from "./../firebase";
 ******************************/
 
 function Mailbox() {
-  const [data, setData] = useState([]);
+  const [state, setState] = useState(false);
+  const [untakenData, setUntakenData] = useState([]);
+  const [takenData, setTakenData] = useState([]);
+
   // useEffect will run only after an initial render, and after an update on data is occurred
   useEffect(() => {
     getMailList(false).then((mailList) => {
       console.log(mailList);
-      setData(mailList);
+      setUntakenData(mailList);
     });
-  }, []); //[]內放需要監聽(有變動就要執行function)的state
+    getMailList(true).then((mailList) => {
+      console.log(mailList);
+      setTakenData(mailList);
+    });
+  }, [state]); //[]內放需要監聽(有變動就要執行function)的state
+
+  function toggleState(e) {
+    switch (e.currentTarget.id) {
+      case "untakenBtn":
+        setState(false);
+        break;
+      case "takenBtn":
+        setState(true);
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <div>
       <h2>信件包裹紀錄</h2>
-      <UntakenMailList list={data} />
+      <MailList
+        state={state}
+        untakenMails={untakenData}
+        takenMails={takenData}
+        toggleState={toggleState}
+      />
       <UpdateMailList />
     </div>
   );

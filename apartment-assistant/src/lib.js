@@ -61,3 +61,8 @@ function daysMonth(year, month, monthOlympic, monthNormal) {
     return monthNormal[month - 1]; //回傳正常年的當月天數
   }
 }
+
+export function scrollToTarget(targetId) {
+  const target = document.querySelector(`#${targetId}`);
+  target.scrollIntoView({ behavior: "smooth" });
+}

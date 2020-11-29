@@ -10,13 +10,6 @@ import {
 } from "react-router-dom";
 import Mailbox from "./component/Mailbox";
 
-import { getResidentList, getMailList, getReceiverInfo } from "./firebase";
-
-// getResidentList();
-// getReceiverInfo("201", "xHdjdEEbxkMU9ZI801CW"); //put family members into receiver's information (update mailbox document)
-// const untakenMailData = getMailList(false); // get untaken mail list
-// console.log(untakenMailData);
-
 function App() {
   return (
     <Router>

@@ -9,6 +9,9 @@ $light-box-shadow: 0px 0px 5px 3px rgba(216, 146, 55, 0.52);
 
 $font-size-small: 16px;
 
+a {
+  color: $base-text-color;
+}
 /* width */
 ::-webkit-scrollbar {
   width: 10px;

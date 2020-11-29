@@ -1,7 +1,7 @@
 @import "./../common";
 
-.untakenMailList {
-  width: 96%;
+.outerMailList {
+  width: 1000px;
   padding: 10px;
   margin: auto;
 }
@@ -44,6 +44,7 @@
     .button {
       margin: 6px;
       padding: 6px;
+      cursor: pointer;
       z-index: 2;
     }
 
@@ -56,20 +57,24 @@
       height: 25px;
       border-radius: $base-border-radius;
       position: absolute;
-      left: 0;
       z-index: 1;
       background-color: $base-button-background-color;
+    }
+    .left {
+      left: 0;
+    }
+    .right {
+      right: 0;
     }
   }
 }
 
 .mailList {
-  width: 96%;
+  width: 98%;
   max-height: 500px;
   overflow-y: scroll;
   margin: 20px auto;
   padding: 10px 5px;
-  // border: 1px solid $base-border-color;
   border-radius: $list-border-radius;
   box-shadow: $list-box-shadow;
   display: grid;
