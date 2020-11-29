@@ -1,10 +1,8 @@
 @import "./../common";
-// @import "./SmallCalendar.module.scss";
 
 .updateMailList {
-  width: 1000px;
+  width: 100%;
   padding: 10px;
-  margin: auto;
 }
 
 .header {
@@ -31,18 +29,19 @@
 }
 
 .updateForm {
-  width: 96%;
-  margin: 20px auto;
-  padding: 10px;
-  // border: 1px solid $base-border-color;
+  width: 100%;
+  margin-top: 20px;
   border-radius: $list-border-radius;
   box-shadow: $list-box-shadow;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 
   form {
+    padding: 20px;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    // grid-template-rows: repeat(3, 40px);
-    // align-items: flex-start;
+    align-items: center;
   }
 
   label {
@@ -79,5 +78,12 @@
 
   .focus {
     box-shadow: $light-box-shadow;
+  }
+
+  .submitBtn {
+    width: 150px;
+    padding: 5px;
+    margin: 0 auto 20px;
+    cursor: pointer;
   }
 }

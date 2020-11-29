@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
 import { getMailList } from "./../firebase";
+import styles from "./MailList.module.scss";
 
 /*****************************
  Mailbox component:
@@ -17,11 +18,11 @@ function Mailbox() {
   // useEffect will run only after an initial render, and after an update on data is occurred
   useEffect(() => {
     getMailList(false).then((mailList) => {
-      console.log(mailList);
+      // console.log(mailList);
       setUntakenData(mailList);
     });
     getMailList(true).then((mailList) => {
-      console.log(mailList);
+      // console.log(mailList);
       setTakenData(mailList);
     });
   }, [state]); //[]內放需要監聽(有變動就要執行function)的state
@@ -40,8 +41,7 @@ function Mailbox() {
   }
 
   return (
-    <div>
-      <h2>信件包裹紀錄</h2>
+    <div className={styles.mailBox}>
       <MailList
         state={state}
         untakenMails={untakenData}

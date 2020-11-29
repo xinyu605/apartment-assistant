@@ -120,7 +120,7 @@ export function UpdateMailList() {
             placeholder="請輸入收件人姓名"
             onChange={updateHook}
           ></input>
-          <label className={styles.itemTitle1}>信件包裹類型</label>
+          <label className={styles.itemTitle1}>類型</label>
           <select id="mailType" className={styles.item} onChange={updateHook}>
             <option>普通平信</option>
             <option>普通掛號信</option>
@@ -150,7 +150,11 @@ export function UpdateMailList() {
             onChange={updateHook}
           ></input>
         </form>
-        <button id="sendToFirebase" onClick={prepareToUpload}>
+        <button
+          className={styles.submitBtn}
+          id="sendToFirebase"
+          onClick={prepareToUpload}
+        >
           確認送出
         </button>
       </div>

@@ -13,13 +13,14 @@ const firebaseConfig = {
 // Initialize Cloud Firestore through Firebase
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
+let refResident = db.collection("resident");
+let refMailbox = db.collection("mailbox");
 
 /*******************
  get resident list
  *******************/
 export function getResidentList() {
-  let ref = db.collection("resident");
-  ref
+  refResident
     .get()
     .then((docRef) => {
       docRef.forEach((doc) => {
@@ -37,10 +38,9 @@ export function getResidentList() {
  get untaken mailList and taken mailList
  ****************************************/
 export function getMailList(status = false) {
-  let ref = db.collection("mailbox");
   let data = [];
   return (
-    ref
+    refMailbox
       .where("status", "==", status) //status= true (taken) | false (untaken)
       // .orderBy("mailNumbers", "asc")
       .get()
@@ -63,8 +63,6 @@ export function getMailList(status = false) {
  get receiver's familyMembers from resident document and append to assigned mailList document
  ********************************************************************************************/
 export function getReceiverInfo(residentNumbers, mailId) {
-  let refResident = db.collection("resident");
-  let refMailbox = db.collection("mailbox");
   let receiverData = null;
   refResident
     .where("residentNumbers", "==", residentNumbers)
@@ -101,7 +99,6 @@ export function getReceiverInfo(residentNumbers, mailId) {
  ****************************************/
 export function uploadMailList(data) {
   console.log(data);
-  let refMailbox = db.collection("mailbox");
   refMailbox
     .add(data)
     .then(() => {
@@ -121,4 +118,26 @@ export function getTimeStamp(year, month, date) {
   );
   // console.log(timeStamp);
   return timeStamp;
+}
+
+/****************************************
+ update mail status (true ←→ false )
+ ****************************************/
+export function updateMailStatus(number, status) {
+  return refMailbox
+    .where("mailNumbers", "==", number)
+    .get()
+    .then((docRef) => {
+      docRef.forEach((doc) => {
+        if (doc.id) {
+          refMailbox.doc(doc.id).update({
+            status: status,
+          });
+        }
+      });
+      console.log("update successful");
+    })
+    .catch(() => {
+      console.log("something wrong");
+    });
 }

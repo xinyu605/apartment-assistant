@@ -1,11 +1,12 @@
 import React from "react";
-import "./App.scss";
+import logo from "./img/logo.png";
+import styles from "./App.module.scss";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link,
-  // useParams,   //nested router (目前用不到)
+  // useParams,   //nested router
   // useRouteMatch,
 } from "react-router-dom";
 import Mailbox from "./component/Mailbox";
@@ -13,23 +14,30 @@ import Mailbox from "./component/Mailbox";
 function App() {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">社區公告</Link>
-            </li>
-            <li>
-              <Link to="/resident">住戶資訊</Link>
-            </li>
-            <li>
-              <Link to="/mailbox">信件包裹紀錄</Link>
-            </li>
-            <li>
-              <Link to="/field">場地租借紀錄</Link>
-            </li>
-          </ul>
-        </nav>
+      <div className={styles.App}>
+        <div className={styles.sidebar}>
+          <div className={styles.logoArea}>
+            <div className={styles.imgWrapper}>
+              <img src={logo} />
+            </div>
+          </div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">社區公告</Link>
+              </li>
+              <li>
+                <Link to="/resident">住戶資訊</Link>
+              </li>
+              <li>
+                <Link to="/mailbox">信件包裹紀錄</Link>
+              </li>
+              <li>
+                <Link to="/field">場地租借紀錄</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>

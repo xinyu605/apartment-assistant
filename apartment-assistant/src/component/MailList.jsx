@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import inboxUntaken from "./../img/inboxUntaken.svg";
 import inboxTaken from "./../img/inboxTaken.svg";
 import styles from "./MailList.module.scss";
 import { showDate, scrollToTarget } from "./../lib";
+import { updateMailStatus } from "./../firebase";
 
 export function MailList(props) {
   console.log(props);
@@ -43,10 +44,31 @@ export function MailList(props) {
     );
   });
 
-  // const bar = document.querySelector(".buttonBackground");
+  /****************************** 
+   Change individual data status
+  *******************************/
+  useEffect(() => {
+    const mailList = document.querySelector("#mailList");
+    // const listItems = mailList.querySelectorAll(`.${styles.list}`);
+    // console.log(listItems);
+    const statusButtons = mailList.querySelectorAll(".status");
+    let status = [];
+    for (let i = 0; i < statusButtons.length; i++) {
+      statusButtons[i].addEventListener("click", () => {
+        let ans = confirm("是否確定更新領取狀態？");
+        if (ans) {
+          const number = parseInt(statusButtons[i].id.slice(6));
+          props.state ? (status[i] = false) : (status[i] = true);
+          updateMailStatus(number, status[i]);
+          window.location.href = "./mailbox";
+        }
+      });
+    }
+  }, [props]);
 
-  // bar.classList.remove("left");
-  // bar.classList.add("right");
+  /*************************************** 
+   Toggle "未領取" "已領取" controller 外觀 
+  ****************************************/
   useEffect(() => {
     const untakenBtn = document.querySelector("#untakenBtn");
     const takenBtn = document.querySelector("#takenBtn");
@@ -97,6 +119,7 @@ export function MailList(props) {
           </div>
         </div>
         <button
+          className={styles.addBtn}
           onClick={() => {
             scrollToTarget("updateMailList");
           }}
@@ -105,7 +128,7 @@ export function MailList(props) {
         </button>
       </div>
       {/* list body */}
-      <div className={styles.mailList}>
+      <div className={styles.mailList} id="mailList">
         <div className={styles.tableTitle}>
           <div className="mailNumbers">編號</div>
           <div className="residentNumber">戶號</div>

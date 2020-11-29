@@ -1,9 +1,14 @@
 @import "./../common";
 
+.mailBox {
+  width: 85%;
+  max-width: 1000px;
+  padding: 40px;
+}
+
 .outerMailList {
-  width: 1000px;
+  width: 100%;
   padding: 10px;
-  margin: auto;
 }
 
 .header {
@@ -67,6 +72,12 @@
       right: 0;
     }
   }
+
+  .addBtn {
+    width: 60px;
+    height: 40px;
+    cursor: pointer;
+  }
 }
 
 .mailList {
@@ -88,6 +99,10 @@
     grid-template-columns: repeat(3, 1fr) repeat(2, 2fr) repeat(2, 1fr) 2fr;
     justify-items: center;
     align-items: center;
+
+    .status {
+      cursor: pointer;
+    }
   }
 
   .tableTitle {
