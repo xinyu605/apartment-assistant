@@ -18,7 +18,7 @@ function Mailbox() {
   // useEffect will run only after an initial render, and after an update on data is occurred
   useEffect(() => {
     getMailList(false).then((mailList) => {
-      // console.log(mailList);
+      console.log(mailList);
       setUntakenData(mailList);
     });
     getMailList(true).then((mailList) => {

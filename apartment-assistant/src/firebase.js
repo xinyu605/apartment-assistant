@@ -29,8 +29,8 @@ export function getResidentList() {
         }
       });
     })
-    .catch(() => {
-      console.error("something wrong");
+    .catch((error) => {
+      console.log(error);
     });
 }
 
@@ -39,24 +39,24 @@ export function getResidentList() {
  ****************************************/
 export function getMailList(status = false) {
   let data = [];
-  return (
-    refMailbox
-      .where("status", "==", status) //status= true (taken) | false (untaken)
-      // .orderBy("mailNumbers", "asc")
-      .get()
-      .then((docRef) => {
-        docRef.forEach((doc) => {
-          if (doc.id) {
-            data = [...data, doc.data()];
-            return data;
-          }
-        });
-        return data;
-      })
-      .catch(() => {
-        console.error("something wrong");
-      })
-  );
+  return refMailbox
+    .where("status", "==", status) //status= true (taken) | false (untaken)
+    .orderBy("mailNumbers", "asc")
+    .get()
+    .then((docRef) => {
+      console.log(docRef);
+      docRef.forEach((doc) => {
+        if (doc.id) {
+          data = [...data, doc.data()];
+          return data;
+        }
+      });
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 /********************************************************************************************
@@ -89,8 +89,8 @@ export function getReceiverInfo(residentNumbers, mailId) {
           console.log("success to append familyMembers to receiver info!");
         });
     })
-    .catch(() => {
-      console.error("something wrong");
+    .catch((error) => {
+      console.log(error);
     });
 }
 
@@ -104,8 +104,8 @@ export function uploadMailList(data) {
     .then(() => {
       console.log("add data successful!");
     })
-    .catch(() => {
-      console.error("something wrong");
+    .catch((error) => {
+      console.log(error);
     });
 }
 
@@ -137,7 +137,51 @@ export function updateMailStatus(number, status) {
       });
       console.log("update successful");
     })
-    .catch(() => {
-      console.log("something wrong");
+    .catch((error) => {
+      console.log(error);
     });
+}
+
+/******************************** 
+ handle Native SignUp and SignIn
+*********************************/
+export function nativeSignUp(email, password) {
+  firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then((user) => {
+      console.log("sign up successful!");
+      console.log(user);
+    })
+    .catch((error) => {
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
+    });
+}
+
+export function nativeSignIn(email, password) {
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((user) => {
+      console.log("sign in successful!");
+      console.log(user);
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
+    });
+}
+
+export function checkUserSignInOrNot() {
+  const user = firebase.auth().currentUser;
+  if (user) {
+    console.log(`user is signed in, uid: ${user.uid}`);
+    return user.uid;
+  } else {
+    console.log("no user is signed in");
+    return false;
+  }
 }

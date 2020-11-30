@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import logo from "./img/logo.png";
 import styles from "./App.module.scss";
 import {
@@ -10,8 +10,15 @@ import {
   // useRouteMatch,
 } from "react-router-dom";
 import Mailbox from "./component/Mailbox";
+import SignUp from "./component/SignUp";
+import { checkUserSignInOrNot } from "./firebase";
 
 function App() {
+  const [uid, setUid] = useState("");
+  useEffect(() => {
+    setUid(checkUserSignInOrNot());
+  }, [uid]);
+
   return (
     <Router>
       <div className={styles.App}>
@@ -55,6 +62,7 @@ function App() {
           </Route>
         </Switch>
       </div>
+      <SignUp checkSignIn={checkUserSignInOrNot} />
     </Router>
   );
 }

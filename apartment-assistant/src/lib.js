@@ -66,3 +66,25 @@ export function scrollToTarget(targetId) {
   const target = document.querySelector(`#${targetId}`);
   target.scrollIntoView({ behavior: "smooth" });
 }
+
+export function checkEmailFormat(string) {
+  if (
+    string.search(
+      /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$/
+    ) !== -1
+  ) {
+    return true;
+  } else if (string.length === 0) {
+    alert("Email欄位不可留空，請重新輸入！");
+  } else {
+    alert("Email格式錯誤，請重新輸入！");
+  }
+}
+
+export function checkPasswordLength(string) {
+  if (string.length >= 6) {
+    return true;
+  } else {
+    alert("密碼需超過6個字元，請重新輸入！");
+  }
+}

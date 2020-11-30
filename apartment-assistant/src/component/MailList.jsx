@@ -21,7 +21,8 @@ export function MailList(props) {
     headerImg = inboxTaken;
     stateController = "未領取";
   }
-
+  console.log(props.state);
+  console.log(lists);
   const List = lists.map((list) => {
     if (list.receiveDate) {
       receiveDate = showDate(list.receiveDate.seconds);
