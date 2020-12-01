@@ -67,6 +67,14 @@ export function scrollToTarget(targetId) {
   target.scrollIntoView({ behavior: "smooth" });
 }
 
+export function checkUserName(string) {
+  if (string.length === 0) {
+    alert("姓名欄位不可留空，請重新輸入！");
+  } else {
+    return true;
+  }
+}
+
 export function checkEmailFormat(string) {
   if (
     string.search(

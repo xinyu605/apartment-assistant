@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
-import { nativeSignIn, nativeSignUp } from "../firebase";
-import { checkEmailFormat, checkPasswordLength } from "../lib";
+import { nativeSignIn, nativeSignUp, signInWithGoogle } from "../firebase";
+import { checkEmailFormat, checkPasswordLength, checkUserName } from "../lib";
+import styles from "./SignIn.module.scss";
 
-export default function SignIn(props) {
+export default function SignIn() {
+  const [userName, setUserName] = useState("");
   const [emailSignUp, setEmailSignUp] = useState("");
   const [passwordSignUp, setPasswordSignUp] = useState("");
   const [emailSignIn, setEmailSignIn] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
   let history = useHistory();
-  console.log(props);
 
   function getUserInput(e) {
     switch (e.currentTarget.id) {
+      case "userName":
+        setUserName(e.currentTarget.value);
+        break;
       case "emailSignUp":
         setEmailSignUp(e.currentTarget.value);
         break;
@@ -32,9 +36,13 @@ export default function SignIn(props) {
 
   function submitSignUpData(e) {
     e.preventDefault();
-    if (checkEmailFormat(emailSignUp) && checkPasswordLength(passwordSignUp)) {
-      nativeSignUp(emailSignUp, passwordSignUp);
-      // console.log(props);
+    if (
+      checkEmailFormat(emailSignUp) &&
+      checkPasswordLength(passwordSignUp) &&
+      checkUserName(userName)
+    ) {
+      nativeSignUp(emailSignUp, passwordSignUp, userName);
+      alert("註冊完成！請按確定繼續");
     } else {
       console.log("Sign up failed");
     }
@@ -47,7 +55,7 @@ export default function SignIn(props) {
     } else {
       // let userId;
       nativeSignIn(emailSignIn, passwordSignIn)
-        .then((id) => {
+        .then(() => {
           history.push(`/`);
         })
         .catch((error) => {
@@ -56,11 +64,23 @@ export default function SignIn(props) {
     }
   }
 
+  function googleSignIn(e) {
+    e.preventDefault();
+    signInWithGoogle();
+  }
+
   return (
     <div>
       <div className="signUp">
         <h2>註冊新帳號</h2>
         <form>
+          <label>請輸入姓名</label>
+          <input
+            id="userName"
+            type="text"
+            placeholder="請輸入姓名"
+            onChange={getUserInput}
+          ></input>
           <label>請輸入Email</label>
           <input
             id="emailSignUp"
@@ -100,6 +120,7 @@ export default function SignIn(props) {
           <button id="submitSignIn" onClick={submitSignInData}>
             登入
           </button>
+          <button onClick={googleSignIn}>Google登入</button>
         </form>
       </div>
     </div>

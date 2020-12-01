@@ -12,7 +12,6 @@ import {
 } from "react-router-dom";
 import Mailbox from "./component/Mailbox";
 import SignIn from "./component/SignIn";
-// import { checkUserSignInOrNot } from "./firebase";
 import firebase from "firebase";
 
 let auth = firebase.auth();
@@ -28,9 +27,10 @@ function App() {
 
   function logout() {
     auth.signOut().then(() => {
-      alert("您被逐出紫禁城了");
-      var user = auth.currentUser;
+      alert("See you later!");
+      let user = auth.currentUser;
       console.log(user);
+      window.location.href = "/";
     });
   }
 
@@ -91,8 +91,7 @@ function App() {
       <Router>
         <Redirect to="/signin" />
         <Route exact path="/signin">
-          <SignIn userId={uid} />
-          {/* <SignIn checkSignIn={checkUserSignInOrNot} /> */}
+          <SignIn />
         </Route>
       </Router>
     );

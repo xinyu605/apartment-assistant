@@ -13,6 +13,7 @@ const firebaseConfig = {
 // Initialize Cloud Firestore through Firebase
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
+let auth = firebase.auth();
 let refResident = db.collection("resident");
 let refMailbox = db.collection("mailbox");
 let users = db.collection("users");
@@ -71,7 +72,6 @@ export function getReceiverInfo(residentNumbers, mailId) {
     .then((docRef) => {
       docRef.forEach((doc) => {
         if (doc.id) {
-          // console.log("doc.id", doc.id, "doc.data()", doc.data());
           receiverData = doc.data();
         }
       });
@@ -147,22 +147,18 @@ export function updateMailStatus(number, status) {
  handle Native SignUp and SignIn
 *********************************/
 //native sign up and create user information in firestore
-export function nativeSignUp(email, password) {
-  firebase
-    .auth()
+export function nativeSignUp(email, password, name) {
+  auth
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
-      console.log(
-        "sign up successful!, userID:",
-        firebase.auth().currentUser.uid
-      );
+      console.log("sign up successful!, userID:", auth.currentUser.uid);
 
       const signUpTime = new Date();
-      users.doc(firebase.auth().currentUser.uid).set({
-        userName: "",
+      users.doc(auth.currentUser.uid).set({
+        userName: name,
         signUpTime: signUpTime,
-        email: firebase.auth().currentUser.email,
-        userId: firebase.auth().currentUser.uid,
+        email: auth.currentUser.email,
+        userId: auth.currentUser.uid,
       });
     })
     .catch((error) => {
@@ -173,17 +169,44 @@ export function nativeSignUp(email, password) {
 }
 
 export function nativeSignIn(email, password) {
-  return firebase
-    .auth()
+  return auth
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       console.log("sign in successful!");
-      console.log(firebase.auth().currentUser.uid);
-      return firebase.auth().currentUser.uid;
+      return auth.currentUser.uid;
     })
     .catch((error) => {
       let errorCode = error.code;
       let errorMessage = error.message;
       console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
+    });
+}
+
+export function signInWithGoogle() {
+  let provider = new firebase.auth.GoogleAuthProvider();
+  auth
+    .signInWithPopup(provider)
+    .then(function (result) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      let token = result.credential.accessToken;
+      // The signed-in user info.
+      let user = result.user;
+      const signUpTime = new Date();
+      users.doc(user.uid).set({
+        userName: user.displayName,
+        signUpTime: signUpTime,
+        email: user.email,
+        userId: user.uid,
+      });
+    })
+    .catch(function (error) {
+      // Handle Errors here.
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      // The email of the user's account used.
+      let email = error.email;
+      // The firebase.auth.AuthCredential type that was used.
+      let credential = error.credential;
+      console.log(error);
     });
 }
