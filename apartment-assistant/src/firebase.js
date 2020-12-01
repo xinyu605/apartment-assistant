@@ -144,15 +144,15 @@ export function updateMailStatus(number, status) {
 }
 
 /******************************** 
- handle Native SignUp and SignIn
+ handle SignUp and SignIn
 *********************************/
+
 //native sign up and create user information in firestore
 export function nativeSignUp(email, password, name) {
   auth
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log("sign up successful!, userID:", auth.currentUser.uid);
-
       const signUpTime = new Date();
       users.doc(auth.currentUser.uid).set({
         userName: name,
@@ -160,10 +160,12 @@ export function nativeSignUp(email, password, name) {
         email: auth.currentUser.email,
         userId: auth.currentUser.uid,
       });
+      alert("註冊完成！請按確定繼續");
     })
     .catch((error) => {
       let errorCode = error.code;
       let errorMessage = error.message;
+      window.alert(`註冊失敗！請重新註冊 (Error: ${errorMessage})`);
       console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
     });
 }
@@ -173,31 +175,43 @@ export function nativeSignIn(email, password) {
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       console.log("sign in successful!");
-      return auth.currentUser.uid;
+      if (email === "admin@apartment.com") {
+        //管理員 密碼：apartment
+        return "admin";
+      } else {
+        return "general";
+      }
     })
     .catch((error) => {
       let errorCode = error.code;
       let errorMessage = error.message;
+      window.alert(`登入失敗！請重新登入 (Error: ${errorMessage})`);
       console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
     });
 }
 
 export function signInWithGoogle() {
   let provider = new firebase.auth.GoogleAuthProvider();
-  auth
+  return auth
     .signInWithPopup(provider)
     .then(function (result) {
       // This gives you a Google Access Token. You can use it to access the Google API.
       let token = result.credential.accessToken;
       // The signed-in user info.
       let user = result.user;
-      const signUpTime = new Date();
-      users.doc(user.uid).set({
-        userName: user.displayName,
-        signUpTime: signUpTime,
-        email: user.email,
-        userId: user.uid,
-      });
+      if (user.email === "admin@apartment.com") {
+        //管理員 密碼：apartment
+        return "admin";
+      } else {
+        const signUpTime = new Date();
+        users.doc(user.uid).set({
+          userName: user.displayName,
+          signUpTime: signUpTime,
+          email: user.email,
+          userId: user.uid,
+        });
+        return "general";
+      }
     })
     .catch(function (error) {
       // Handle Errors here.

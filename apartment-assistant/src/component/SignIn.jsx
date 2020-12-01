@@ -42,7 +42,6 @@ export default function SignIn() {
       checkUserName(userName)
     ) {
       nativeSignUp(emailSignUp, passwordSignUp, userName);
-      alert("註冊完成！請按確定繼續");
     } else {
       console.log("Sign up failed");
     }
@@ -53,10 +52,13 @@ export default function SignIn() {
     if (emailSignIn.length === 0 || passwordSignIn.length < 6) {
       alert("資料尚未填寫完成喔！");
     } else {
-      // let userId;
       nativeSignIn(emailSignIn, passwordSignIn)
-        .then(() => {
-          history.push(`/`);
+        .then((result) => {
+          if (result === "admin") {
+            history.push("/");
+          } else {
+            history.push("/mailbox"); //之後改成 /entry (住戶入口頁)
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -66,7 +68,14 @@ export default function SignIn() {
 
   function googleSignIn(e) {
     e.preventDefault();
-    signInWithGoogle();
+    signInWithGoogle().then((result) => {
+      console.log(result);
+      if (result === "admin") {
+        history.push("/");
+      } else {
+        history.push("/mailbox"); //之後改成 /entry (住戶入口頁)
+      }
+    });
   }
 
   return (
