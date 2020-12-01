@@ -15,6 +15,7 @@ firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 let refResident = db.collection("resident");
 let refMailbox = db.collection("mailbox");
+let users = db.collection("users");
 
 /*******************
  get resident list
@@ -145,13 +146,24 @@ export function updateMailStatus(number, status) {
 /******************************** 
  handle Native SignUp and SignIn
 *********************************/
+//native sign up and create user information in firestore
 export function nativeSignUp(email, password) {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then((user) => {
-      console.log("sign up successful!");
-      console.log(user);
+    .then(() => {
+      console.log(
+        "sign up successful!, userID:",
+        firebase.auth().currentUser.uid
+      );
+
+      const signUpTime = new Date();
+      users.doc(firebase.auth().currentUser.uid).set({
+        userName: "",
+        signUpTime: signUpTime,
+        email: firebase.auth().currentUser.email,
+        userId: firebase.auth().currentUser.uid,
+      });
     })
     .catch((error) => {
       let errorCode = error.code;
@@ -161,27 +173,17 @@ export function nativeSignUp(email, password) {
 }
 
 export function nativeSignIn(email, password) {
-  firebase
+  return firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then((user) => {
+    .then(() => {
       console.log("sign in successful!");
-      console.log(user);
+      console.log(firebase.auth().currentUser.uid);
+      return firebase.auth().currentUser.uid;
     })
     .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
+      let errorCode = error.code;
+      let errorMessage = error.message;
       console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
     });
-}
-
-export function checkUserSignInOrNot() {
-  const user = firebase.auth().currentUser;
-  if (user) {
-    console.log(`user is signed in, uid: ${user.uid}`);
-    return user.uid;
-  } else {
-    console.log("no user is signed in");
-    return false;
-  }
 }

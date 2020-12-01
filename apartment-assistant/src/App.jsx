@@ -6,65 +6,97 @@ import {
   Switch,
   Route,
   Link,
+  Redirect,
   // useParams,   //nested router
   // useRouteMatch,
 } from "react-router-dom";
 import Mailbox from "./component/Mailbox";
-import SignUp from "./component/SignUp";
-import { checkUserSignInOrNot } from "./firebase";
+import SignIn from "./component/SignIn";
+// import { checkUserSignInOrNot } from "./firebase";
+import firebase from "firebase";
+
+let auth = firebase.auth();
 
 function App() {
   const [uid, setUid] = useState("");
-  useEffect(() => {
-    setUid(checkUserSignInOrNot());
-  }, [uid]);
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      // console.log(auth.currentUser.uid);
+      setUid(auth.currentUser.uid);
+    }
+  });
 
-  return (
-    <Router>
-      <div className={styles.App}>
-        <div className={styles.sidebar}>
-          <div className={styles.logoArea}>
-            <div className={styles.imgWrapper}>
-              <img src={logo} />
+  function logout() {
+    auth.signOut().then(() => {
+      alert("您被逐出紫禁城了");
+      var user = auth.currentUser;
+      console.log(user);
+    });
+  }
+
+  if (uid) {
+    return (
+      <Router>
+        <Route path="/">
+          <div className={styles.App}>
+            <div className={styles.sidebar}>
+              <div className={styles.logoArea}>
+                <div className={styles.imgWrapper}>
+                  <img src={logo} />
+                </div>
+              </div>
+              <nav>
+                <ul>
+                  <li>
+                    <Link to="/board">社區公告</Link>
+                  </li>
+                  <li>
+                    <Link to="/resident">住戶資訊</Link>
+                  </li>
+                  <li>
+                    <Link to="/mailbox">信件包裹紀錄</Link>
+                  </li>
+                  <li>
+                    <Link to="/field">場地租借紀錄</Link>
+                  </li>
+                </ul>
+              </nav>
+              <button id="logout" onClick={logout}>
+                登出
+              </button>
             </div>
+
+            {/* A <Switch> looks through its children <Route>s and
+              renders the first one that matches the current URL. */}
+            <Switch>
+              <Route path="/resident">
+                <Resident />
+              </Route>
+              <Route path="/mailbox">
+                <Mailbox />
+              </Route>
+              <Route path="/field">
+                <Field />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
           </div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">社區公告</Link>
-              </li>
-              <li>
-                <Link to="/resident">住戶資訊</Link>
-              </li>
-              <li>
-                <Link to="/mailbox">信件包裹紀錄</Link>
-              </li>
-              <li>
-                <Link to="/field">場地租借紀錄</Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/resident">
-            <Resident />
-          </Route>
-          <Route path="/mailbox">
-            <Mailbox />
-          </Route>
-          <Route path="/field">
-            <Field />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
-      <SignUp checkSignIn={checkUserSignInOrNot} />
-    </Router>
-  );
+        </Route>
+      </Router>
+    );
+  } else {
+    return (
+      <Router>
+        <Redirect to="/signin" />
+        <Route exact path="/signin">
+          <SignIn userId={uid} />
+          {/* <SignIn checkSignIn={checkUserSignInOrNot} /> */}
+        </Route>
+      </Router>
+    );
+  }
 }
 
 function Home() {

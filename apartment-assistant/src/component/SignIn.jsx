@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { nativeSignIn, nativeSignUp } from "./../firebase";
-import { checkEmailFormat, checkPasswordLength } from "./../lib";
+import { BrowserRouter as Router, useHistory } from "react-router-dom";
+import { nativeSignIn, nativeSignUp } from "../firebase";
+import { checkEmailFormat, checkPasswordLength } from "../lib";
 
-export default function SignUp(props) {
+export default function SignIn(props) {
   const [emailSignUp, setEmailSignUp] = useState("");
   const [passwordSignUp, setPasswordSignUp] = useState("");
   const [emailSignIn, setEmailSignIn] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
+  let history = useHistory();
   console.log(props);
 
   function getUserInput(e) {
@@ -32,6 +34,7 @@ export default function SignUp(props) {
     e.preventDefault();
     if (checkEmailFormat(emailSignUp) && checkPasswordLength(passwordSignUp)) {
       nativeSignUp(emailSignUp, passwordSignUp);
+      // console.log(props);
     } else {
       console.log("Sign up failed");
     }
@@ -42,7 +45,14 @@ export default function SignUp(props) {
     if (emailSignIn.length === 0 || passwordSignIn.length < 6) {
       alert("資料尚未填寫完成喔！");
     } else {
-      nativeSignIn(emailSignIn, passwordSignIn);
+      // let userId;
+      nativeSignIn(emailSignIn, passwordSignIn)
+        .then((id) => {
+          history.push(`/`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 
