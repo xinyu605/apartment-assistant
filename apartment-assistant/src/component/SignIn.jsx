@@ -55,9 +55,9 @@ export default function SignIn() {
       nativeSignIn(emailSignIn, passwordSignIn)
         .then((result) => {
           if (result === "admin") {
-            history.push("/");
+            history.push("/mailbox");
           } else {
-            history.push("/mailbox"); //之後改成 /entry (住戶入口頁)
+            history.push("/entry"); //之後改成 /entry (住戶入口頁)
           }
         })
         .catch((error) => {
@@ -71,9 +71,9 @@ export default function SignIn() {
     signInWithGoogle().then((result) => {
       console.log(result);
       if (result === "admin") {
-        history.push("/");
+        history.push("/mailbox");
       } else {
-        history.push("/mailbox"); //之後改成 /entry (住戶入口頁)
+        history.push("/entry"); //之後改成 /entry (住戶入口頁)
       }
     });
   }

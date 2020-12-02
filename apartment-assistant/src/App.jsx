@@ -39,7 +39,7 @@ function App() {
       <Router>
         <Route path="/">
           <div className={styles.App}>
-            <div className={styles.sidebar}>
+            {/* <div className={styles.sidebar}>
               <div className={styles.logoArea}>
                 <div className={styles.imgWrapper}>
                   <img src={logo} />
@@ -64,22 +64,32 @@ function App() {
               <button id="logout" onClick={logout}>
                 登出
               </button>
-            </div>
+            </div> */}
 
             {/* A <Switch> looks through its children <Route>s and
               renders the first one that matches the current URL. */}
             <Switch>
+              <Route path="/entry">
+                <Entry logout={logout} />
+              </Route>
+              <Route path="/board">
+                <Sidebar logout={logout} />
+                <Home logout={logout} />
+              </Route>
               <Route path="/resident">
+                <Sidebar logout={logout} />
                 <Resident />
               </Route>
               <Route path="/mailbox">
+                <Sidebar logout={logout} />
                 <Mailbox />
               </Route>
               <Route path="/field">
+                <Sidebar logout={logout} />
                 <Field />
               </Route>
               <Route path="/">
-                <Home />
+                <Home logout={logout} />
               </Route>
             </Switch>
           </div>
@@ -98,10 +108,42 @@ function App() {
   }
 }
 
-function Home() {
+function Sidebar(props) {
+  return (
+    <div className={styles.sidebar}>
+      <div className={styles.logoArea}>
+        <div className={styles.imgWrapper}>
+          <img src={logo} />
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/board">社區公告</Link>
+          </li>
+          <li>
+            <Link to="/resident">住戶資訊</Link>
+          </li>
+          <li>
+            <Link to="/mailbox">信件包裹紀錄</Link>
+          </li>
+          <li>
+            <Link to="/field">場地租借紀錄</Link>
+          </li>
+        </ul>
+      </nav>
+      <button id="logout" onClick={props.logout}>
+        登出
+      </button>
+    </div>
+  );
+}
+
+function Home(props) {
   return (
     <div>
       <h2>社區公告</h2>
+      <button onClick={props.logout}>登出</button>
     </div>
   );
 }
@@ -118,6 +160,15 @@ function Field() {
   return (
     <div>
       <h2>場地租借紀錄</h2>
+    </div>
+  );
+}
+
+function Entry(props) {
+  return (
+    <div>
+      <h2>住戶入口頁</h2>
+      <button onClick={props.logout}>登出</button>
     </div>
   );
 }
