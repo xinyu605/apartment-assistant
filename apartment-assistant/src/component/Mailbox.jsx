@@ -1,4 +1,13 @@
 import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  // useParams,   //nested router
+  // useRouteMatch,
+} from "react-router-dom";
 import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
 import { getMailList } from "./../firebase";
@@ -11,6 +20,7 @@ import styles from "./MailList.module.scss";
 ******************************/
 
 function Mailbox() {
+  // const [isLogined, setLogin]=useState(undefined);
   const [state, setState] = useState(false);
   const [untakenData, setUntakenData] = useState([]);
   const [takenData, setTakenData] = useState([]);
@@ -48,7 +58,8 @@ function Mailbox() {
         takenMails={takenData}
         toggleState={toggleState}
       />
-      <UpdateMailList />
+      <Route exact path="/admin/mailbox" component={UpdateMailList} />
+      {/* <UpdateMailList /> */}
     </div>
   );
 }

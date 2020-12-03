@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,20 +11,48 @@ import {
 import logo from "./../img/logo.png";
 import Mailbox from "./Mailbox";
 import styles from "./../App.module.scss";
+import firebase from "firebase";
+
+let auth = firebase.auth();
 
 export function Admin(props) {
-  return (
-    <Router>
-      <Route path="/admin">
+  const [uid, setUid] = useState(props.uid);
+
+  // auth.onAuthStateChanged(function (user) {
+  //   if (user) {
+  //     // console.log(auth.currentUser.uid);
+  //     setUid(auth.currentUser.uid);
+  //   }
+  // });
+  // const [isLogined, setLogin] = useState(false);
+  // // console.log(props.uid);
+  // useEffect(() => {
+  //   if (props.uid) {
+  //     setLogin(true);
+  //     console.log(isLogined);
+  //   } else {
+  //     setLogin(false);
+  //     console.log(isLogined);
+  //   }
+  // }, [isLogined]);
+  // if (props.uid) {
+  //   setLogin(true);
+  // } else {
+  //   setLogin(false);
+  // }
+  if (uid) {
+    return (
+      //  <Router>
+      <Route exact path="/admin">
         <Sidebar logout={props.logout} />
 
         <Switch>
           <Route path="/admin/resident">
             <Resident />
           </Route>
-          <Route path="/admin/mailbox">
-            <Mailbox />
-          </Route>
+          <Route path="/admin/mailbox" component={Mailbox} />
+          {/* <Mailbox /> */}
+          {/* </Route> */}
           <Route path="/admin/field">
             <Field />
           </Route>
@@ -33,8 +61,11 @@ export function Admin(props) {
           </Route>
         </Switch>
       </Route>
-    </Router>
-  );
+      //  </Router>
+    );
+  } else {
+    return <div>Please waiting...</div>;
+  }
 }
 
 function Sidebar(props) {

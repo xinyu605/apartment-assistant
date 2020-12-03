@@ -59,7 +59,7 @@ export default function SignIn() {
           if (result === "admin") {
             history.push("/admin");
           } else {
-            history.push("/entry"); //之後改成 /entry (住戶入口頁)
+            history.push("/entry");
           }
         })
         .catch((error) => {
@@ -75,16 +75,21 @@ export default function SignIn() {
       if (result === "admin") {
         history.push("/admin");
       } else {
-        history.push("/entry"); //之後改成 /entry (住戶入口頁)
+        history.push("/entry");
       }
     });
   }
 
-  function callSignUp() {
+  function moveCard(e) {
     const imageCard = document.querySelector("#imageCard");
     console.log(imageCard);
-    imageCard.style.transform = "translateX(450px)";
-    imageCard.style.transition = "all 0.5s ease";
+    if (e.currentTarget.id === "clickToSignUp") {
+      imageCard.style.transform = "translateX(450px)";
+      imageCard.style.transition = "all 0.5s ease";
+    } else {
+      imageCard.style.transform = "translateX(0px)";
+      imageCard.style.transition = "all 0.5s ease";
+    }
   }
 
   return (
@@ -113,7 +118,7 @@ export default function SignIn() {
               <input
                 id="emailSignUp"
                 type="text"
-                placeholder="example@gmail.com"
+                placeholder="請輸入Email"
                 onChange={getUserInput}
               ></input>
               <div className={styles.loginImg}></div>
@@ -123,7 +128,7 @@ export default function SignIn() {
               <input
                 id="pwdSignUp"
                 type="password"
-                placeholder="******"
+                placeholder="請輸入6位以上英數字"
                 onChange={getUserInput}
               ></input>
               <div className={styles.lockImg}></div>
@@ -132,6 +137,13 @@ export default function SignIn() {
             <button id="submitSignUp" onClick={submitSignUpData}>
               註冊
             </button>
+            <div
+              id="clickToSignIn"
+              className={styles.clickToSignUp}
+              onClick={moveCard}
+            >
+              登入
+            </div>
           </form>
         </div>
         <div className={styles.signIn}>
@@ -164,7 +176,7 @@ export default function SignIn() {
           <div
             id="clickToSignUp"
             className={styles.clickToSignUp}
-            onClick={callSignUp}
+            onClick={moveCard}
           >
             立即註冊
           </div>

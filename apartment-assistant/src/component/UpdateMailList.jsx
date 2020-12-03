@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import { SmallCalendar } from "./SmallCalendar";
 import styles from "./UpdateMailList.module.scss";
-import { uploadMailList, getTimeStamp } from "./../firebase";
+import { uploadMailList, getTimeStamp, getReceiverInfo } from "./../firebase";
+import { nanoid } from "nanoid";
 import envelope from "./../img/envelope.svg";
 
 export function UpdateMailList() {
   const [mailNumber, setMailNumber] = useState("");
+  const [mailId, setMailId] = useState("");
   const [residentNumber, setResidentNumber] = useState("");
   const [receiver, setReceiver] = useState("");
   const [mailType, setMailType] = useState("普通平信");
@@ -13,6 +16,7 @@ export function UpdateMailList() {
   const [place, setPlace] = useState("信箱");
   const [status, setStatus] = useState(false);
   const [remark, setRemark] = useState("無");
+  let history = useHistory();
 
   function updateReceiveDate(year, month, date) {
     // console.log(year, month, date);
@@ -64,10 +68,12 @@ export function UpdateMailList() {
       } else {
         data = {
           mailNumbers: parseInt(mailNumber),
+          mailId: nanoid(),
           mailType: mailType,
           place: place,
           receiveDate: receiveDate,
           receiver: { name: receiver, residentNumbers: residentNumber },
+          familyMembers: "",
           status: status,
           taker: { name: "", takeDate: "" },
           remark: remark,
@@ -79,8 +85,10 @@ export function UpdateMailList() {
       alert("請確實填寫資料");
       message = false;
     } else {
-      uploadMailList(data);
-      window.location.href = "/mailbox/untaken";
+      uploadMailList(data, data.mailId);
+      getReceiverInfo(residentNumber, data.mailId);
+      // window.location.href = "/mailbox/untaken";
+      history.push("/admin/mailbox"); //無法順利跳轉
     }
   }
 

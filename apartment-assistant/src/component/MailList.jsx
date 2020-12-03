@@ -28,7 +28,7 @@ export function MailList(props) {
       receiveDate = showDate(list.receiveDate.seconds);
     }
     return (
-      <div className={styles.list} key={`mail${list.mailNumbers}`}>
+      <div className={styles.list} key={list.mailId}>
         <div className="mailNumbers">{list.mailNumbers}</div>
         <div className="residentNumber">
           {list.receiver ? list.receiver.residentNumbers : ""}
