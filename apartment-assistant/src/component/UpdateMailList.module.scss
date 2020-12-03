@@ -40,7 +40,8 @@
   form {
     padding: 20px;
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr) repeat(1, 2fr) repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     align-items: center;
   }
 
@@ -74,6 +75,12 @@
     border: 1px solid $base-border-color;
     border-radius: $base-border-radius;
     margin: 10px 0;
+    font-size: $font-size-small;
+    color: $base-text-color;
+  }
+
+  select {
+    padding-left: 5px;
   }
 
   .focus {

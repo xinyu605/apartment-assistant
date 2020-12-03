@@ -5,13 +5,27 @@
   flex-wrap: wrap;
 }
 
+h1 {
+  font-size: 40px;
+  font-weight: 700;
+}
+
 h2 {
   font-size: 20px;
   margin: 10px;
 }
 
+h3 {
+  font-size: 18px;
+}
+
 a {
   text-decoration: none;
+}
+
+.admin {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .sidebar {
@@ -21,7 +35,7 @@ a {
   background: $base-background;
   background: $gradient-background;
   font-size: 1.2em;
-  position: relative;
+  position: fixed;
 
   .logoArea {
     width: 100%;
@@ -56,7 +70,28 @@ a {
       letter-spacing: 3px;
     }
   }
+
   li:first-child {
     border-top: none;
+  }
+
+  li:hover {
+    width: calc(100%-3px);
+    border-right: 8px solid #455;
+  }
+
+  .logout {
+    width: 60px;
+    height: 30px;
+    font-size: 14px;
+    opacity: 0.5;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .logout:hover {
+    opacity: 1;
+    transition: all 0.7s ease-in-out;
   }
 }

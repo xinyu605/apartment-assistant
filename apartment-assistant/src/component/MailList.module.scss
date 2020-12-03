@@ -4,6 +4,8 @@
   width: 85%;
   max-width: 1000px;
   padding: 40px;
+  margin-left: $admin-margin-left;
+  margin-top: $admin-margin-top;
 }
 
 .outerMailList {
@@ -15,6 +17,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   .titleContainer {
     margin-right: auto;
@@ -39,7 +42,7 @@
     margin: 10px 50px;
     border: 1px solid $base-border-color;
     border-radius: $base-border-radius;
-    font-size: 14px;
+    font-size: $font-size-xsmall;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -75,13 +78,13 @@
 
   .addBtn {
     width: 60px;
-    height: 40px;
+    height: 30px;
     cursor: pointer;
   }
 }
 
 .mailList {
-  width: 98%;
+  width: 100%;
   max-height: 500px;
   overflow-y: scroll;
   margin: 20px auto;
@@ -101,6 +104,11 @@
     align-items: center;
 
     .status {
+      width: 70px;
+      height: 30px;
+      font-size: $font-size-xsmall;
+      color: $base-text-color;
+      background-color: $small-button-background-color;
       cursor: pointer;
     }
   }

@@ -6,7 +6,8 @@ import { showDate, scrollToTarget } from "./../lib";
 import { updateMailStatus } from "./../firebase";
 
 export function MailList(props) {
-  console.log(props);
+  const [newMail, setNewMail] = useState(props.newMail);
+  // console.log(props);
   let lists = [];
   let headerImg;
   let stateController;
@@ -21,8 +22,8 @@ export function MailList(props) {
     headerImg = inboxTaken;
     stateController = "未領取";
   }
-  console.log(props.state);
-  console.log(lists);
+  // console.log(props.state);
+  // console.log(lists);
   const List = lists.map((list) => {
     if (list.receiveDate) {
       receiveDate = showDate(list.receiveDate.seconds);
@@ -31,14 +32,16 @@ export function MailList(props) {
       <div className={styles.list} key={list.mailId}>
         <div className="mailNumbers">{list.mailNumbers}</div>
         <div className="residentNumber">
-          {list.receiver ? list.receiver.residentNumbers : ""}
+          {list.residentNumbers}
+          {/* {list.receiver ? list.receiver.residentNumbers : ""} */}
         </div>
-        {list.receiver ? list.receiver.name : ""}
+        <div className="receiverName">{list.receiverName}</div>
+        {/* {list.receiver ? list.receiver.name : ""} */}
         <div className="mailType">{list.mailType}</div>
         <div className="receiveDate">{receiveDate}</div>
         <div className="place">{list.place}</div>
         <div className="remark">{list.remark}</div>
-        <button className="status" id={`status${list.mailNumbers}`}>
+        <button className={styles.status} id={`status${list.mailId}`}>
           {stateController}
         </button>
       </div>
@@ -61,7 +64,7 @@ export function MailList(props) {
           const number = parseInt(statusButtons[i].id.slice(6));
           props.state ? (status[i] = false) : (status[i] = true);
           updateMailStatus(number, status[i]);
-          window.location.href = "./mailbox";
+          // window.location.href = "./mailbox";
         }
       });
     }

@@ -1,7 +1,11 @@
+$admin-margin-left: 270px;
+$admin-margin-top: 60px;
+
 $base-text-color: #445;
 $base-border-color: #445;
 $base-border-radius: 5px;
-$base-button-background-color: #455;
+$base-button-background-color: rgb(21, 54, 44);
+$small-button-background-color: rgb(162, 204, 154);
 $base-background: rgb(251, 196, 63);
 $gradient-background: linear-gradient(
   336deg,
@@ -20,6 +24,7 @@ $list-box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.2);
 $light-box-shadow: 0px 0px 5px 3px rgba(216, 146, 55, 0.52);
 
 $font-size-small: 16px;
+$font-size-xsmall: 14px;
 
 * {
   box-sizing: border-box;

@@ -1,26 +1,31 @@
 import React, { useState } from "react";
-import firebase from "firebase";
-
-let auth = firebase.auth();
+import styles from "./Entry.module.scss";
+import mailbox from "./../img/inboxUntaken.svg";
 
 export default function Entry(props) {
-  console.log(auth.currentUser.email);
-
   return (
-    <div>
-      <h2>Welcome to Apartment Assistant!</h2>
-      <div className="issues">
-        <h3>社區公告</h3>
+    <div className={styles.entry}>
+      <h1>Welcome to Apartment Assistant!</h1>
+      <div className={styles.issues}>
+        <h2>社區公告</h2>
       </div>
-      <div className="mails">
-        <h3>信件包裹領取通知</h3>
-        <h3>目前您有?個信件/包裹尚未領取</h3>
+      <div className={styles.mails}>
+        <div className={styles.title}>
+          <div className={styles.imgWrapper}>
+            <div className={styles.number}>1</div>
+            <img src={mailbox} />
+          </div>
+          <h2>信件包裹領取通知</h2>
+        </div>
+
         <div>
           list
-          <button>已領取</button>
+          <button className={styles.takenBtn}>已領取</button>
         </div>
       </div>
-      <button onClick={props.logout}>登出</button>
+      <button className={styles.logout} onClick={props.logout}>
+        登出
+      </button>
     </div>
   );
 }

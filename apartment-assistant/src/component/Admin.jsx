@@ -6,7 +6,7 @@ import {
   Link,
   Redirect,
   // useParams,   //nested router
-  // useRouteMatch,
+  useRouteMatch,
 } from "react-router-dom";
 import logo from "./../img/logo.png";
 import Mailbox from "./Mailbox";
@@ -16,56 +16,28 @@ import firebase from "firebase";
 let auth = firebase.auth();
 
 export function Admin(props) {
-  const [uid, setUid] = useState(props.uid);
+  const match = useRouteMatch();
 
-  // auth.onAuthStateChanged(function (user) {
-  //   if (user) {
-  //     // console.log(auth.currentUser.uid);
-  //     setUid(auth.currentUser.uid);
-  //   }
-  // });
-  // const [isLogined, setLogin] = useState(false);
-  // // console.log(props.uid);
-  // useEffect(() => {
-  //   if (props.uid) {
-  //     setLogin(true);
-  //     console.log(isLogined);
-  //   } else {
-  //     setLogin(false);
-  //     console.log(isLogined);
-  //   }
-  // }, [isLogined]);
-  // if (props.uid) {
-  //   setLogin(true);
-  // } else {
-  //   setLogin(false);
-  // }
-  if (uid) {
-    return (
-      //  <Router>
-      <Route exact path="/admin">
-        <Sidebar logout={props.logout} />
+  return (
+    <div className={styles.admin}>
+      <Sidebar logout={props.logout} />
 
-        <Switch>
-          <Route path="/admin/resident">
-            <Resident />
-          </Route>
-          <Route path="/admin/mailbox" component={Mailbox} />
-          {/* <Mailbox /> */}
-          {/* </Route> */}
-          <Route path="/admin/field">
-            <Field />
-          </Route>
-          <Route path="/admin">
-            <Board />
-          </Route>
-        </Switch>
-      </Route>
-      //  </Router>
-    );
-  } else {
-    return <div>Please waiting...</div>;
-  }
+      <Switch>
+        <Route path="/admin/resident">
+          <Resident />
+        </Route>
+        <Route path={`${match.path}/mailbox`}>
+          <Mailbox />
+        </Route>
+        <Route path="/admin/field">
+          <Field />
+        </Route>
+        <Route path="/admin">
+          <Board />
+        </Route>
+      </Switch>
+    </div>
+  );
 }
 
 function Sidebar(props) {
@@ -92,7 +64,7 @@ function Sidebar(props) {
           </li>
         </ul>
       </nav>
-      <button id="logout" onClick={props.logout}>
+      <button id="logout" className={styles.logout} onClick={props.logout}>
         登出
       </button>
     </div>

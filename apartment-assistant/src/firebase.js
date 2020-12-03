@@ -22,14 +22,18 @@ let users = db.collection("users");
  get resident list
  *******************/
 export function getResidentList() {
-  refResident
+  let data = [];
+  return refResident
     .get()
     .then((docRef) => {
       docRef.forEach((doc) => {
         if (doc.id) {
-          console.log(doc.data());
+          // console.log(doc.data());
+          data = [...data, doc.data()];
+          return data;
         }
       });
+      return data;
     })
     .catch((error) => {
       console.log(error);
@@ -46,14 +50,12 @@ export function getMailList(status = false) {
     .orderBy("mailNumbers", "asc")
     .get()
     .then((docRef) => {
-      console.log(docRef);
       docRef.forEach((doc) => {
         if (doc.id) {
           data = [...data, doc.data()];
           return data;
         }
       });
-      console.log(data);
       return data;
     })
     .catch((error) => {
@@ -65,39 +67,40 @@ export function getMailList(status = false) {
  get receiver's familyMembers from resident document and append to assigned mailList document
  ********************************************************************************************/
 
-export async function getReceiverInfo(residentNumbers, mailId) {
-  let receiverData = [];
-  try {
-    let residential = await refResident
-      .where("residentNumbers", "==", residentNumbers)
-      .get();
-    residential.forEach((doc) => {
-      console.log("doc.id:", doc.id, "get data:", doc.data());
-      refResident
-        .doc(doc.id)
-        .collection("familyMembers")
-        .get()
-        .then((docRef) => {
-          docRef.forEach((doc) => {
-            console.log("doc.id:", doc.id, "get data:", doc.data());
-            receiverData = [...receiverData, doc.data()];
-            return receiverData;
-          });
-        })
-        .then(() => {
-          console.log(receiverData);
-          refMailbox
-            .doc(mailId)
-            .update({ familyMembers: receiverData })
-            .then(() => {
-              console.log("success to append familyMembers to receiver info!");
-            });
-        });
-    });
-  } catch (error) {
-    console.log("Error getting documents", error);
-  }
-}
+// export async function getReceiverInfo(residentNumbers, mailId) {
+//   let receiverData = [];
+//   try {
+//     let residential = await refResident
+//       .where("residentNumbers", "==", residentNumbers)
+//       .get();
+//     residential.forEach((doc) => {
+//       console.log("doc.id:", doc.id, "get data:", doc.data());
+//       refResident
+//         .doc(doc.id)
+//         .collection("familyMembers")
+//         .get()
+//         .then((docRef) => {
+//           docRef.forEach((doc) => {
+//             console.log("doc.id:", doc.id, "get data:", doc.data());
+//             receiverData = [...receiverData, doc.data()];
+//             return receiverData;
+//           });
+//         })
+//         .then(() => {
+//           console.log(receiverData);
+//           refMailbox
+//             .doc(mailId)
+//             .update({ familyMembers: receiverData })
+//             .then(() => {
+//               console.log("success to append familyMembers to receiver info!");
+//               // console.log(callback());
+//             });
+//         });
+//     });
+//   } catch (error) {
+//     console.log("Error getting documents", error);
+//   }
+// }
 
 /****************************************
  upload new mail list to firestore
@@ -228,22 +231,6 @@ export function signInWithGoogle() {
       let credential = error.credential;
       console.log(error);
     });
-}
-
-/*
- check login
-*/
-export function checkLogin() {
-  auth.onAuthStateChanged(function (user) {
-    if (user) {
-      // console.log(auth.currentUser.uid);
-      // setUid(auth.currentUser.uid);
-      console.log(auth.currentUser.uid);
-      return auth.currentUser.uid;
-    } else {
-      return false;
-    }
-  });
 }
 
 /*********************************** 

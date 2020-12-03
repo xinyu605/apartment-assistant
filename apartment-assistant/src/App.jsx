@@ -7,80 +7,71 @@ import {
   Route,
   Link,
   Redirect,
+  useHistory,
   // useParams,   //nested router
   // useRouteMatch,
 } from "react-router-dom";
 import { Admin } from "./component/Admin";
 import Entry from "./component/Entry";
 import SignIn from "./component/SignIn";
-import { checkLogin } from "./firebase";
+// import { checkLogin } from "./firebase";
 import firebase from "firebase";
+import { checkUserName } from "./lib";
 
 let auth = firebase.auth();
 
 function App() {
-  const [uid, setUid] = useState("");
-
-  useEffect(() => {
-    auth.onAuthStateChanged(function (user) {
-      if (user) {
-        // console.log(auth.currentUser.uid);
-        console.log("fire2");
-        setUid(auth.currentUser.uid);
-      }
-    });
-  }, []);
-
-  console.log(uid);
   function logout() {
     auth.signOut().then(() => {
       alert("See you later!");
       let user = auth.currentUser;
       console.log(user);
-      window.location.href = "/";
+      window.location.href = "/signin";
     });
   }
 
-  if (uid) {
-    return (
-      <Router>
-        <Route path="/">
-          <div className={styles.App}>
-            <Switch>
-              <Route path="/entry">
-                <Entry logout={logout} />
-              </Route>
-              <Route path="/admin">
-                <Admin logout={logout} uid={uid} />
-              </Route>
-              <Route path="/">
-                <Home logout={logout} />
-                <div>been here </div>
-              </Route>
-            </Switch>
-          </div>
-        </Route>
-      </Router>
-    );
-  } else {
-    return (
-      <Router>
-        <Redirect to="/signin" />
-        <Route exact path="/signin">
-          <SignIn />
-        </Route>
-      </Router>
-    );
-  }
+  return (
+    <Router>
+      <Route path="/" component={Home} />
+      <Route path="/">
+        <div className={styles.App}>
+          <Switch>
+            <Route
+              path="/entry"
+              render={(props) => <Entry {...props} logout={logout} />}
+            />
+            <Route
+              path="/admin"
+              render={(props) => <Admin {...props} logout={logout} />}
+            />
+            <Route path="/signin" component={SignIn} />
+          </Switch>
+        </div>
+      </Route>
+    </Router>
+  );
 }
 
 function Home(props) {
-  return (
-    <div>
-      <h2>Homepage</h2>
-      <button onClick={props.logout}>登出</button>
-    </div>
-  );
+  let history = useHistory();
+  let path = "";
+  useEffect(() => {
+    auth.onAuthStateChanged(function (user) {
+      if (user) {
+        if (user.email === "admin@apartment.com") {
+          path = "/admin";
+        } else {
+          path = "/entry";
+        }
+      } else {
+        path = "/signin";
+      }
+      // setChecked(true);
+      history.push(path);
+      // window.location.href = `.${path}`;
+    });
+  }, []);
+  return <div className={styles.App}></div>;
 }
 
 export default App;

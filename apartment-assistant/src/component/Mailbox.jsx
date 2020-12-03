@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
-import { getMailList } from "./../firebase";
+import { getMailList, getResidentList } from "./../firebase";
 import styles from "./MailList.module.scss";
 
 /*****************************
@@ -24,11 +24,14 @@ function Mailbox() {
   const [state, setState] = useState(false);
   const [untakenData, setUntakenData] = useState([]);
   const [takenData, setTakenData] = useState([]);
+  const [residentData, setResidentData] = useState([]);
+
+  const [newMail, setNewMail] = useState(false);
 
   // useEffect will run only after an initial render, and after an update on data is occurred
   useEffect(() => {
     getMailList(false).then((mailList) => {
-      console.log(mailList);
+      // console.log(mailList);
       setUntakenData(mailList);
     });
     getMailList(true).then((mailList) => {
@@ -36,6 +39,13 @@ function Mailbox() {
       setTakenData(mailList);
     });
   }, [state]); //[]內放需要監聽(有變動就要執行function)的state
+
+  useEffect(() => {
+    getResidentList().then((residentList) => {
+      // console.log(residentList);
+      setResidentData(residentList);
+    });
+  }, []);
 
   function toggleState(e) {
     switch (e.currentTarget.id) {
@@ -50,6 +60,10 @@ function Mailbox() {
     }
   }
 
+  function updateNewMail() {
+    newMail ? setNewMail(false) : setNewMail(true);
+  }
+
   return (
     <div className={styles.mailBox}>
       <MailList
@@ -57,9 +71,13 @@ function Mailbox() {
         untakenMails={untakenData}
         takenMails={takenData}
         toggleState={toggleState}
+        newMail={newMail}
       />
-      <Route exact path="/admin/mailbox" component={UpdateMailList} />
-      {/* <UpdateMailList /> */}
+      {/* <Route exact path="/admin/mailbox" component={UpdateMailList} /> */}
+      <UpdateMailList
+        updateNewMail={updateNewMail}
+        residentList={residentData}
+      />
     </div>
   );
 }

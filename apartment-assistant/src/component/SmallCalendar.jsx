@@ -21,7 +21,8 @@ export function SmallCalendar(props) {
     props.updateReceiveDate(thisYear, thisMonth, receiveDate);
   }, [isCalendarShowing, thisYear, thisMonth, receiveDate]);
 
-  function toggleCalendar() {
+  function toggleCalendar(e) {
+    e.preventDefault();
     isCalendarShowing ? setCalendarShowing(false) : setCalendarShowing(true);
   }
 
@@ -104,7 +105,9 @@ export function SmallCalendar(props) {
               <option value="11">11 月</option>
               <option value="12">12 月</option>
             </select>
-            <button onClick={toggleCalendar}>確定</button>
+            <button className={styles.decideDate} onClick={toggleCalendar}>
+              確定
+            </button>
           </div>
           <div className={styles.calendarBody}>
             <ul className={styles.days} id="days">
@@ -123,14 +126,15 @@ export function SmallCalendar(props) {
     );
   } else {
     return (
-      <div>
+      <div className={styles.selectReceiveTime}>
         {thisYear}年{thisMonth}月{receiveDate}日
-        <input
+        <button
           type="button"
           className={styles.editBtn}
-          value="修改"
           onClick={toggleCalendar}
-        ></input>
+        >
+          修改
+        </button>
       </div>
     );
   }
