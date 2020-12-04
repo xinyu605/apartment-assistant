@@ -12,7 +12,7 @@ import {
   // useRouteMatch,
 } from "react-router-dom";
 import { Admin } from "./component/Admin";
-import Entry from "./component/Entry";
+import Entry from "./component/Entry/Entry";
 import SignIn from "./component/SignIn";
 import firebase from "firebase";
 

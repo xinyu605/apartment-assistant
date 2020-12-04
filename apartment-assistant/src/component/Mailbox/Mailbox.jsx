@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
-import { getMailList, getResidentList } from "./../firebase";
+import { getMailList, getResidentList } from "./../../firebase";
 import styles from "./MailList.module.scss";
 
 /*****************************

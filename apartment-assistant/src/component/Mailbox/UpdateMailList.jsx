@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { SmallCalendar } from "./SmallCalendar";
 import styles from "./UpdateMailList.module.scss";
-import { uploadMailList, getTimeStamp, getReceiverInfo } from "./../firebase";
+import {
+  uploadMailList,
+  getTimeStamp,
+  getReceiverInfo,
+} from "./../../firebase";
 import { nanoid } from "nanoid";
-import envelope from "./../img/envelope.svg";
+import envelope from "./../../img/envelope.svg";
 
 export function UpdateMailList(props) {
   const [mailNumber, setMailNumber] = useState("");

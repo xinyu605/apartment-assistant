@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Entry.module.scss";
-import logo from "./../img/logo.png";
-import mailbox from "./../img/inboxUntaken.svg";
-import list from "./../img/list.svg";
+import logo from "./../../img/logo.png";
+import mailbox from "./../../img/inboxUntaken.svg";
+import list from "./../../img/list.svg";
 import firebase from "firebase";
-import { getUserMailList, getUserProfile } from "./../firebase";
+import { getUserMailList, getUserProfile } from "./../../firebase";
 import { nanoid } from "nanoid";
-import { showDate } from "./../lib";
+import { showDate } from "./../../lib";
 
 let auth = firebase.auth();
 export default function Entry(props) {

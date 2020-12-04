@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./SmallCalendar.module.scss";
-import { showCalendar } from "./../lib";
+import { showCalendar } from "./../../lib";
 
 /************************
  SmallCalendar component 

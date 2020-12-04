@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import inboxUntaken from "./../img/inboxUntaken.svg";
-import inboxTaken from "./../img/inboxTaken.svg";
+import inboxUntaken from "./../../img/inboxUntaken.svg";
+import inboxTaken from "./../../img/inboxTaken.svg";
 import styles from "./MailList.module.scss";
-import { showDate, scrollToTarget } from "./../lib";
-import { updateMailStatus } from "./../firebase";
+import { showDate, scrollToTarget } from "./../../lib";
+import { updateMailStatus } from "./../../firebase";
 
 export function MailList(props) {
   const [newMail, setNewMail] = useState(props.newMail);

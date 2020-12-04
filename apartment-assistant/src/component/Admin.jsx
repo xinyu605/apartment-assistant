@@ -9,7 +9,8 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import logo from "./../img/logo.png";
-import Mailbox from "./Mailbox";
+import Resident from "./Resident/Resident";
+import Mailbox from "./Mailbox/Mailbox";
 import styles from "./../App.module.scss";
 import firebase from "firebase";
 
@@ -67,14 +68,6 @@ function Sidebar(props) {
       <button id="logout" className={styles.logout} onClick={props.logout}>
         登出
       </button>
-    </div>
-  );
-}
-
-function Resident() {
-  return (
-    <div>
-      <h2>住戶資訊</h2>
     </div>
   );
 }
