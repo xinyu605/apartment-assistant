@@ -14,9 +14,7 @@ import {
 import { Admin } from "./component/Admin";
 import Entry from "./component/Entry";
 import SignIn from "./component/SignIn";
-// import { checkLogin } from "./firebase";
 import firebase from "firebase";
-import { checkUserName } from "./lib";
 
 let auth = firebase.auth();
 
@@ -66,7 +64,6 @@ function Home(props) {
       } else {
         path = "/signin";
       }
-      // setChecked(true);
       history.push(path);
       // window.location.href = `.${path}`;
     });

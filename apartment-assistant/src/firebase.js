@@ -19,6 +19,19 @@ let refMailbox = db.collection("mailbox");
 let users = db.collection("users");
 
 /*******************
+ get user profile
+ *******************/
+export function getUserProfile(uid) {
+  return users
+    .doc(uid)
+    .get()
+    .then((doc) => {
+      // console.log(doc.data());
+      return doc.data();
+    });
+}
+
+/*******************
  get resident list
  *******************/
 export function getResidentList() {
@@ -48,6 +61,29 @@ export function getMailList(status = false) {
   return refMailbox
     .where("status", "==", status) //status= true (taken) | false (untaken)
     .orderBy("mailNumbers", "asc")
+    .get()
+    .then((docRef) => {
+      docRef.forEach((doc) => {
+        if (doc.id) {
+          data = [...data, doc.data()];
+          return data;
+        }
+      });
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+/****************************************
+ get user's mailList
+ ****************************************/
+export function getUserMailList(email, status = false) {
+  let data = [];
+  return refMailbox
+    .where("receiverEmail", "==", email)
+    .where("status", "==", status)
     .get()
     .then((docRef) => {
       docRef.forEach((doc) => {
