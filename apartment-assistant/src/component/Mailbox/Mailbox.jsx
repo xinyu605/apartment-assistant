@@ -41,10 +41,14 @@ function Mailbox() {
   }, [state]); //[]內放需要監聽(有變動就要執行function)的state
 
   useEffect(() => {
+    let isMounted = true; // note this flag denote mount status
     getResidentList().then((residentList) => {
-      // console.log(residentList);
-      setResidentData(residentList);
+      console.log(residentList);
+      if (isMounted) setResidentData(residentList);
     });
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
   }, []);
 
   function toggleState(e) {

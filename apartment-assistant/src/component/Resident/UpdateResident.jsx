@@ -1,18 +1,11 @@
-import { checkPropTypes } from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./UpdateResident.module.scss";
+import { uploadResident } from "./../../firebase";
 
 export default function UpdateResident() {
   const [familyMembersForm, setFamilyMemberForm] = useState([
     { id: "member0" },
   ]);
-  const [residentNumbers, setResidentNumbers] = useState("");
-  const [floor, setFloor] = useState(0);
-  const [address, setAddress] = useState("");
-  const [remark, setRemark] = useState("無");
-  const [memberNameList, setMemberNameList] = useState([]);
-  const [memberPhoneList, setMemberPhoneList] = useState([]);
-  const [memberEmailList, setMemberEmailList] = useState([]);
 
   /**************************************************
   Create / Delete one more family member input form
@@ -39,26 +32,52 @@ export default function UpdateResident() {
 
   function packingInfo(e) {
     e.preventDefault();
+    let message = false;
+    let inputs = document.querySelectorAll("input");
+
     let residentNumbers = document.querySelector("#residentNumbers").value;
     let floor = parseInt(document.querySelector("#floor").value);
     let address = document.querySelector("#address").value;
     let remark = document.querySelector("#remark").value;
-    let nameList = [];
-    let phoneList = [];
-    let emailList = [];
-    for (let i = 0; i < familyMembersForm.length; i++) {
-      nameList[i] = document.querySelector(`#inputName${i}`).value;
-      phoneList[i] = document.querySelector(`#inputPhone${i}`).value;
-      emailList[i] = document.querySelector(`#inputEmail${i}`).value;
+    let familyMembers = [];
+
+    if (remark === "") {
+      remark = "無";
     }
 
-    setResidentNumbers(residentNumbers);
-    setFloor(floor);
-    setAddress(address);
-    setRemark(remark);
-    setMemberNameList(nameList);
-    setMemberPhoneList(phoneList);
-    setMemberEmailList(emailList);
+    for (let i = 0; i < familyMembersForm.length; i++) {
+      familyMembers[i] = {
+        name: document.querySelector(`#inputName${i}`).value,
+        phone: document.querySelector(`#inputPhone${i}`).value,
+        email: document.querySelector(`#inputEmail${i}`).value,
+      };
+    }
+
+    const infoPackage = {
+      residentNumbers: residentNumbers,
+      floor: floor,
+      address: address,
+      remark: remark,
+      familyMembers: familyMembers,
+    };
+
+    // console.log(inputs);
+    for (let i = 1; i < inputs.length; i++) {
+      if (inputs[i].value === "") {
+        inputs[i].classList.add(styles.focus);
+        message = true;
+      }
+    }
+
+    if (message) {
+      alert("還有空白欄位尚未填寫完成喔！");
+      message = false;
+    } else {
+      uploadResident(infoPackage);
+      for (let i = 1; i < inputs.length; i++) {
+        inputs[i].value = "";
+      }
+    }
   }
 
   /****************************

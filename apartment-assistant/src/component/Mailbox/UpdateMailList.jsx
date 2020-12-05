@@ -38,10 +38,13 @@ export function UpdateMailList(props) {
     setFamilyMembers([]);
     setFamilyMembersEmail([]);
     const residentList = props.residentList;
+    console.log(residentList);
     let familyMembersName = [];
     let familyMembersEmail = [];
     for (let i = 0; i < residentList.length; i++) {
       if (residentList[i].residentNumbers === residentNumber) {
+        console.log(residentList[i]);
+
         for (let j = 0; j < residentList[i].familyMembers.length; j++) {
           familyMembersName = [
             ...familyMembersName,

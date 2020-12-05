@@ -53,6 +53,36 @@ export function getResidentList() {
     });
 }
 
+/*********************
+ upload resident list
+ *********************/
+export function uploadResident(data) {
+  refResident
+    .add({
+      residentNumbers: data.residentNumbers,
+      floor: data.floor,
+      address: data.address,
+      remark: data.remark,
+      familyMembers: data.familyMembers,
+    })
+    .then((docRef) => {
+      console.log(docRef.id);
+      for (let i = 0; i < data.familyMembers.length; i++) {
+        refResident.doc(docRef.id).collection("familyMembers").doc().set(
+          {
+            name: data.familyMembers[i].name,
+            phone: data.familyMembers[i].phone,
+            email: data.familyMembers[i].email,
+          },
+          { merge: true }
+        );
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 /****************************************
  get untaken mailList and taken mailList
  ****************************************/
@@ -99,9 +129,9 @@ export function getUserMailList(email, status = false) {
     });
 }
 
-/********************************************************************************************
- get receiver's familyMembers from resident document and append to assigned mailList document
- ********************************************************************************************/
+/*****************************************************
+ get receiver's familyMembers from resident document
+ *****************************************************/
 
 // export async function getReceiverInfo(residentNumbers, mailId) {
 //   let receiverData = [];
