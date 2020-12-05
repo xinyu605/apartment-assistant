@@ -3,54 +3,91 @@ import React, { useEffect, useState } from "react";
 import styles from "./UpdateResident.module.scss";
 
 export default function UpdateResident() {
-  const [familyMembers, setFamilyMembers] = useState(["familyMembers-0"]);
-  const [inputName, setInputName] = useState(["inputName-0"]);
-  const [inputPhone, setInputPhone] = useState(["inputPhone-0"]);
-  const [inputEmail, setInputEmail] = useState(["inputEmail-0"]);
+  const [familyMembersForm, setFamilyMemberForm] = useState([
+    { id: "member0" },
+  ]);
+  const [residentNumbers, setResidentNumbers] = useState("");
+  const [floor, setFloor] = useState(0);
+  const [address, setAddress] = useState("");
+  const [remark, setRemark] = useState("無");
 
   function createInputs(e) {
     e.preventDefault();
-    let newFamilyMembers = `familyMembers-${familyMembers.length}`;
-    let newInputName = `inputName-${inputName.length}`;
-    let newInputPhone = `inputPhone-${inputPhone.length}`;
-    let newInputEmail = `inputEmail-${inputEmail.length}`;
-    setFamilyMembers([...familyMembers, newFamilyMembers]);
-    setInputName([...inputName, newInputName]);
-    setInputPhone([...inputPhone, newInputPhone]);
-    setInputEmail([...inputEmail, newInputEmail]);
+    setFamilyMemberForm([
+      ...familyMembersForm,
+      { id: `member${familyMembersForm.length}` },
+    ]);
+  }
+
+  function deleteLastInput(e) {
+    e.preventDefault();
+    familyMembersForm.pop();
+    console.log(familyMembersForm);
+    setFamilyMemberForm(familyMembersForm); //bug: 無法順利更新 familyMemberForm state
+  }
+
+  const FamilyMemberForm = familyMembersForm.map((item) => {
+    return (
+      <FamilyMembers
+        id={`familyMembers${item.id}`}
+        key={`familyMembers${item.id}`}
+      />
+    );
+  });
+
+  /************************
+ Get user's input value
+ ***********************/
+  function updateInfo(e) {
+    let inputValue = e.currentTarget.value;
+    switch (e.currentTarget.id) {
+      case "residentNumbers":
+        setResidentNumbers(inputValue);
+        break;
+      case "floor":
+        setFloor(parseInt(inputValue));
+        break;
+      case "address":
+        setAddress(inputValue);
+        break;
+      case "remark":
+        setRemark(inputValue);
+        break;
+      default:
+        break;
+    }
   }
 
   return (
     <div className={styles.updateResident}>
       <form>
-        <input id="residentNumber" type="text" placeholder="請填寫戶號"></input>
-        <input id="floor" placeholder="請填寫樓層"></input>
-        <input id="address" placeholder="請填寫地址"></input>
-        <input id="remark" type="text" placeholder="請填寫備註"></input>
+        <input
+          id="residentNumbers"
+          type="text"
+          placeholder="請填寫戶號"
+          onChange={updateInfo}
+        ></input>
+        <input
+          id="floor"
+          placeholder="請填寫樓層"
+          onChange={updateInfo}
+        ></input>
+        <input
+          id="address"
+          placeholder="請填寫地址"
+          onChange={updateInfo}
+        ></input>
+        <input
+          id="remark"
+          type="text"
+          placeholder="請填寫備註"
+          onChange={updateInfo}
+        ></input>
         <div className={styles.familyMemberList}>
           <h3>住戶成員</h3>
-          <input id="inputName-0" type="text" placeholder="請填寫姓名"></input>
-          <input
-            id="inputPhone-0"
-            type="text"
-            placeholder="請填寫聯絡電話"
-          ></input>
-          <input
-            id="inputEmail-0"
-            type="text"
-            placeholder="請填寫Email"
-          ></input>
-          {/* <FamilyMembers /> */}
-          <FamilyMembers
-            familyMembers={familyMembers}
-            inputName={inputName}
-            inputPhone={inputPhone}
-            inputEmail={inputEmail}
-          />
-          <button id="createMemberInput" onClick={createInputs}>
-            +
-          </button>
-          <button id="deleteMemberInput">-</button>
+          {FamilyMemberForm}
+          <button onClick={createInputs}>+</button>
+          <button onClick={deleteLastInput}>-</button>
         </div>
       </form>
     </div>
@@ -58,12 +95,29 @@ export default function UpdateResident() {
 }
 
 function FamilyMembers(props) {
-  let familyMembers = props.familyMembers;
+  console.log(props);
   return (
-    <div className={styles.familyMembers}>
-      <input type="text" placeholder="請填寫姓名"></input>
-      <input type="text" placeholder="請填寫聯絡電話"></input>
-      <input type="text" placeholder="請填寫Email"></input>
+    <div
+      className={styles.familyMember}
+      id={`familymember${props.id}`}
+      key={`familymember${props.id}`}
+    >
+      <input
+        id={`inputName${props.id}`}
+        type="text"
+        placeholder="請填寫姓名"
+        // onChange={updateMemberName}
+      ></input>
+      <input
+        id={`inputPhone${props.id}`}
+        type="text"
+        placeholder="請填寫聯絡電話"
+      ></input>
+      <input
+        id={`inputEmail${props.id}`}
+        type="text"
+        placeholder="請填寫Email"
+      ></input>
     </div>
   );
 }
