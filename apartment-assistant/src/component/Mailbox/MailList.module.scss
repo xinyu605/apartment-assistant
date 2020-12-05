@@ -79,6 +79,7 @@
   .addBtn {
     width: 60px;
     height: 30px;
+    background-color: $color-fireOpal;
     cursor: pointer;
   }
 }
@@ -107,7 +108,7 @@
       width: 70px;
       height: 30px;
       font-size: $font-size-xsmall;
-      color: $base-text-color;
+      color: $light-text-color;
       background-color: $small-button-background-color;
       cursor: pointer;
     }

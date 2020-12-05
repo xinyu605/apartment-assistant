@@ -1,11 +1,20 @@
+/* theme colors */
+$color-opal: #96bbbb;
+$color-steelTeal: #618985;
+$color-rifleGreen: #414535;
+$color-fireOpal: #f26157;
+$color-dutchWhite: #f2e3bc;
+
 $admin-margin-left: 270px;
 $admin-margin-top: 60px;
 
-$base-text-color: #445;
-$base-border-color: #445;
+$base-text-color: #414535;
+$light-text-color: #fff;
+$light-border-color: #96bbbb;
+$base-border-color: #414535;
 $base-border-radius: 5px;
-$base-button-background-color: rgb(21, 54, 44);
-$small-button-background-color: rgb(162, 204, 154);
+$base-button-background-color: #414535;
+$small-button-background-color: #96bbbb;
 $base-background: rgb(251, 196, 63);
 $gradient-background: linear-gradient(
   336deg,
@@ -25,6 +34,22 @@ $light-box-shadow: 0px 0px 5px 3px rgba(216, 146, 55, 0.52);
 
 $font-size-small: 16px;
 $font-size-xsmall: 14px;
+
+@mixin label-list {
+  margin: 5px;
+  padding-right: 10px;
+  font-size: 1em;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+@mixin input-base {
+  border: 1px solid $base-border-color;
+  border-radius: $base-border-radius;
+  margin: 10px 0;
+  font-size: $font-size-xsmall;
+  color: $base-text-color;
+}
 
 * {
   box-sizing: border-box;

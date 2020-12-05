@@ -7,6 +7,7 @@ export default function ResidentList() {
       <div className={styles.residentDetail}>
         <div>V</div>
         <div className={styles.residentInfo}>
+          <button>刪除</button>
           <div className={`${styles.items} ${styles.item1}`}>
             <div className={styles.itemTitle}>戶號</div>
             <div>201</div>

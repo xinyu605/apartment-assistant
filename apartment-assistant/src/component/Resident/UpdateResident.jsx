@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "./UpdateResident.module.scss";
 import { uploadResident } from "./../../firebase";
+import memberIcon1 from "./../../img/members1.svg";
+import memberIcon2 from "./../../img/members2.svg";
 
 export default function UpdateResident() {
   const [familyMembersForm, setFamilyMemberForm] = useState([
@@ -90,22 +92,79 @@ export default function UpdateResident() {
 
   return (
     <div className={styles.updateResident}>
-      <form>
-        <input
-          id="residentNumbers"
-          type="text"
-          placeholder="請填寫戶號"
-        ></input>
-        <input id="floor" placeholder="請填寫樓層"></input>
-        <input id="address" placeholder="請填寫地址"></input>
-        <input id="remark" type="text" placeholder="請填寫備註"></input>
-        <div className={styles.familyMemberList}>
-          <h3>住戶成員</h3>
-          {FamilyMemberForm}
-          <button onClick={createInputs}>+</button>
-          <button onClick={deleteLastInput}>-</button>
+      <div className={styles.titleContainer}>
+        <div className={styles.titleImg}>
+          <img src={memberIcon1} />
         </div>
-        <button onClick={packingInfo}>確定</button>
+        <h3 className={styles.title}>新增住戶</h3>
+      </div>
+      <form className={styles.updateResidentDetails}>
+        <div className={styles.basicInfo}>
+          <label
+            className={`${styles.detailTitle} ${styles.titleResidentNumbers}`}
+          >
+            戶號
+          </label>
+          <input
+            className={`${styles.detailInput} ${styles.inputResidentNumbers}`}
+            id="residentNumbers"
+            type="text"
+            placeholder="請填寫戶號"
+          ></input>
+          <label className={`${styles.detailTitle} ${styles.titleFloor}`}>
+            樓層
+          </label>
+          <input
+            className={`${styles.detailInput} ${styles.inputFloor}`}
+            id="floor"
+            placeholder="請填寫樓層"
+          ></input>
+          <label className={`${styles.detailTitle} ${styles.titleAddress}`}>
+            地址
+          </label>
+          <input
+            className={`${styles.detailInput} ${styles.inputAddress}`}
+            id="address"
+            placeholder="請填寫地址"
+          ></input>
+          <label className={`${styles.detailTitle} ${styles.titleRemark}`}>
+            備註
+          </label>
+          <input
+            className={`${styles.detailInput} ${styles.inputRemark}`}
+            id="remark"
+            type="text"
+            placeholder="請填寫備註"
+          ></input>
+        </div>
+
+        <div className={styles.familyMemberList}>
+          <div className={styles.titleContainer}>
+            <div className={styles.titleImg}>
+              <img src={memberIcon2} />
+            </div>
+            <h3 className={styles.title}>住戶成員</h3>
+            <div className={styles.buttonContainer}>
+              <button
+                className={styles.buttonMemberList}
+                onClick={createInputs}
+              >
+                +
+              </button>
+              <button
+                className={styles.buttonMemberList}
+                onClick={deleteLastInput}
+              >
+                -
+              </button>
+            </div>
+          </div>
+
+          {FamilyMemberForm}
+        </div>
+        <button className={styles.submitMemberList} onClick={packingInfo}>
+          確定
+        </button>
       </form>
     </div>
   );
@@ -115,17 +174,23 @@ function FamilyMembers(props) {
   const number = props.id.slice(12);
   return (
     <div className={styles.familyMember} id={`${props.id}`} key={`${props.id}`}>
+      <label className={styles.familyTitle}>姓名</label>
       <input
+        className={styles.familyInput}
         id={`inputName${number}`}
         type="text"
         placeholder="請填寫姓名"
       ></input>
+      <label className={styles.familyTitle}>聯絡電話</label>
       <input
+        className={styles.familyInput}
         id={`inputPhone${number}`}
         type="text"
         placeholder="請填寫聯絡電話"
       ></input>
+      <label className={styles.familyTitle}>Email</label>
       <input
+        className={styles.familyInput}
         id={`inputEmail${number}`}
         type="text"
         placeholder="請填寫Email"
