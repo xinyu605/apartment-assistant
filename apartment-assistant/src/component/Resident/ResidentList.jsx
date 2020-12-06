@@ -3,9 +3,16 @@ import { showDate } from "../../lib";
 import styles from "./ResidentList.module.scss";
 
 export default function ResidentList(props) {
-  let lists = props.residentList;
+  let lists = [];
+  let resultList = props.searchResult;
   let updateDate = "";
-  console.log(lists);
+  console.log(resultList);
+
+  if (resultList.length !== 0) {
+    lists = resultList;
+  } else {
+    lists = props.residentList;
+  }
 
   const MemberList = (list) => {
     let familyMembers = list.familyMembers.map((member) => {

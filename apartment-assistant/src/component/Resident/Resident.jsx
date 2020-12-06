@@ -8,6 +8,11 @@ import searchImg from "./../../img/search.svg";
 
 export default function Resident() {
   const [residentList, setResidentList] = useState([]);
+  const [searchResult, setSearchResult] = useState([]);
+
+  /************************************* 
+   get resident list and pass to state
+  **************************************/
   useEffect(() => {
     let isMounted = true; // note this flag denote mount status
     getResidentList().then((residents) => {
@@ -17,6 +22,18 @@ export default function Resident() {
       isMounted = false;
     }; // use effect cleanup to set flag false, if unmounted
   }, []);
+
+  function searchResident(e) {
+    e.preventDefault();
+    const searchNumber = document.querySelector("#searchInput").value;
+    console.log(searchNumber);
+    const resultResident = residentList.filter(
+      (list) => list.residentNumbers === searchNumber
+    );
+    console.log(resultResident);
+    // setResidentList(resultResident);
+    setSearchResult(resultResident);
+  }
 
   return (
     <div className={styles.residentPage}>
@@ -30,17 +47,18 @@ export default function Resident() {
 
         <div className={styles.searchContainer}>
           <input
+            id="searchInput"
             className={styles.searchInput}
             type="text"
             placeholder="戶號"
           ></input>
-          <div className={styles.searchButton}>
+          <div className={styles.searchButton} onClick={searchResident}>
             <img src={searchImg} />
           </div>
         </div>
       </div>
 
-      <ResidentList residentList={residentList} />
+      <ResidentList residentList={residentList} searchResult={searchResult} />
       <UpdateResident />
     </div>
   );
