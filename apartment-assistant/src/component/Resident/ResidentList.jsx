@@ -12,21 +12,18 @@ export default function ResidentList(props) {
       let index = list.familyMembers.indexOf(member);
       return (
         <div
-          className={styles.memberList}
+          className={`${styles.memberInfo}`}
           id={`memberList${index}`}
           key={`memberList${index}`}
         >
-          <div className={`${styles.items} ${styles.item2}`}>
-            <div className={styles.itemTitle}>姓名</div>
-            <div>{member.name}</div>
+          <div className={`${styles.members} ${styles.memberName}`}>
+            {member.name}
           </div>
-          <div className={`${styles.items} ${styles.item3}`}>
-            <div className={styles.itemTitle}>聯絡電話</div>
-            <div>{member.phone}</div>
+          <div className={`${styles.members} ${styles.memberPhone}`}>
+            {member.phone}
           </div>
-          <div className={`${styles.items} ${styles.item4}`}>
-            <div className={styles.itemTitle}>Email</div>
-            <div>{member.email}</div>
+          <div className={`${styles.members} ${styles.memberEmail}`}>
+            {member.email}
           </div>
         </div>
       );
@@ -46,19 +43,31 @@ export default function ResidentList(props) {
         id={`residentInfo${index}`}
         key={`residentInfo${index}`}
       >
-        <div className={`${styles.items} ${styles.item1}`}>
-          <div className={styles.itemTitle}>戶號</div>
-          <div>{list.residentNumbers}</div>
+        <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
+          戶號
         </div>
-        <div className={`${styles.items} ${styles.item5}`}>
-          <div className={styles.itemTitle}>地址</div>
-          <div>{list.address}</div>
+        <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
+          {list.residentNumbers}
         </div>
-        <div className={`${styles.items} ${styles.item6}`}>
-          <div className={styles.itemTitle}>更新日期</div>
-          <div>{updateDate}</div>
+        <div className={`${styles.itemTitle} ${styles.titleAddress}`}>地址</div>
+        <div className={`${styles.items} ${styles.itemAddress}`}>
+          {list.address}
         </div>
-        {MemberList(list)}
+        <div className={`${styles.itemTitle} ${styles.titleDate}`}>
+          更新日期
+        </div>
+        <div className={`${styles.items} ${styles.itemDate}`}>{updateDate}</div>
+        <div className={`${styles.itemTitle} ${styles.titleMembers}`}>
+          住戶成員
+        </div>
+        <div className={`${styles.itemTitle} ${styles.titleName}`}>姓名</div>
+        <div className={`${styles.itemTitle} ${styles.titlePhone}`}>
+          聯絡電話
+        </div>
+        <div className={`${styles.itemTitle} ${styles.titleEmail}`}>Email</div>
+        <div className={`${styles.items} ${styles.itemMembers}`}>
+          {MemberList(list)}
+        </div>
       </div>
     );
   });

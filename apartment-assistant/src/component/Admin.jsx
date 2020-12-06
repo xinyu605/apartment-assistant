@@ -12,6 +12,7 @@ import logo from "./../img/logo.png";
 import Board from "./Board/Board";
 import Resident from "./Resident/Resident";
 import Mailbox from "./Mailbox/Mailbox";
+import Field from "./Field/Field";
 import styles from "./../App.module.scss";
 import firebase from "firebase";
 
@@ -69,14 +70,6 @@ function Sidebar(props) {
       <button id="logout" className={styles.logout} onClick={props.logout}>
         登出
       </button>
-    </div>
-  );
-}
-
-function Field() {
-  return (
-    <div>
-      <h2>場地租借紀錄</h2>
     </div>
   );
 }
