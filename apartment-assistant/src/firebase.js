@@ -64,6 +64,7 @@ export function uploadResident(data) {
       address: data.address,
       remark: data.remark,
       familyMembers: data.familyMembers,
+      updateDate: data.updateDate,
     })
     .then((docRef) => {
       console.log(docRef.id);

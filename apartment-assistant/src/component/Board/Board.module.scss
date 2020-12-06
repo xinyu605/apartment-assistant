@@ -1,0 +1,10 @@
+@import "./../../common";
+
+.board {
+  width: 85%;
+  max-width: 1000px;
+  min-height: 100vh;
+  padding: 40px;
+  margin-left: $admin-margin-left;
+  margin-top: $admin-margin-top;
+}

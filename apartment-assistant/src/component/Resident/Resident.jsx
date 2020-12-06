@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ResidentList from "./ResidentList";
 import UpdateResident from "./UpdateResident";
+import { getResidentList } from "./../../firebase";
 import styles from "./Resident.module.scss";
 import headerImg from "./../../img/home.svg";
 import searchImg from "./../../img/search.svg";
 
 export default function Resident() {
+  const [residentList, setResidentList] = useState([]);
+  useEffect(() => {
+    let isMounted = true; // note this flag denote mount status
+    getResidentList().then((residents) => {
+      if (isMounted) setResidentList(residents);
+    });
+    return () => {
+      isMounted = false;
+    }; // use effect cleanup to set flag false, if unmounted
+  }, []);
+
   return (
     <div className={styles.residentPage}>
       <div className={styles.header}>
@@ -28,8 +40,7 @@ export default function Resident() {
         </div>
       </div>
 
-      <ResidentList />
-
+      <ResidentList residentList={residentList} />
       <UpdateResident />
     </div>
   );

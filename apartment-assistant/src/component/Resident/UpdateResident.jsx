@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./UpdateResident.module.scss";
-import { uploadResident } from "./../../firebase";
+import { uploadResident, getTimeStamp } from "./../../firebase";
 import memberIcon1 from "./../../img/members1.svg";
 import memberIcon2 from "./../../img/members2.svg";
 
@@ -55,12 +55,20 @@ export default function UpdateResident() {
       };
     }
 
+    const updateTime = new Date();
+    const year = updateTime.getFullYear();
+    const month = updateTime.getMonth() + 1;
+    const date = updateTime.getDate();
+    const secondsToFirebase = getTimeStamp(year, month, date);
+    // console.log(secondsToFirebase);
+
     const infoPackage = {
       residentNumbers: residentNumbers,
       floor: floor,
       address: address,
       remark: remark,
       familyMembers: familyMembers,
+      updateDate: secondsToFirebase,
     };
 
     // console.log(inputs);

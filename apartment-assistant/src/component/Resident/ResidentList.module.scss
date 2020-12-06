@@ -1,5 +1,10 @@
 @import "./../../common";
 .residentList {
-  border: 1px solid #ddf;
-  margin: 20px 0;
+  width: 100%;
+  max-height: 500px;
+  overflow-y: scroll;
+  margin: 20px auto;
+  padding: 10px 5px;
+  border-radius: $list-border-radius;
+  box-shadow: $list-box-shadow;
 }

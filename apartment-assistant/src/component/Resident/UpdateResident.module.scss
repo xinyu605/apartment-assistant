@@ -21,7 +21,7 @@
 
 .title {
   margin: 10px;
-  font-size: 1.2em;
+  font-size: 1.4em;
   font-weight: 600;
 }
 
@@ -84,6 +84,12 @@
         width: 50px;
         color: $base-text-color;
         background-color: $color-dutchWhite;
+
+        &:hover {
+          color: $light-text-color;
+          background-color: $color-fireOpal;
+          transition: all 0.3s ease-in-out;
+        }
       }
     }
   }

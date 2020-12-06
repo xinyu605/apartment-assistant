@@ -9,6 +9,7 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import logo from "./../img/logo.png";
+import Board from "./Board/Board";
 import Resident from "./Resident/Resident";
 import Mailbox from "./Mailbox/Mailbox";
 import styles from "./../App.module.scss";
@@ -76,14 +77,6 @@ function Field() {
   return (
     <div>
       <h2>場地租借紀錄</h2>
-    </div>
-  );
-}
-
-function Board() {
-  return (
-    <div>
-      <h2>社區公告</h2>
     </div>
   );
 }
