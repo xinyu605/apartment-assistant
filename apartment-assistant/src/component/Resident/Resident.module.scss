@@ -33,9 +33,20 @@
       }
     }
 
+    .addBtn {
+      width: 60px;
+      height: 30px;
+
+      // background-color: $color-fireOpal;
+      background-color: $color-steelTeal;
+      cursor: pointer;
+    }
+
     .searchContainer {
       width: 110px;
       height: 30px;
+      margin-left: auto;
+      margin-right: 10px;
       border: 1px solid $light-border-color;
       border-radius: $base-border-radius;
       display: flex;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { showDate } from "../../lib";
 import styles from "./ResidentList.module.scss";
+import trashIcon from "./../../img/trash.svg";
 
 export default function ResidentList(props) {
   let lists = [];
@@ -45,35 +46,46 @@ export default function ResidentList(props) {
 
     let index = lists.indexOf(list);
     return (
-      <div
-        className={styles.residentInfo}
-        id={`residentInfo${index}`}
-        key={`residentInfo${index}`}
-      >
-        <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
-          戶號
-        </div>
-        <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
-          {list.residentNumbers}
-        </div>
-        <div className={`${styles.itemTitle} ${styles.titleAddress}`}>地址</div>
-        <div className={`${styles.items} ${styles.itemAddress}`}>
-          {list.address}
-        </div>
-        <div className={`${styles.itemTitle} ${styles.titleDate}`}>
-          更新日期
-        </div>
-        <div className={`${styles.items} ${styles.itemDate}`}>{updateDate}</div>
-        <div className={`${styles.itemTitle} ${styles.titleMembers}`}>
-          住戶成員
-        </div>
-        <div className={`${styles.itemTitle} ${styles.titleName}`}>姓名</div>
-        <div className={`${styles.itemTitle} ${styles.titlePhone}`}>
-          聯絡電話
-        </div>
-        <div className={`${styles.itemTitle} ${styles.titleEmail}`}>Email</div>
-        <div className={`${styles.items} ${styles.itemMembers}`}>
-          {MemberList(list)}
+      <div key={`residentCard${index}`}>
+        <div className={styles.residentInfo} id={`residentInfo${index}`}>
+          <div
+            className={styles.trashImg}
+            id={`trash${index}`}
+            onClick={props.deleteResident}
+          >
+            <img src={trashIcon} />
+          </div>
+          <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
+            戶號
+          </div>
+          <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
+            {list.residentNumbers}
+          </div>
+          <div className={`${styles.itemTitle} ${styles.titleAddress}`}>
+            地址
+          </div>
+          <div className={`${styles.items} ${styles.itemAddress}`}>
+            {list.address}
+          </div>
+          <div className={`${styles.itemTitle} ${styles.titleDate}`}>
+            更新日期
+          </div>
+          <div className={`${styles.items} ${styles.itemDate}`}>
+            {updateDate}
+          </div>
+          <div className={`${styles.itemTitle} ${styles.titleMembers}`}>
+            住戶成員
+          </div>
+          <div className={`${styles.itemTitle} ${styles.titleName}`}>姓名</div>
+          <div className={`${styles.itemTitle} ${styles.titlePhone}`}>
+            聯絡電話
+          </div>
+          <div className={`${styles.itemTitle} ${styles.titleEmail}`}>
+            Email
+          </div>
+          <div className={`${styles.items} ${styles.itemMembers}`}>
+            {MemberList(list)}
+          </div>
         </div>
       </div>
     );

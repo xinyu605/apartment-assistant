@@ -99,12 +99,12 @@ export default function UpdateResident() {
   });
 
   return (
-    <div className={styles.updateResident}>
+    <div className={styles.updateResident} id="updateResident">
       <div className={styles.titleContainer}>
         <div className={styles.titleImg}>
           <img src={memberIcon1} />
         </div>
-        <h3 className={styles.title}>新增住戶</h3>
+        <h2 className={styles.title}>新增住戶</h2>
       </div>
       <form className={styles.updateResidentDetails}>
         <div className={styles.basicInfo}>
@@ -148,9 +148,6 @@ export default function UpdateResident() {
 
         <div className={styles.familyMemberList}>
           <div className={styles.titleContainer}>
-            <div className={styles.titleImg}>
-              <img src={memberIcon2} />
-            </div>
             <h3 className={styles.title}>住戶成員</h3>
             <div className={styles.buttonContainer}>
               <button

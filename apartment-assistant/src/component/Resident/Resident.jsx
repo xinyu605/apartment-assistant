@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ResidentList from "./ResidentList";
 import UpdateResident from "./UpdateResident";
 import { getResidentList } from "./../../firebase";
+import { scrollToTarget } from "./../../lib";
 import styles from "./Resident.module.scss";
 import headerImg from "./../../img/home.svg";
 import searchImg from "./../../img/search.svg";
@@ -26,13 +27,19 @@ export default function Resident() {
   function searchResident(e) {
     e.preventDefault();
     const searchNumber = document.querySelector("#searchInput").value;
-    console.log(searchNumber);
+    // console.log(searchNumber);
     const resultResident = residentList.filter(
       (list) => list.residentNumbers === searchNumber
     );
-    console.log(resultResident);
-    // setResidentList(resultResident);
+    // console.log(resultResident);
     setSearchResult(resultResident);
+  }
+
+  function deleteResident(e) {
+    const index = parseInt(e.currentTarget.id.slice(5));
+    residentList.splice(index, 1);
+    console.log(residentList);
+    setResidentList(residentList);
   }
 
   return (
@@ -56,9 +63,22 @@ export default function Resident() {
             <img src={searchImg} />
           </div>
         </div>
+
+        <button
+          className={styles.addBtn}
+          onClick={() => {
+            scrollToTarget("updateResident");
+          }}
+        >
+          新增
+        </button>
       </div>
 
-      <ResidentList residentList={residentList} searchResult={searchResult} />
+      <ResidentList
+        residentList={residentList}
+        searchResult={searchResult}
+        deleteResident={deleteResident}
+      />
       <UpdateResident />
     </div>
   );
