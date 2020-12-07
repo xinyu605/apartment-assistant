@@ -48,7 +48,7 @@ function Mailbox() {
   useEffect(() => {
     let isMounted = true; // note this flag denote mount status
     getResidentList().then((residentList) => {
-      console.log(residentList);
+      // console.log(residentList);
       if (isMounted) setResidentData(residentList);
     });
     return () => {

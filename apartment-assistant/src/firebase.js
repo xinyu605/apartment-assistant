@@ -216,18 +216,12 @@ export function getTimeStamp(year, month, date) {
 /****************************************
  update mail status (true ←→ false )
  ****************************************/
-export function updateMailStatus(number, status) {
+
+export function updateMailStatus(mailId, status) {
   return refMailbox
-    .where("mailNumbers", "==", number)
-    .get()
-    .then((docRef) => {
-      docRef.forEach((doc) => {
-        if (doc.id) {
-          refMailbox.doc(doc.id).update({
-            status: status,
-          });
-        }
-      });
+    .doc(mailId)
+    .update({ status: status })
+    .then(() => {
       console.log("update successful");
     })
     .catch((error) => {

@@ -25,6 +25,7 @@ export function MailList(props) {
   // console.log(props.state);
   // console.log(lists);
   const List = lists.map((list) => {
+    // console.log(list.mailId);
     if (list.receiveDate) {
       receiveDate = showDate(list.receiveDate.seconds);
     }
@@ -41,7 +42,11 @@ export function MailList(props) {
         <div className="receiveDate">{receiveDate}</div>
         <div className="place">{list.place}</div>
         <div className="remark">{list.remark}</div>
-        <button className={styles.status} id={`status${list.mailId}`}>
+        <button
+          className={styles.status}
+          id={`status${list.mailId}`}
+          onClick={changeMailStatus}
+        >
           {stateController}
         </button>
       </div>
@@ -51,24 +56,18 @@ export function MailList(props) {
   /****************************** 
    Change individual data status
   *******************************/
-  useEffect(() => {
-    const mailList = document.querySelector("#mailList");
-    // const listItems = mailList.querySelectorAll(`.${styles.list}`);
-    // console.log(listItems);
-    const statusButtons = mailList.querySelectorAll(".status");
-    let status = [];
-    for (let i = 0; i < statusButtons.length; i++) {
-      statusButtons[i].addEventListener("click", () => {
-        let ans = confirm("是否確定更新領取狀態？");
-        if (ans) {
-          const number = parseInt(statusButtons[i].id.slice(6));
-          props.state ? (status[i] = false) : (status[i] = true);
-          updateMailStatus(number, status[i]);
-          // window.location.href = "./mailbox";
-        }
-      });
+
+  function changeMailStatus(e) {
+    console.log(e.currentTarget.id);
+    let status;
+    let ans = confirm("是否確定更新領取狀態？");
+    if (ans) {
+      const mailId = e.currentTarget.id.slice(6);
+      props.state ? (status = false) : (status = true);
+      console.log(status);
+      updateMailStatus(mailId, status);
     }
-  }, [props]);
+  }
 
   /*************************************** 
    Toggle "未領取" "已領取" controller 外觀 
