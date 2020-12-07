@@ -32,6 +32,27 @@ export function getUserProfile(uid) {
     });
 }
 
+/*******************
+  get Board list
+ *******************/
+export function getBoardList() {
+  let data = [];
+  return refBoard
+    .get()
+    .then((docRef) => {
+      docRef.forEach((doc) => {
+        if (doc.id) {
+          data = [...data, doc.data()];
+          return data;
+        }
+      });
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 /*********************************** 
   upload announcement on board
 ***********************************/

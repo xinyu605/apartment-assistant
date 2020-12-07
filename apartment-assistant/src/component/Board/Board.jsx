@@ -1,10 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { nanoid } from "nanoid";
 import UpdateBoardList from "./UpdateBoardList";
+import { getBoardList } from "./../../firebase";
+import { showDate } from "./../../lib";
 import styles from "./Board.module.scss";
 import announcement from "./../../img/promotion.svg";
 import readMore from "./../../img/next.svg";
 
 export default function Board() {
+  const [matters, setMatters] = useState([]);
+  const [details, setDetails] = useState({});
+
+  useEffect(() => {
+    getBoardList().then((boardList) => {
+      setMatters(boardList);
+      setDetails(boardList[0]);
+    });
+  }, []);
+
+  const List = matters.map((matter) => {
+    const updateTime = showDate(matter.updateTime.seconds);
+    const index = matters.indexOf(matter);
+    return (
+      <li className={styles.matter} key={nanoid()}>
+        <p className={styles.matterDate}>{updateTime}</p>
+        <h4 className={styles.matterTitle}>{matter.topic}</h4>
+        <button
+          id={`showDetailBtn${index}`}
+          className={styles.readMoreBtn}
+          onClick={selectMatterDetail}
+        >
+          <img src={readMore} />
+        </button>
+      </li>
+    );
+  });
+
+  const detailArea = () => {
+    if (details.topic) {
+      return (
+        <div className={styles.matterDetails}>
+          <h4>{details.topic}</h4>
+          <p className={styles.detailAuthor}>發布者：{details.author}</p>
+          <p className={styles.detailDate}>
+            公告日期：{showDate(details.updateTime.seconds)}
+          </p>
+          <p className={styles.detailDeadline}>
+            公告期限：{showDate(details.deadline.seconds)}
+          </p>
+          <p className={styles.content}>{details.content}</p>
+        </div>
+      );
+    } else {
+      return <div className={styles.matterDetails}></div>;
+    }
+  };
+
+  function selectMatterDetail(e) {
+    // console.log(e.currentTarget.id.slice(13));
+    const index = parseInt(e.currentTarget.id.slice(13));
+    setDetails(matters[index]);
+
+    //change styles
+    const allMatters = document.querySelectorAll(`.${styles.matter}`);
+    const matter = allMatters[index];
+    allMatters.forEach((item) => {
+      item.classList.remove(styles.currentMatter);
+    });
+    matter.classList.add(styles.currentMatter);
+  }
+
   return (
     <div className={styles.boardPage}>
       <div className={styles.boardList}>
@@ -16,41 +81,9 @@ export default function Board() {
         </div>
         <div className={styles.anouncement}>
           <h3 className={styles.title}>近期公告</h3>
-          <ul className={styles.announcementList}>
-            <li className={styles.matter}>
-              <p className={styles.matterDate}>2020年12月3日</p>
-              <h4 className={styles.matterTitle}>請住戶填寫機車位資料表</h4>
-              <button className={styles.readMoreBtn}>
-                <img src={readMore} />
-              </button>
-            </li>
-
-            <li className={styles.matter}>
-              <p className={styles.matterDate}>2020年12月3日</p>
-              <h4 className={styles.matterTitle}>請住戶填寫機車位資料表</h4>
-              <button className={styles.readMoreBtn}>
-                <img src={readMore} />
-              </button>
-            </li>
-
-            <li className={styles.matter}>
-              <p className={styles.matterDate}>2020年12月3日</p>
-              <h4 className={styles.matterTitle}>請住戶填寫機車位資料表</h4>
-              <button className={styles.readMoreBtn}>
-                <img src={readMore} />
-              </button>
-            </li>
-          </ul>
+          <ul className={styles.announcementList}>{List}</ul>
         </div>
-        <div className={styles.matterDetails}>
-          <h4>請住戶填寫機車位資料表</h4>
-          <p className={styles.detailDate}>公告日期：2020年12月3日</p>
-          <p className={styles.detailDeadline}>公告期限：2020年12月8日</p>
-          <p className={styles.content}>
-            管委會為確保住(業)戶權益，強化本社區大樓管理特請全體住戶配合建立「機車位資料表」，以俾利門禁管制及社區管理服務。
-            請所有住戶至信箱收取「機車位資料表」，一戶填寫一張表格，敬請詳實填寫住戶資料表後於12月30日前交給社區保全。
-          </p>
-        </div>
+        {detailArea()}
       </div>
       <UpdateBoardList />
     </div>
