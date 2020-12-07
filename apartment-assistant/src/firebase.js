@@ -14,12 +14,13 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 let auth = firebase.auth();
+let refBoard = db.collection("board");
 let refResident = db.collection("resident");
 let refMailbox = db.collection("mailbox");
 let users = db.collection("users");
 
 /*******************
- get user profile
+  get user profile
  *******************/
 export function getUserProfile(uid) {
   return users
@@ -31,8 +32,28 @@ export function getUserProfile(uid) {
     });
 }
 
+/*********************************** 
+  upload announcement on board
+***********************************/
+export function uploadAnnouncement(data) {
+  refBoard
+    .add({
+      topic: data.topic,
+      author: data.author,
+      updateTime: data.updateTime,
+      deadline: data.deadline,
+      content: data.content,
+    })
+    .then(() => {
+      console.log("upload announcement successful");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 /*******************
- get resident list
+  get resident list
  *******************/
 export function getResidentList() {
   let data = [];
@@ -54,8 +75,8 @@ export function getResidentList() {
 }
 
 /*********************
- upload resident list
- *********************/
+  upload resident list
+**********************/
 export function uploadResident(data) {
   refResident
     .add({
@@ -85,7 +106,7 @@ export function uploadResident(data) {
 }
 
 /****************************************
- get untaken mailList and taken mailList
+  get untaken mailList and taken mailList
  ****************************************/
 export function getMailList(status = false) {
   let data = [];
@@ -125,7 +146,7 @@ export function getMailList(status = false) {
 // }
 
 /****************************************
- get user's mailList
+  get user's mailList
  ****************************************/
 export function getUserMailList(email, status = false) {
   let data = [];
@@ -148,8 +169,8 @@ export function getUserMailList(email, status = false) {
 }
 
 /*****************************************************
- get receiver's familyMembers from resident document
- *****************************************************/
+  get receiver's familyMembers from resident document
+******************************************************/
 
 // export async function getReceiverInfo(residentNumbers, mailId) {
 //   let receiverData = [];
@@ -187,7 +208,7 @@ export function getUserMailList(email, status = false) {
 // }
 
 /****************************************
- upload new mail list to firestore
+  upload new mail list to firestore
  ****************************************/
 export function uploadMailList(data, mailId) {
   console.log(data);
@@ -203,7 +224,7 @@ export function uploadMailList(data, mailId) {
 }
 
 /****************************************
- turn time into firebase timeStamp
+  turn time into firebase timeStamp
  ****************************************/
 export function getTimeStamp(year, month, date) {
   const timeStamp = firebase.firestore.Timestamp.fromDate(
@@ -214,7 +235,7 @@ export function getTimeStamp(year, month, date) {
 }
 
 /****************************************
- update mail status (true ←→ false )
+  update mail status (true ←→ false )
  ****************************************/
 
 export function updateMailStatus(mailId, status) {
@@ -310,10 +331,3 @@ export function signInWithGoogle() {
       console.log(error);
     });
 }
-
-/*********************************** 
- get user's mail information by email
-***********************************/
-// function getMailInfoByEmail(email) {
-//   refResident.where("");
-// }

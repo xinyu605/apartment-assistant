@@ -84,7 +84,7 @@ export default function SignIn() {
     const imageCard = document.querySelector("#imageCard");
     console.log(imageCard);
     if (e.currentTarget.id === "clickToSignUp") {
-      imageCard.style.transform = "translateX(450px)";
+      imageCard.style.transform = "translateX(360px)";
       imageCard.style.transition = "all 0.5s ease";
     } else {
       imageCard.style.transform = "translateX(0px)";
