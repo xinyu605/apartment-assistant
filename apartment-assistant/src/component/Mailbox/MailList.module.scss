@@ -78,11 +78,8 @@
   }
 
   .addBtn {
+    @include button-main;
     width: 60px;
-    height: 30px;
-    // background-color: $color-fireOpal;
-    background-color: $color-steelTeal;
-    cursor: pointer;
   }
 }
 
@@ -107,12 +104,7 @@
     align-items: center;
 
     .status {
-      width: 70px;
-      height: 30px;
-      font-size: $font-size-xsmall;
-      color: $light-text-color;
-      background-color: $small-button-background-color;
-      cursor: pointer;
+      @include button-sub;
     }
   }
 

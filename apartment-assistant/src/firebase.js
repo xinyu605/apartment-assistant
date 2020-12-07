@@ -107,6 +107,23 @@ export function getMailList(status = false) {
     });
 }
 
+// export function getInstantMailList(status = false) {
+//   let data = [];
+//   refMailbox
+//     .where("status", "==", status) //status= true (taken) | false (untaken)
+//     .orderBy("mailNumbers", "asc")
+//     .onSnapshot(function (querySnapshot) {
+//       querySnapshot.forEach((doc) => {
+//         if (doc.id) {
+//           data = [...data, doc.data()];
+//           return data;
+//         }
+//       });
+//       console.log(data);
+//       return data;
+//     });
+// }
+
 /****************************************
  get user's mailList
  ****************************************/

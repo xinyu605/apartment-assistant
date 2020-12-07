@@ -37,9 +37,10 @@ export default function Resident() {
 
   function deleteResident(e) {
     const index = parseInt(e.currentTarget.id.slice(5));
-    residentList.splice(index, 1);
-    console.log(residentList);
-    setResidentList(residentList);
+    let newResidentList = [...residentList];
+    newResidentList.splice(index, 1);
+    console.log(newResidentList);
+    setResidentList(newResidentList);
   }
 
   return (

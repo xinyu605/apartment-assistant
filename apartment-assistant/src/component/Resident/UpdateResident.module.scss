@@ -33,9 +33,9 @@
   flex-wrap: wrap;
 
   .submitMemberList {
+    @include button-main;
     width: 120px;
     margin: 0 auto 20px;
-    background-color: $base-button-background-color;
   }
 }
 

@@ -30,7 +30,7 @@ function App() {
 
   return (
     <Router>
-      <Route path="/" component={Home} />
+      <Route exact path="/" component={Home} />
       <Route path="/">
         <div className={styles.App}>
           <Switch>

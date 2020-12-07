@@ -34,12 +34,8 @@
     }
 
     .addBtn {
+      @include button-main;
       width: 60px;
-      height: 30px;
-
-      // background-color: $color-fireOpal;
-      background-color: $color-steelTeal;
-      cursor: pointer;
     }
 
     .searchContainer {

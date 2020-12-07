@@ -7,6 +7,10 @@
   padding: 40px;
   margin-left: $admin-margin-left;
   margin-top: $admin-margin-top;
+}
+
+.boardList {
+  margin: 40px 0 40px;
   display: grid;
   grid-template-columns: 40% 60%;
   grid-template-rows: 50px auto;
@@ -113,6 +117,7 @@
 }
 
 .matterDetails {
+  justify-self: end;
   width: 96%;
   max-height: 500px;
   padding: 20px;

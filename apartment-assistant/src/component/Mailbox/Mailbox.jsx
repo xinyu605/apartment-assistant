@@ -23,15 +23,20 @@ function Mailbox() {
   // const [isLogined, setLogin]=useState(undefined);
   const [state, setState] = useState(false);
   const [untakenData, setUntakenData] = useState([]);
+  // const [untakenData, setUntakenData] = useState(getMailList(false));
   const [takenData, setTakenData] = useState([]);
+  // const [takenData, setTakenData] = useState(getMailList(true));
   const [residentData, setResidentData] = useState([]);
 
   const [newMail, setNewMail] = useState(false);
 
   // useEffect will run only after an initial render, and after an update on data is occurred
   useEffect(() => {
+    // console.log(getMailList(false));
+    // setUntakenData(getMailList(false));
+    // setTakenData(getMailList(true));
     getMailList(false).then((mailList) => {
-      // console.log(mailList);
+      console.log(mailList);
       setUntakenData(mailList);
     });
     getMailList(true).then((mailList) => {

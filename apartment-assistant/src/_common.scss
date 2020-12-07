@@ -56,6 +56,33 @@ $font-size-xsmall: 14px;
   color: $base-text-color;
 }
 
+@mixin button-main {
+  width: 100px;
+  height: 30px;
+  font-size: $font-size-xsmall;
+  cursor: pointer;
+  background-color: $color-steelTeal;
+
+  &:hover {
+    background-color: $color-melon;
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+@mixin button-sub {
+  width: 70px;
+  height: 30px;
+  font-size: $font-size-xsmall;
+  color: $light-text-color;
+  background-color: $small-button-background-color;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-melon;
+    transition: all 0.3s ease-in-out;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -63,9 +90,12 @@ $font-size-xsmall: 14px;
 a {
   color: $base-text-color;
 }
+
+/* scrollbar */
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
   border-radius: 20px;
 }
 
@@ -79,6 +109,8 @@ a {
 ::-webkit-scrollbar-thumb {
   background: rgb(180, 221, 221);
   border-radius: 20px;
+  background: $base-background;
+  background: $gradient-background;
 }
 
 /* Handle on hover */

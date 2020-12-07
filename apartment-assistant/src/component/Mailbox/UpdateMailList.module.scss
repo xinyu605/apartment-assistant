@@ -88,9 +88,7 @@
   }
 
   .submitBtn {
-    width: 150px;
-    padding: 5px;
+    @include button-main;
     margin: 0 auto 20px;
-    cursor: pointer;
   }
 }

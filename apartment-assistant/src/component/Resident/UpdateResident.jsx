@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styles from "./UpdateResident.module.scss";
 import { uploadResident, getTimeStamp } from "./../../firebase";
 import memberIcon1 from "./../../img/members1.svg";
-import memberIcon2 from "./../../img/members2.svg";
 
 export default function UpdateResident() {
   const [familyMembersForm, setFamilyMemberForm] = useState([
@@ -23,9 +22,9 @@ export default function UpdateResident() {
 
   function deleteLastInput(e) {
     e.preventDefault();
-    familyMembersForm.pop();
-    console.log(familyMembersForm);
-    setFamilyMemberForm(familyMembersForm); //bug: 無法順利更新 familyMemberForm state
+    let newFamilyMembersForm = [...familyMembersForm];
+    newFamilyMembersForm.pop();
+    setFamilyMemberForm(newFamilyMembersForm);
   }
 
   /************************
@@ -168,7 +167,7 @@ export default function UpdateResident() {
           {FamilyMemberForm}
         </div>
         <button className={styles.submitMemberList} onClick={packingInfo}>
-          確定
+          確認送出
         </button>
       </form>
     </div>
