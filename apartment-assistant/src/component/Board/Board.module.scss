@@ -131,11 +131,40 @@
   border-radius: $list-border-radius;
   box-shadow: $list-box-shadow;
 
-  h4 {
-    padding-bottom: 10px;
-    border-bottom: 3px dotted $color-silverPink;
-    font-size: 1.2em;
-    font-weight: 600;
+  .detailHeader {
+    display: grid;
+    grid-template-columns: auto 40px;
+    grid-template-rows: 30px;
+    align-items: center;
+
+    h4 {
+      padding-bottom: 10px;
+      border-bottom: 3px dotted $color-silverPink;
+      font-size: 1.2em;
+      font-weight: 600;
+    }
+
+    .trashImg {
+      width: 35px;
+      height: 35px;
+      padding: 5px;
+      margin-left: 10px;
+      border-radius: 50%;
+      background-color: $color-opal;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $color-fireOpal;
+        transition: all 0.3s ease-in-out;
+      }
+
+      img {
+        width: 100%;
+      }
+    }
   }
 
   p {

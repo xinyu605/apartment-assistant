@@ -52,13 +52,6 @@ export function MailList(props) {
           >
             {stateController}
           </button>
-          {/* <button
-            className={styles.deleteBtn}
-            id={`delete${index}`}
-            onClick={props.deleteMail}
-          >
-            刪除
-          </button> */}
           <div
             className={styles.trashImg}
             id={`trash${index}`}

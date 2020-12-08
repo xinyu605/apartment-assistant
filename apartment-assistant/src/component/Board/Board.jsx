@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
 import UpdateBoardList from "./UpdateBoardList";
-import { getBoardList } from "./../../firebase";
+import { getBoardList, deleteIssueData } from "./../../firebase";
 import { showDate } from "./../../lib";
 import styles from "./Board.module.scss";
 import announcement from "./../../img/promotion.svg";
 import readMore from "./../../img/next.svg";
+import trashIcon from "./../../img/trash.svg";
 
 export default function Board() {
   const [matters, setMatters] = useState([]);
   const [details, setDetails] = useState({});
+  const [issueIndex, setIssueIndex] = useState(0);
 
   useEffect(() => {
     getBoardList().then((boardList) => {
@@ -40,7 +42,13 @@ export default function Board() {
     if (details.topic) {
       return (
         <div className={styles.matterDetails}>
-          <h4>{details.topic}</h4>
+          <div className={styles.detailHeader}>
+            <h4>{details.topic}</h4>
+            <div className={styles.trashImg} onClick={deleteIssue}>
+              <img src={trashIcon} />
+            </div>
+          </div>
+
           <p className={styles.detailAuthor}>發布者：{details.author}</p>
           <p className={styles.detailDate}>
             公告日期：{showDate(details.updateTime.seconds)}
@@ -59,6 +67,7 @@ export default function Board() {
   function selectMatterDetail(e) {
     // console.log(e.currentTarget.id.slice(13));
     const index = parseInt(e.currentTarget.id.slice(13));
+    setIssueIndex(index);
     setDetails(matters[index]);
 
     //change styles
@@ -68,6 +77,18 @@ export default function Board() {
       item.classList.remove(styles.currentMatter);
     });
     matter.classList.add(styles.currentMatter);
+  }
+
+  function deleteIssue() {
+    console.log(issueIndex);
+    let ans = window.confirm("刪了就回不去囉！你確定？");
+    if (ans) {
+      let issueList = [...matters];
+      let removeIssue = issueList.splice(issueIndex, 1);
+      setMatters(issueList);
+      setDetails(issueList[0]);
+      deleteIssueData(removeIssue[0].issueId);
+    }
   }
 
   return (

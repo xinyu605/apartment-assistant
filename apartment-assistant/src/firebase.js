@@ -65,12 +65,32 @@ export function uploadAnnouncement(data) {
       deadline: data.deadline,
       content: data.content,
     })
-    .then(() => {
+    .then((docRef) => {
+      console.log(docRef.id);
+      refBoard.doc(docRef.id).set(
+        {
+          issueId: docRef.id,
+        },
+        { merge: true }
+      );
       console.log("upload announcement successful");
     })
     .catch((error) => {
       console.log(error);
     });
+}
+
+/***********************
+  delete issue on board
+ ***********************/
+export function deleteIssueData(id) {
+  refBoard
+    .doc(id)
+    .delete()
+    .then(() => {
+      console.log("delete issue successful");
+    })
+    .catch((error) => console.log(error));
 }
 
 /*******************
