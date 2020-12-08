@@ -148,11 +148,6 @@
   .detailDate::before,
   .detailDeadline::before {
     content: "";
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    margin-right: 10px;
-    border-radius: 50%;
-    background-color: $color-opal;
+    @include list-bullet;
   }
 }

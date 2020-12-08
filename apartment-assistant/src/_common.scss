@@ -83,6 +83,15 @@ $font-size-xsmall: 14px;
   }
 }
 
+@mixin list-bullet {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background-color: $color-opal;
+}
+
 * {
   box-sizing: border-box;
 }

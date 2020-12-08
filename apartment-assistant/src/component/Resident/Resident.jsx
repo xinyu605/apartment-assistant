@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ResidentList from "./ResidentList";
 import UpdateResident from "./UpdateResident";
-import { getResidentList } from "./../../firebase";
+import { getResidentList, deleteResidentData } from "./../../firebase";
 import { scrollToTarget } from "./../../lib";
 import styles from "./Resident.module.scss";
 import headerImg from "./../../img/home.svg";
@@ -36,11 +36,14 @@ export default function Resident() {
   }
 
   function deleteResident(e) {
-    const index = parseInt(e.currentTarget.id.slice(5));
-    let newResidentList = [...residentList];
-    newResidentList.splice(index, 1);
-    console.log(newResidentList);
-    setResidentList(newResidentList);
+    let ans = window.confirm("刪了就回不去囉！你確定？");
+    if (ans) {
+      const index = parseInt(e.currentTarget.id.slice(5));
+      let newResidentList = [...residentList];
+      const removedResident = newResidentList.splice(index, 1);
+      setResidentList(newResidentList);
+      deleteResidentData(removedResident[0].residentId);
+    }
   }
 
   return (

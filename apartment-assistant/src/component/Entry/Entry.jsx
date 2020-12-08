@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import EntryBoard from "./EntryBoard";
 import styles from "./Entry.module.scss";
 import logo from "./../../img/logo.png";
 import mailbox from "./../../img/inboxUntaken.svg";
@@ -27,12 +28,12 @@ export default function Entry(props) {
       }
     });
     getUserMailList(userEmail).then((mailList) => {
-      console.log(mailList);
+      // console.log(mailList);
       setUserMailList(mailList);
       setMailCount(mailList.length);
     });
     getUserMailList(userEmail, true).then((mailList) => {
-      console.log(mailList);
+      // console.log(mailList);
       setUserMailHistory(mailList);
     });
   }, [userEmail]);
@@ -110,9 +111,7 @@ export default function Entry(props) {
         <img src={logo} />
       </div>
       <h1>Welcome to Apartment Assistant!</h1>
-      <div className={styles.issues}>
-        <h2>社區公告</h2>
-      </div>
+      <EntryBoard />
       <div className={styles.mails}>
         <div className={styles.title}>
           <div className={styles.imgWrapper}>

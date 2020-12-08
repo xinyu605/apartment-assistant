@@ -131,6 +131,11 @@
     align-items: center;
     cursor: pointer;
 
+    &:hover {
+      background-color: $color-fireOpal;
+      transition: all 0.3s ease-in-out;
+    }
+
     img {
       width: 100%;
     }

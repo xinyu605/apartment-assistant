@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import inboxUntaken from "./../../img/inboxUntaken.svg";
 import inboxTaken from "./../../img/inboxTaken.svg";
+import trashIcon from "./../../img/trash.svg";
 import styles from "./MailList.module.scss";
 import { showDate, scrollToTarget } from "./../../lib";
 import { updateMailStatus } from "./../../firebase";
@@ -26,11 +27,12 @@ export function MailList(props) {
   // console.log(lists);
   const List = lists.map((list) => {
     // console.log(list.mailId);
+    const index = lists.indexOf(list);
     if (list.receiveDate) {
       receiveDate = showDate(list.receiveDate.seconds);
     }
     return (
-      <div className={styles.list} key={list.mailId}>
+      <div className={styles.list} id={`mail${index}`} key={list.mailId}>
         <div className="mailNumbers">{list.mailNumbers}</div>
         <div className="residentNumber">
           {list.residentNumbers}
@@ -42,13 +44,29 @@ export function MailList(props) {
         <div className="receiveDate">{receiveDate}</div>
         <div className="place">{list.place}</div>
         <div className="remark">{list.remark}</div>
-        <button
-          className={styles.status}
-          id={`status${list.mailId}`}
-          onClick={changeMailStatus}
-        >
-          {stateController}
-        </button>
+        <div className={styles.mailBtns}>
+          <button
+            className={styles.status}
+            id={`status${list.mailId}`}
+            onClick={changeMailStatus}
+          >
+            {stateController}
+          </button>
+          {/* <button
+            className={styles.deleteBtn}
+            id={`delete${index}`}
+            onClick={props.deleteMail}
+          >
+            刪除
+          </button> */}
+          <div
+            className={styles.trashImg}
+            id={`trash${index}`}
+            onClick={props.deleteMail}
+          >
+            <img src={trashIcon} />
+          </div>
+        </div>
       </div>
     );
   });
@@ -60,7 +78,7 @@ export function MailList(props) {
   function changeMailStatus(e) {
     console.log(e.currentTarget.id);
     let status;
-    let ans = confirm("是否確定更新領取狀態？");
+    let ans = window.confirm("是否確定更新領取狀態？");
     if (ans) {
       const mailId = e.currentTarget.id.slice(6);
       props.state ? (status = false) : (status = true);

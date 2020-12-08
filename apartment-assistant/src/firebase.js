@@ -109,7 +109,18 @@ export function uploadResident(data) {
       updateDate: data.updateDate,
     })
     .then((docRef) => {
-      console.log(docRef.id);
+      // console.log(docRef.id);
+
+      refResident
+        .doc(docRef.id)
+        .set({ residentId: docRef.id }, { merge: true })
+        .then(() => {
+          console.log("add residentId successful");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
       for (let i = 0; i < data.familyMembers.length; i++) {
         refResident.doc(docRef.id).collection("familyMembers").doc().set(
           {
@@ -120,6 +131,21 @@ export function uploadResident(data) {
           { merge: true }
         );
       }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+/****************************************
+  Delete resident and update residentList
+*****************************************/
+export function deleteResidentData(id) {
+  refResident
+    .doc(id)
+    .delete()
+    .then(() => {
+      console.log("delete resident successful");
     })
     .catch((error) => {
       console.log(error);
@@ -183,6 +209,21 @@ export function getUserMailList(email, status = false) {
         }
       });
       return data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+/****************************************
+  Delete resident and update residentList
+*****************************************/
+export function deleteMailData(id) {
+  refMailbox
+    .doc(id)
+    .delete()
+    .then(() => {
+      console.log("delete mail successful");
     })
     .catch((error) => {
       console.log(error);

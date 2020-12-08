@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
-import { getMailList, getResidentList } from "./../../firebase";
+import { getMailList, getResidentList, deleteMailData } from "./../../firebase";
 import styles from "./MailList.module.scss";
 
 /*****************************
@@ -69,6 +69,29 @@ function Mailbox() {
     }
   }
 
+  /****************************** 
+    Delete individual mail
+  *******************************/
+  function deleteMail(e) {
+    let ans = window.confirm("刪了就回不去囉！你確定？");
+    if (ans) {
+      const index = parseInt(e.currentTarget.id.slice(6));
+      let mailList = [];
+      let removedMail = [];
+      if (state) {
+        mailList = [...takenData];
+        removedMail = mailList.splice(index, 1);
+        setTakenData(mailList);
+      } else {
+        mailList = [...untakenData];
+        removedMail = mailList.splice(index, 1);
+        setUntakenData(mailList);
+      }
+
+      deleteMailData(removedMail[0].mailId);
+    }
+  }
+
   function updateNewMail() {
     newMail ? setNewMail(false) : setNewMail(true);
   }
@@ -80,6 +103,7 @@ function Mailbox() {
         untakenMails={untakenData}
         takenMails={takenData}
         toggleState={toggleState}
+        deleteMail={deleteMail}
         newMail={newMail}
       />
       {/* <Route exact path="/admin/mailbox" component={UpdateMailList} /> */}

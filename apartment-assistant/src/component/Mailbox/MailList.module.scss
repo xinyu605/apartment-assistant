@@ -103,8 +103,33 @@
     justify-items: center;
     align-items: center;
 
-    .status {
-      @include button-sub;
+    .mailBtns {
+      display: flex;
+      .status {
+        @include button-sub;
+      }
+
+      .trashImg {
+        width: 35px;
+        height: 35px;
+        padding: 5px;
+        margin-left: 10px;
+        border-radius: 50%;
+        background-color: $color-opal;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $color-fireOpal;
+          transition: all 0.3s ease-in-out;
+        }
+
+        img {
+          width: 100%;
+        }
+      }
     }
   }
 
