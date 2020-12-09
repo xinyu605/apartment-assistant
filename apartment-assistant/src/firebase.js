@@ -1,4 +1,6 @@
 import firebase from "firebase";
+import "firebase/functions";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDl0B2I0o0r4mptX5VyvBmZVChAXqCgnCE",
   authDomain: "apartment-assistant-project.firebaseapp.com",
@@ -14,10 +16,35 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 let auth = firebase.auth();
+let functions = firebase.functions();
 let refBoard = db.collection("board");
 let refResident = db.collection("resident");
 let refMailbox = db.collection("mailbox");
 let users = db.collection("users");
+
+/***********************************************************************
+  call Firebase cloud function: emailSender (自定義，檔案在 src/index.js)
+ ***********************************************************************/
+
+export function sendMail(data) {
+  // let data = {
+  //   name: "xinyu",
+  //   email: "xinyuyan605@gmail.com",
+  //   subject: "測試",
+  //   content: "測試內容",
+  // };
+  let emailSender = functions.httpsCallable("emailSender");
+  emailSender(data)
+    .then((result) => {
+      // console.log(result.data.text);
+      console.log(result);
+    })
+    .catch((error) => {
+      console.log(error.code);
+      console.log(error.message);
+      console.log(error.details);
+    });
+}
 
 /*******************
   get user profile

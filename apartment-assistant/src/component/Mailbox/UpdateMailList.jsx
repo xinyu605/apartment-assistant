@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SmallCalendar } from "./SmallCalendar";
+import { EmailForm } from "./EmailForm";
 import styles from "./UpdateMailList.module.scss";
 import {
   uploadMailList,
@@ -13,7 +14,7 @@ export function UpdateMailList(props) {
   const [mailNumber, setMailNumber] = useState("");
   const [residentNumber, setResidentNumber] = useState("");
   const [receiver, setReceiver] = useState("");
-  // const [receiverEmail, setReceiverEmail] = useState("");
+  const [receiverEmail, setReceiverEmail] = useState("");
   const [mailType, setMailType] = useState("普通平信");
   const [receiveDate, setReceiveDate] = useState(0);
   const [place, setPlace] = useState("信箱");
@@ -23,7 +24,7 @@ export function UpdateMailList(props) {
   const [familyMembersEmail, setFamilyMembersEmail] = useState([]);
   const [isEditingMail, setIsEditingMail] = useState(false);
 
-  console.log(props);
+  // console.log(props);
 
   function updateReceiveDate(year, month, date) {
     // console.log(year, month, date);
@@ -41,12 +42,12 @@ export function UpdateMailList(props) {
     setFamilyMembers([]);
     setFamilyMembersEmail([]);
     const residentList = props.residentList;
-    console.log(residentList);
+    // console.log(residentList);
     let familyMembersName = [];
     let familyMembersEmail = [];
     for (let i = 0; i < residentList.length; i++) {
       if (residentList[i].residentNumbers === residentNumber) {
-        console.log(residentList[i]);
+        // console.log(residentList[i]);
 
         for (let j = 0; j < residentList[i].familyMembers.length; j++) {
           familyMembersName = [
@@ -105,9 +106,9 @@ export function UpdateMailList(props) {
         inputs[i].classList.add(styles.focus);
         message = true;
       } else {
-        const index = familyMembers.indexOf(receiver);
-        const receiverEmail = familyMembersEmail[index];
-        // setReceiverEmail(familyMembersEmail[index]);
+        // const index = familyMembers.indexOf(receiver);
+        // const receiverEmail = familyMembersEmail[index];
+        // console.log(receiverEmail);
         data = {
           mailNumbers: parseInt(mailNumber),
           mailId: nanoid(),
@@ -143,6 +144,13 @@ export function UpdateMailList(props) {
     e.preventDefault();
     isEditingMail === true ? setIsEditingMail(false) : setIsEditingMail(true);
   }
+
+  useEffect(() => {
+    // console.log(receiver, familyMembers, familyMembersEmail);
+    const index = familyMembers.indexOf(receiver);
+    // console.log(familyMembersEmail[index]);
+    setReceiverEmail(familyMembersEmail[index]);
+  }, [receiver]);
 
   return (
     <div className={styles.updateMailList} id="updateMailList">
@@ -224,64 +232,13 @@ export function UpdateMailList(props) {
       </div>
 
       <EmailForm
+        receiver={receiver}
+        receiverEmail={receiverEmail}
+        mailType={mailType}
+        place={place}
         isEditingMail={isEditingMail}
         toggleEmailForm={toggleEmailForm}
       />
     </div>
   );
-}
-
-function EmailForm(props) {
-  if (props.isEditingMail) {
-    return (
-      <div className={styles.emailBackground}>
-        <div className={styles.emailFrom}>
-          <div className={styles.informTitle}>
-            <h2>通知信件即將寄出，請確認！</h2>
-            <button className={styles.closeBtn} onClick={props.toggleEmailForm}>
-              X
-            </button>
-          </div>
-
-          <form className={styles.fillPlace}>
-            <p
-              className={`${styles.emailInputTitle} ${styles.emailInputTitle1}`}
-            >
-              收件者
-            </p>
-            <input
-              className={`${styles.emailInput} ${styles.emailInput1}`}
-              type="text"
-              placeholder="請輸入email"
-            ></input>
-
-            <p
-              className={`${styles.emailInputTitle} ${styles.emailInputTitle2}`}
-            >
-              主旨
-            </p>
-            <input
-              className={`${styles.emailInput} ${styles.emailInput2}`}
-              type="text"
-              placeholder="請輸入主旨"
-            ></input>
-
-            <p
-              className={`${styles.emailInputTitle} ${styles.emailInputTitle3}`}
-            >
-              內容
-            </p>
-            <textarea
-              className={`${styles.emailInput} ${styles.emailInput3}`}
-              rows="10"
-            ></textarea>
-
-            <button className={styles.sendBtn}>送出</button>
-          </form>
-        </div>
-      </div>
-    );
-  } else {
-    return <div></div>;
-  }
 }

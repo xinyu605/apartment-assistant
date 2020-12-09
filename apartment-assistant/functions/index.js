@@ -7,14 +7,9 @@ const admin = require("firebase-admin");
 // Setting up Nodemailer
 const nodemailer = require("nodemailer");
 
+const cors = require("cors")({ origin: true });
+
 admin.initializeApp();
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
 
 // Creating a Nodemailer transporter
 let transporter = nodemailer.createTransport({
@@ -26,21 +21,54 @@ let transporter = nodemailer.createTransport({
 });
 
 // Creating a Firebase Cloud Function & Building the email message
-exports.emailSender = functions.https.onRequest((req, res) => {
+// exports.emailSender = functions.https.onRequest((req, res) => {
+//   cors(req, res, () => {
+// const data = req.body; //should be recipient's name, email, subject, content
+// const recipientName = data.name;
+// const recipientEmail = data.email;
+// const subject = data.subject;
+// const content = data.content;
+// console.log(data);
+// const mailOptions = {
+//   from: "bestapartmentassistant@gmail.com", //Adding sender's email
+//   to: recipientEmail, //Getting recipient's email by query string
+//   subject: subject, //Email subject
+//   html: `<p>Hi! ${recipientName}</p></br><p>${content}</p>`, //Email content in HTML
+// };
+
+// return transporter.sendMail(mailOptions, (err, info) => {
+//   if (err) {
+//     console.log(err);
+//     return res.send(err.toString());
+//   }
+//   return res.send("Email sent successfully");
+// });
+//   });
+// });
+
+//create API: https://us-central1-apartment-assistant-project.cloudfunctions.net/emailSender
+
+// Creating a Firebase Cloud Function & Building the email message
+exports.emailSender = functions.https.onCall((data, context) => {
+  // cors(data, context, () => {
+  const recipientName = data.name;
+  const recipientEmail = data.email;
+  const subject = data.subject;
+  const content = data.content;
+  console.log(data);
   const mailOptions = {
-    from: "bestapartmentassistant@gmail.com", //Adding sender's email
-    to: "xinyuyan605@gmail.com", //Getting recipient's email by query string
-    subject: "Email Sent via Firebase", //Email subject
-    html: '<p style="color:red">Sending emails with Firebase is easy!</p>', //Email content in HTML
+    from: "Apartment Assistant <bestapartmentassistant@gmail.com>", //Adding sender's email
+    to: `${recipientName} <${recipientEmail}>`, //Getting recipient's email by query string
+    subject: subject, //Email subject
+    html: `<p>${content}</p>`, //Email content in HTML
   };
 
   return transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
       console.log(err);
-      return res.send(err.toString());
+      return { message: err.toString() };
     }
-    return res.send("Email sent successfully");
+    return { message: "Email sent successfully" };
   });
+  // });
 });
-
-//API: https://us-central1-apartment-assistant-project.cloudfunctions.net/emailSender
