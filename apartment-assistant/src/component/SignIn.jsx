@@ -103,7 +103,7 @@ export default function SignIn() {
         </div>
         <div className={styles.signUp}>
           <h2>註冊新帳號</h2>
-          <form>
+          <form className={styles.signInPageForm}>
             <div className={styles.inputWrapper}>
               <input
                 id="userName"
@@ -148,7 +148,7 @@ export default function SignIn() {
         </div>
         <div className={styles.signIn}>
           <h2>會員登入</h2>
-          <form>
+          <form className={styles.signInPageForm}>
             <div className={styles.inputWrapper}>
               <input
                 id="emailSignIn"

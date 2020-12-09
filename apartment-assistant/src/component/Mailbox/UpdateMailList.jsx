@@ -21,6 +21,9 @@ export function UpdateMailList(props) {
   const [remark, setRemark] = useState("無");
   const [familyMembers, setFamilyMembers] = useState([]);
   const [familyMembersEmail, setFamilyMembersEmail] = useState([]);
+  const [isEditingMail, setIsEditingMail] = useState(false);
+
+  console.log(props);
 
   function updateReceiveDate(year, month, date) {
     // console.log(year, month, date);
@@ -122,7 +125,7 @@ export function UpdateMailList(props) {
           // taker: { name: "", takeDate: "" }, //待刪
           remark: remark,
         };
-        // console.log(data);
+        console.log(data);
       }
     }
     if (message) {
@@ -134,6 +137,11 @@ export function UpdateMailList(props) {
         inputs[i].value = "";
       }
     }
+  }
+
+  function toggleEmailForm(e) {
+    e.preventDefault();
+    isEditingMail === true ? setIsEditingMail(false) : setIsEditingMail(true);
   }
 
   return (
@@ -198,6 +206,13 @@ export function UpdateMailList(props) {
             placeholder="其他注意事項"
             onChange={updateHook}
           ></input>
+          <button
+            className={styles.informBtn}
+            id="informBtn"
+            onClick={toggleEmailForm}
+          >
+            通知收件人
+          </button>
         </form>
         <button
           className={styles.submitBtn}
@@ -207,6 +222,66 @@ export function UpdateMailList(props) {
           確認送出
         </button>
       </div>
+
+      <EmailForm
+        isEditingMail={isEditingMail}
+        toggleEmailForm={toggleEmailForm}
+      />
     </div>
   );
+}
+
+function EmailForm(props) {
+  if (props.isEditingMail) {
+    return (
+      <div className={styles.emailBackground}>
+        <div className={styles.emailFrom}>
+          <div className={styles.informTitle}>
+            <h2>通知信件即將寄出，請確認！</h2>
+            <button className={styles.closeBtn} onClick={props.toggleEmailForm}>
+              X
+            </button>
+          </div>
+
+          <form className={styles.fillPlace}>
+            <p
+              className={`${styles.emailInputTitle} ${styles.emailInputTitle1}`}
+            >
+              收件者
+            </p>
+            <input
+              className={`${styles.emailInput} ${styles.emailInput1}`}
+              type="text"
+              placeholder="請輸入email"
+            ></input>
+
+            <p
+              className={`${styles.emailInputTitle} ${styles.emailInputTitle2}`}
+            >
+              主旨
+            </p>
+            <input
+              className={`${styles.emailInput} ${styles.emailInput2}`}
+              type="text"
+              placeholder="請輸入主旨"
+            ></input>
+
+            <p
+              className={`${styles.emailInputTitle} ${styles.emailInputTitle3}`}
+            >
+              內容
+            </p>
+            <textarea
+              className={`${styles.emailInput} ${styles.emailInput3}`}
+              rows="10"
+            ></textarea>
+
+            <button className={styles.sendBtn}>送出</button>
+          </form>
+        </div>
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
 }
