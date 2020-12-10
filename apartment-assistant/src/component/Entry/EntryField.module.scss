@@ -1,0 +1,54 @@
+@import "./../../common";
+@import "./Entry.module.scss";
+
+.fieldApply {
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr 80px 1fr 100px 1fr;
+  grid-template-rows: 40px;
+  align-items: center;
+
+  .applyTitle {
+    margin-right: 10px;
+    justify-self: end;
+    font-size: $font-size-small;
+    font-weight: 600;
+  }
+  .selectField,
+  .selectDate,
+  .selectTime {
+    height: 25px;
+  }
+
+  .orderBtn {
+    @include button-main;
+    width: 60px;
+    margin-left: 20px;
+  }
+}
+
+.fieldTable {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.8fr repeat(7, 1fr);
+  grid-template-rows: repeat(13, 40px);
+  align-items: center;
+  justify-items: center;
+
+  .tableTitle {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 40px;
+    align-self: center;
+    font-size: $font-size-xsmall;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    border-bottom: 1px solid $color-steelTeal;
+  }
+
+  .tableCol1 {
+    font-size: $font-size-xsmall;
+    font-weight: 600;
+  }
+}

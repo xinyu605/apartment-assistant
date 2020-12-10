@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import EntryBoard from "./EntryBoard";
+import EntryField from "./EntryField";
 import styles from "./Entry.module.scss";
 import logo from "./../../img/logo.png";
 import mailbox from "./../../img/inboxUntaken.svg";
@@ -133,6 +134,7 @@ export default function Entry(props) {
 
         <div className={styles.userMailList}>{MailHistoryDetail}</div>
       </div>
+      <EntryField userName={userName} userEmail={userEmail} />
     </div>
   );
 }

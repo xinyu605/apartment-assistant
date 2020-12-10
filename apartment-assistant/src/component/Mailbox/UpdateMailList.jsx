@@ -145,6 +145,10 @@ export function UpdateMailList(props) {
     isEditingMail === true ? setIsEditingMail(false) : setIsEditingMail(true);
   }
 
+  function closeForm() {
+    setIsEditingMail(false);
+  }
+
   useEffect(() => {
     // console.log(receiver, familyMembers, familyMembersEmail);
     const index = familyMembers.indexOf(receiver);
@@ -238,6 +242,7 @@ export function UpdateMailList(props) {
         place={place}
         isEditingMail={isEditingMail}
         toggleEmailForm={toggleEmailForm}
+        closeForm={closeForm}
       />
     </div>
   );

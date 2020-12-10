@@ -65,8 +65,9 @@ export function EmailForm(props) {
       subject: subject,
       content: content,
     };
-    console.log(data);
-    // sendMail(data); //call firebase cloud function
+    // console.log(data);
+    props.closeForm();
+    sendMail(data); //call firebase cloud function
   }
 
   if (props.isEditingMail) {
