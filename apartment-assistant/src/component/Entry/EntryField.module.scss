@@ -3,9 +3,8 @@
 
 .fieldApply {
   margin: 20px 0;
-  display: grid;
-  grid-template-columns: 1fr 80px 1fr 80px 1fr 100px 1fr;
-  grid-template-rows: 40px;
+  display: flex;
+  justify-content: space-around;
   align-items: center;
 
   .applyTitle {
@@ -14,10 +13,9 @@
     font-size: $font-size-small;
     font-weight: 600;
   }
-  .selectField,
-  .selectDate,
-  .selectTime {
+  .selectField {
     height: 25px;
+    margin-right: auto;
   }
 
   .orderBtn {
@@ -27,28 +25,37 @@
   }
 }
 
-.fieldTable {
+.titleWrapper {
   width: 100%;
   display: grid;
-  grid-template-columns: 1.8fr repeat(7, 1fr);
-  grid-template-rows: repeat(13, 40px);
+  grid-template-columns: 1.5fr repeat(7, 1fr);
+  grid-template-rows: 50px;
   align-items: center;
   justify-items: center;
 
   .tableTitle {
     width: 100%;
     height: 100%;
-    padding-bottom: 40px;
     align-self: center;
     font-size: $font-size-xsmall;
     font-weight: 600;
-    line-height: 1.2;
+    line-height: 1.4;
     text-align: center;
     border-bottom: 1px solid $color-steelTeal;
   }
+}
+
+.applyTable {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1.5fr repeat(7, 1fr);
+  grid-template-rows: repeat(13, 40px);
+  grid-auto-flow: column;
+  align-items: center;
 
   .tableCol1 {
     font-size: $font-size-xsmall;
     font-weight: 600;
+    justify-self: center;
   }
 }

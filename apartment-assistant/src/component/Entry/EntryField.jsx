@@ -3,25 +3,94 @@ import styles from "./EntryField.module.scss";
 
 export default function EntryField(props) {
   // console.log(props);
-  const [field, setField] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
+  const [timeTitle, setTimeTitle] = useState([]);
+  const [timeTable, setTimeTable] = useState([]);
 
   /************************* 
     show weekly date choice
   **************************/
   useEffect(() => {
+    /********************** 
+      Render weekly title 
+    ***********************/
     for (let i = 0; i < 7; i++) {
-      const optionDay = document.querySelector(`#day${i}`);
+      // const optionDay = document.querySelector(`#day${i}`);
       const tableDay = document.querySelector(`#tday${i}`);
-      const weekDayList = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
       let days = new Date();
-      days.setDate(days.getDate() - days.getDay() + i); //取得星期"i"的日期
+      days.setDate(days.getDate() + i); //取得星期"i"的日期
       let month = days.getMonth() + 1;
-      let date = days.getDate();
-      optionDay.innerHTML = `${month}/${date}`;
-      tableDay.innerHTML = `${month}/${date}<br/>${weekDayList[i]}`;
+      let date = days.getDate(); //type: number
+      let day = days.getDay();
+      if (date.toString().length < 2) {
+        date = `0${date.toString()}`;
+      }
+      // console.log(date, day);
+      switch (day) {
+        case 0:
+          day = "SUN";
+          break;
+        case 1:
+          day = "MON";
+          break;
+        case 2:
+          day = "TUE";
+          break;
+        case 3:
+          day = "WED";
+          break;
+        case 4:
+          day = "THU";
+          break;
+        case 5:
+          day = "FRI";
+          break;
+        case 6:
+          day = "SAT";
+          break;
+        default:
+          break;
+      }
+
+      // optionDay.innerHTML = `${month}/${date}`;
+      tableDay.innerHTML = `${month}/${date}<br/>${day}`;
     }
+  }, []);
+
+  /******************************* 
+    create table with specific id
+  ********************************/
+
+  useEffect(() => {
+    let timeTitle = [];
+    let timeTable = [];
+
+    for (let i = 0; i < 13; i++) {
+      let time = i + 9;
+      if (time.toString().length < 2) {
+        time = `0${time}`;
+      }
+      timeTitle[i] = `time${time}`;
+    }
+
+    for (let i = 0; i < 7; i++) {
+      let day = new Date();
+      let milliseconds = day.getTime() + 86400000 * i; //get milliseconds of the day
+      day.setTime(milliseconds);
+      let month = day.getMonth() + 1;
+      let date = day.getDate();
+      timeTable[i] = [];
+      for (let j = 0; j < 13; j++) {
+        let time = j + 9;
+        if (time.toString().length < 2) {
+          time = `0${time}`;
+        }
+        timeTable[i][j] = `time${month}${date}${time}`; // prepare id of each <div> ex. <div id="121109">
+      }
+    }
+    console.log(timeTable);
+    console.log(timeTitle);
+    setTimeTitle(timeTitle);
+    setTimeTable(timeTable);
   }, []);
 
   function orderField(e) {
@@ -33,8 +102,8 @@ export default function EntryField(props) {
       user: props.user,
       userEmail: props.userEmail,
       field: "",
-      date: "", // timeStamp
-      time: "", // string
+      date: "", // string
+      startTime: "", // string
     };
   }
 
@@ -53,88 +122,74 @@ export default function EntryField(props) {
           <option>籃球場A</option>
           <option>籃球場B</option>
         </select>
-        <label className={styles.applyTitle}>日期</label>
-        <select id="selectDate" className={styles.selectDate}>
-          <option id="day0"></option>
-          <option id="day1"></option>
-          <option id="day2"></option>
-          <option id="day3"></option>
-          <option id="day4"></option>
-          <option id="day5"></option>
-          <option id="day6"></option>
-        </select>
-        <label className={styles.applyTitle}>時間</label>
-        <select id="selectTime" className={styles.selectTime}>
-          <option value="09">09:00-10:00</option>
-          <option value="10">10:00-11:00</option>
-          <option value="11">11:00-12:00</option>
-          <option value="12">12:00-13:00</option>
-          <option value="13">13:00-14:00</option>
-          <option value="14">14:00-15:00</option>
-          <option value="15">15:00-16:00</option>
-          <option value="16">16:00-17:00</option>
-          <option value="17">17:00-18:00</option>
-          <option value="18">18:00-19:00</option>
-          <option value="19">19:00-20:00</option>
-          <option value="20">20:00-21:00</option>
-        </select>
         <button id="orderBtn" className={styles.orderBtn} onClick={orderField}>
           預約
         </button>
       </form>
       <div className={styles.fieldTable}>
-        {/* <div className={styles.tableRow}> */}
-        {/* <div className={styles.tableTitle}>日期</div> */}
-        <div className={styles.tableTitle}></div>
-        <div id="tday0" className={styles.tableTitle}></div>
-        <div id="tday1" className={styles.tableTitle}></div>
-        <div id="tday2" className={styles.tableTitle}></div>
-        <div id="tday3" className={styles.tableTitle}></div>
-        <div id="tday4" className={styles.tableTitle}></div>
-        <div id="tday5" className={styles.tableTitle}></div>
-        <div id="tday6" className={styles.tableTitle}></div>
-        {/* </div> */}
-        {/* <div className={styles.tableRow}> */}
-        <div className={styles.tableCol1}>09:00-10:00</div>
-        <div id="week0-09"></div>
-        <div id="week1-09"></div>
-        <div id="week2-09"></div>
-        <div id="week3-09"></div>
-        <div id="week4-09"></div>
-        <div id="week5-09"></div>
-        <div id="week6-09"></div>
-        {/* </div> */}
-        {/* <div className={styles.tableRow}> */}
-        <div className={styles.tableCol1}>10:00-11:00</div>
-        <div id="week0-10"></div>
-        <div id="week1-10"></div>
-        <div id="week2-10"></div>
-        <div id="week3-10"></div>
-        <div id="week4-10"></div>
-        <div id="week5-10"></div>
-        <div id="week6-10"></div>
-        {/* </div> */}
-        {/* <div className={styles.tableRow}> */}
-        <div className={styles.tableCol1}>11:00-12:00</div>
-        <div id="week0-11"></div>
-        <div id="week1-11"></div>
-        <div id="week2-11"></div>
-        <div id="week3-11"></div>
-        <div id="week4-11"></div>
-        <div id="week5-11"></div>
-        <div id="week6-11"></div>
-        {/* </div> */}
-        {/* <div className={styles.tableRow}> */}
-        <div className={styles.tableCol1}>12:00-13:00</div>
-        <div id="week0-12"></div>
-        <div id="week1-12"></div>
-        <div id="week2-12"></div>
-        <div id="week3-12"></div>
-        <div id="week4-12"></div>
-        <div id="week5-12"></div>
-        <div id="week6-12"></div>
-        {/* </div> */}
+        <div className={styles.titleWrapper}>
+          <div className={styles.tableTitle}></div>
+          <div id="tday0" className={styles.tableTitle}></div>
+          <div id="tday1" className={styles.tableTitle}></div>
+          <div id="tday2" className={styles.tableTitle}></div>
+          <div id="tday3" className={styles.tableTitle}></div>
+          <div id="tday4" className={styles.tableTitle}></div>
+          <div id="tday5" className={styles.tableTitle}></div>
+          <div id="tday6" className={styles.tableTitle}></div>
+        </div>
+
+        <ApplyTable timeTable={timeTable} timeTitle={timeTitle} />
       </div>
+    </div>
+  );
+}
+
+function ApplyTable(props) {
+  console.log(props);
+  const titleList = props.timeTitle;
+  const timeList = props.timeTable;
+
+  /************************************ 
+    time titles (first column in table)
+  *************************************/
+
+  const TimeTitle = titleList.map((title) => {
+    let startTime = title.slice(4);
+    let endTime = parseInt(startTime) + 1;
+    console.log(startTime);
+    return (
+      <div className={styles.tableCol1}>{`${startTime}:00-${endTime}:00`}</div>
+    );
+  });
+
+  // const FirstDay = timeList[0].map((time) => {
+  //   return (
+  //     <div className={styles.daysInTable} id={`${time}`}>
+  //       day1
+  //     </div>
+  //   );
+  // });
+
+  const Days = timeList.map((timePerDay) => {
+    return timePerDay.map((time) => {
+      console.log(time);
+      return (
+        <div
+          className={styles.daysInTable}
+          id={`${time}`}
+          style={{ "font-size": "12px" }}
+        >
+          {time}
+        </div>
+      );
+    });
+  });
+
+  return (
+    <div className={styles.applyTable}>
+      {TimeTitle}
+      {/* {FirstDay} */}
+      {Days}
     </div>
   );
 }
