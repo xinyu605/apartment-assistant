@@ -21,6 +21,7 @@ let refBoard = db.collection("board");
 let refResident = db.collection("resident");
 let refMailbox = db.collection("mailbox");
 let users = db.collection("users");
+let refField = db.collection("field");
 
 /***********************************************************************
   call Firebase cloud function: emailSender (自定義，檔案在 src/index.js)
@@ -360,7 +361,27 @@ export function updateMailStatus(mailId, status) {
 }
 
 /******************************** 
- handle SignUp and SignIn
+  upload Field order lists
+*********************************/
+export function uploadFieldOrder(data) {
+  console.log(data);
+  for (let i = 0; i < data.length; i++) {
+    refField
+      .add(data[i])
+      .then((docRef) => {
+        refField.doc(docRef.id).set({ orderId: docRef.id }, { merge: true });
+      })
+      .then(() => {
+        console.log("upload fieldList successful");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+}
+
+/******************************** 
+  handle SignUp and SignIn
 *********************************/
 
 //native sign up and create user information in firestore

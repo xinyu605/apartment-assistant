@@ -44,18 +44,3 @@
     border-bottom: 1px solid $color-steelTeal;
   }
 }
-
-.applyTable {
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: 1.5fr repeat(7, 1fr);
-  grid-template-rows: repeat(13, 40px);
-  grid-auto-flow: column;
-  align-items: center;
-
-  .tableCol1 {
-    font-size: $font-size-xsmall;
-    font-weight: 600;
-    justify-self: center;
-  }
-}

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import ApplyTable from "./ApplyTable";
+import { uploadFieldOrder } from "../../firebase";
 import styles from "./EntryField.module.scss";
+import calendarIcon from "./../../img/calendar.svg";
 
 export default function EntryField(props) {
   // console.log(props);
@@ -56,10 +59,9 @@ export default function EntryField(props) {
     }
   }, []);
 
-  /******************************* 
-    create table with specific id
-  ********************************/
-
+  /***************************************** 
+    create table elements with specific id
+  ******************************************/
   useEffect(() => {
     let timeTitle = [];
     let timeTable = [];
@@ -76,6 +78,7 @@ export default function EntryField(props) {
       let day = new Date();
       let milliseconds = day.getTime() + 86400000 * i; //get milliseconds of the day
       day.setTime(milliseconds);
+      let year = day.getFullYear();
       let month = day.getMonth() + 1;
       let date = day.getDate();
       timeTable[i] = [];
@@ -84,43 +87,70 @@ export default function EntryField(props) {
         if (time.toString().length < 2) {
           time = `0${time}`;
         }
-        timeTable[i][j] = `time${month}${date}${time}`; // prepare id of each <div> ex. <div id="121109">
+        timeTable[i][j] = `time${year}${month}${date}${time}`; // prepare id of each <div> ex. <div id="121109">
       }
     }
     console.log(timeTable);
-    console.log(timeTitle);
+    // console.log(timeTitle);
     setTimeTitle(timeTitle);
     setTimeTable(timeTable);
   }, []);
 
+  /******************************************* 
+    Click order button to submit orderList
+  ********************************************/
   function orderField(e) {
     e.preventDefault();
-    console.log(document.querySelector("#selectField").value);
-    console.log(document.querySelector("#selectDate").value);
-    console.log(document.querySelector("#selectTime").value);
-    let data = {
-      user: props.user,
-      userEmail: props.userEmail,
-      field: "",
-      date: "", // string
-      startTime: "", // string
-    };
+    let orderList = [];
+    let data = [];
+    const orderBoxes = document.querySelectorAll("input[type=checkbox]");
+    const selectedField = document.querySelector("#selectField");
+
+    // 1. collect checked list
+    for (let i = 0; i < orderBoxes.length; i++) {
+      if (orderBoxes[i].checked === true) {
+        orderList = [
+          ...orderList,
+          {
+            date: orderBoxes[i].id.slice(5, 13),
+            time: orderBoxes[i].id.slice(13),
+          },
+        ];
+      }
+    }
+
+    // 2. prepare data to upload firebase
+    for (let i = 0; i < orderList.length; i++) {
+      data[i] = {
+        user: props.userName,
+        userEmail: props.userEmail,
+        field: selectedField.value,
+        date: orderList[i].date,
+        startTime: orderList[i].time,
+      };
+    }
+    console.log(data);
+
+    // 3. pass data to firebase
+    uploadFieldOrder(data);
   }
 
   return (
     <div className={styles.field}>
       <div className={styles.title}>
-        <div className={styles.imgWrapper}>img</div>
+        <div className={styles.imgWrapper}>
+          <img src={calendarIcon} />
+        </div>
         <h2>場地租借申請</h2>
       </div>
       <form className={styles.fieldApply}>
         <label className={styles.applyTitle}>場地</label>
         <select id="selectField" className={styles.selectField}>
-          <option>交誼廳</option>
-          <option>會議室</option>
-          <option>K歌房</option>
-          <option>籃球場A</option>
-          <option>籃球場B</option>
+          <option value="交誼廳">交誼廳</option>
+          <option value="會議室">會議室</option>
+          <option value="KTV包廂">KTV包廂</option>
+          <option value="籃球場A">籃球場A</option>
+          <option value="籃球場B">籃球場B</option>
         </select>
         <button id="orderBtn" className={styles.orderBtn} onClick={orderField}>
           預約
@@ -140,56 +170,6 @@ export default function EntryField(props) {
 
         <ApplyTable timeTable={timeTable} timeTitle={timeTitle} />
       </div>
-    </div>
-  );
-}
-
-function ApplyTable(props) {
-  console.log(props);
-  const titleList = props.timeTitle;
-  const timeList = props.timeTable;
-
-  /************************************ 
-    time titles (first column in table)
-  *************************************/
-
-  const TimeTitle = titleList.map((title) => {
-    let startTime = title.slice(4);
-    let endTime = parseInt(startTime) + 1;
-    console.log(startTime);
-    return (
-      <div className={styles.tableCol1}>{`${startTime}:00-${endTime}:00`}</div>
-    );
-  });
-
-  // const FirstDay = timeList[0].map((time) => {
-  //   return (
-  //     <div className={styles.daysInTable} id={`${time}`}>
-  //       day1
-  //     </div>
-  //   );
-  // });
-
-  const Days = timeList.map((timePerDay) => {
-    return timePerDay.map((time) => {
-      console.log(time);
-      return (
-        <div
-          className={styles.daysInTable}
-          id={`${time}`}
-          style={{ "font-size": "12px" }}
-        >
-          {time}
-        </div>
-      );
-    });
-  });
-
-  return (
-    <div className={styles.applyTable}>
-      {TimeTitle}
-      {/* {FirstDay} */}
-      {Days}
     </div>
   );
 }
