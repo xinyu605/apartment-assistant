@@ -9,17 +9,13 @@
 
 .residentInfo {
   padding: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   display: grid;
-  grid-template-columns: repeat(2, 60px) 80px 2fr auto 120px 150px 40px;
-  grid-template-rows: repeat(2, 40px) auto;
+  grid-template-columns: 60px auto 60px 120px 50px;
+  grid-template-rows: 40px auto;
   align-items: center;
   border-radius: $list-border-radius;
   box-shadow: $list-box-shadow;
-
-  &:last-child {
-    border: none;
-  }
 
   .itemTitle {
     width: 100%;
@@ -45,94 +41,74 @@
   .itemResidentNumbers {
     width: 100%;
     height: 100%;
-    border-top: 1px solid $color-linen;
-    grid-column: 2/3;
-    grid-row: 1/2;
+    border: 1px solid $color-melon;
+    font-weight: 600;
+    grid-column: 1/2;
+    grid-row: 2/3;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .titleAddress {
-    grid-column: 3/4;
-    grid-row: 1/2;
-    // border-radius: 10px 10px 0 0;
-    background-color: $color-linen;
-  }
-
   .itemAddress {
-    grid-column: 4/6;
+    grid-column: 2/3;
     grid-row: 1/2;
-    padding-left: 10px;
-    border-top: 1px solid $color-linen;
+    padding-left: 20px;
+    border-top: 1px solid $color-melon;
     display: flex;
     align-items: center;
+
+    .imgWrapper {
+      width: 18px;
+      height: 18px;
+      margin-right: 10px;
+
+      img {
+        width: 100%;
+      }
+    }
   }
 
   .titleDate {
-    grid-column: 6/7;
+    grid-column: 3/4;
     grid-row: 1/2;
-    // border-radius: 10px 10px 0 0;
-    background-color: $color-linen;
+    border-top: 1px solid $color-melon;
+    font-size: $font-size-xsmall;
   }
 
   .itemDate {
-    grid-column: 7/8;
+    grid-column: 4/5;
     grid-row: 1/2;
     padding-left: 10px;
-    border-top: 1px solid $color-linen;
-    border-right: 1px solid $color-linen;
+    border-top: 1px solid $color-melon;
+    border-right: 1px solid $color-melon;
+    font-size: $font-size-xsmall;
     display: flex;
     align-items: center;
   }
 
-  .titleMembers {
-    grid-column: 1/3;
-    grid-row: 2/4;
-    border-radius: 0 0 0px 10px;
-    background-color: $color-linen;
-  }
-
-  .titleName,
-  .titlePhone,
-  .titleEmail {
-    background-color: $color-melon;
-  }
-
   .itemMembers {
-    grid-column: 3/8;
-    grid-row: 3/4;
-  }
-
-  .titleName {
-    grid-column: 3/4;
-    grid-row: 2/3;
-  }
-
-  .titlePhone {
-    grid-column: 4/5;
-    grid-row: 2/3;
-  }
-
-  .titleEmail {
-    grid-column: 5/8;
+    border-top: 1px solid $color-melon;
+    grid-column: 2/5;
     grid-row: 2/3;
   }
 
   .trashImg {
-    width: 35px;
-    height: 35px;
+    width: 30px;
+    height: 30px;
     padding: 5px;
     margin-left: 10px;
     border-radius: 50%;
     background-color: $color-opal;
+    grid-column: 5/6;
+    grid-row: 1/2;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
 
     &:hover {
-      background-color: $color-fireOpal;
+      background-color: $color-melon;
       transition: all 0.3s ease-in-out;
     }
 
@@ -142,10 +118,36 @@
   }
 }
 
+.editImg {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  margin-left: 10px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background-color: $color-opal;
+  grid-column: 5/6;
+  grid-row: 2/3;
+  align-self: flex-start;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-melon;
+    transition: all 0.3s ease-in-out;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
 .memberInfo {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 2fr 3fr;
+  grid-template-columns: 15% 50% auto;
 
   .members {
     width: 100%;
@@ -156,9 +158,21 @@
     align-items: center;
   }
 
+  .imgWrapper {
+    width: 18px;
+    height: 18px;
+    margin-right: 5px;
+
+    img {
+      width: 100%;
+    }
+  }
+
   .memberName {
+    padding-left: 20px;
     grid-column: 1/2;
-    border-left: 1px solid $color-melon;
+    display: flex;
+    justify-content: start;
   }
 
   .memberPhone {
@@ -168,5 +182,7 @@
   .memberEmail {
     grid-column: 3/4;
     border-right: 1px solid $color-melon;
+    display: flex;
+    justify-content: start;
   }
 }

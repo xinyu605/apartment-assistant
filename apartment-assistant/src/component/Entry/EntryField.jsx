@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import ApplyTable from "./ApplyTable";
-import { uploadFieldOrder } from "../../firebase";
+import {
+  getExistedOrders,
+  getMyFieldOrders,
+  uploadFieldOrder,
+} from "../../firebase";
 import styles from "./EntryField.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
 
@@ -8,6 +12,8 @@ export default function EntryField(props) {
   // console.log(props);
   const [timeTitle, setTimeTitle] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
+  const [orderRecord, setOrderRecord] = useState([]);
+  const [field, setField] = useState("");
 
   /************************* 
     show weekly date choice
@@ -20,7 +26,9 @@ export default function EntryField(props) {
       // const optionDay = document.querySelector(`#day${i}`);
       const tableDay = document.querySelector(`#tday${i}`);
       let days = new Date();
-      days.setDate(days.getDate() + i); //取得星期"i"的日期
+      let milliseconds = days.getTime() + 86400000 * i; //get milliseconds of the day
+      days.setTime(milliseconds);
+      let year = days.getFullYear();
       let month = days.getMonth() + 1;
       let date = days.getDate(); //type: number
       let day = days.getDay();
@@ -54,10 +62,34 @@ export default function EntryField(props) {
           break;
       }
 
-      // optionDay.innerHTML = `${month}/${date}`;
       tableDay.innerHTML = `${month}/${date}<br/>${day}`;
+
+      /************************************
+        get exsisted orders from firebase
+      *************************************/
+      getExistedOrders(`${year}`, `${month}`, `${date}`, getOrders);
+      // getMyFieldOrders(
+      //   `${year}`,
+      //   `${month}`,
+      //   `${date}`,
+      //   props.userEmail,
+      //   getMyOrders
+      // );
     }
   }, []);
+
+  let allFieldOrders = [];
+  function getOrders(data) {
+    if (data.length !== 0) {
+      allFieldOrders = [...allFieldOrders, data];
+      console.log(allFieldOrders);
+      setOrderRecord(allFieldOrders);
+    }
+  }
+
+  // function getMyOrders(data) {
+  //   console.log(data);
+  // }
 
   /***************************************** 
     create table elements with specific id
@@ -90,11 +122,18 @@ export default function EntryField(props) {
         timeTable[i][j] = `time${year}${month}${date}${time}`; // prepare id of each <div> ex. <div id="121109">
       }
     }
-    console.log(timeTable);
+    // console.log(timeTable);
     // console.log(timeTitle);
     setTimeTitle(timeTitle);
     setTimeTable(timeTable);
   }, []);
+
+  /************************
+    Change selected field
+  *************************/
+  function changeField(e) {
+    setField(e.currentTarget.value);
+  }
 
   /******************************************* 
     Click order button to submit orderList
@@ -133,6 +172,14 @@ export default function EntryField(props) {
 
     // 3. pass data to firebase
     uploadFieldOrder(data);
+
+    // 4. remind user apply successful
+    window.alert(`${selectedField.value}預約成功！`);
+
+    // 5. clear all checkbox
+    for (let i = 0; i < orderBoxes.length; i++) {
+      orderBoxes[i].checked = false;
+    }
   }
 
   return (
@@ -145,7 +192,11 @@ export default function EntryField(props) {
       </div>
       <form className={styles.fieldApply}>
         <label className={styles.applyTitle}>場地</label>
-        <select id="selectField" className={styles.selectField}>
+        <select
+          id="selectField"
+          className={styles.selectField}
+          onChange={changeField}
+        >
           <option value="交誼廳">交誼廳</option>
           <option value="會議室">會議室</option>
           <option value="KTV包廂">KTV包廂</option>
@@ -168,7 +219,12 @@ export default function EntryField(props) {
           <div id="tday6" className={styles.tableTitle}></div>
         </div>
 
-        <ApplyTable timeTable={timeTable} timeTitle={timeTitle} />
+        <ApplyTable
+          timeTable={timeTable}
+          timeTitle={timeTitle}
+          orderRecord={orderRecord}
+          field={field}
+        />
       </div>
     </div>
   );

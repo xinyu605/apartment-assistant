@@ -361,6 +361,37 @@ export function updateMailStatus(mailId, status) {
 }
 
 /******************************** 
+  get Field order lists
+*********************************/
+export function getExistedOrders(year, month, date, callback) {
+  // console.log(year, month, date);
+  let data = [];
+  refField
+    .where("date", "==", `${year}${month}${date}`)
+    .onSnapshot((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        data = [...data, doc.data()];
+      });
+      // console.log(data);
+      callback(data);
+    });
+}
+
+// export function getMyFieldOrders(year, month, date, email, callback) {
+//   let data = [];
+//   refField
+//     .where("userEmail", "==", email)
+//     .where("date", "==", `${year}${month}${date}`)
+//     .onSnapshot((querySnapshot) => {
+//       querySnapshot.forEach((doc) => {
+//         data = [...data, doc.data()];
+//       });
+//       console.log(data);
+//       callback(data);
+//     });
+// }
+
+/******************************** 
   upload Field order lists
 *********************************/
 export function uploadFieldOrder(data) {

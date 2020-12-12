@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { showDate } from "../../lib";
 import styles from "./ResidentList.module.scss";
+import editIcon from "./../../img/edit.svg";
 import trashIcon from "./../../img/trash.svg";
+import address from "./../../img/address.svg";
+import phone from "./../../img/phone.svg";
+import email from "./../../img/email555.svg";
 
 export default function ResidentList(props) {
   let lists = [];
@@ -28,9 +32,17 @@ export default function ResidentList(props) {
             {member.name}
           </div>
           <div className={`${styles.members} ${styles.memberPhone}`}>
+            <div className={styles.imgWrapper}>
+              <img src={phone} />
+            </div>
+
             {member.phone}
           </div>
           <div className={`${styles.members} ${styles.memberEmail}`}>
+            <div className={styles.imgWrapper}>
+              <img src={email} />
+            </div>
+
             {member.email}
           </div>
         </div>
@@ -55,16 +67,19 @@ export default function ResidentList(props) {
           >
             <img src={trashIcon} />
           </div>
+          <div className={styles.editImg} id={`edit${index}`}>
+            <img src={editIcon} />
+          </div>
           <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
             戶號
           </div>
           <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
             {list.residentNumbers}
           </div>
-          <div className={`${styles.itemTitle} ${styles.titleAddress}`}>
-            地址
-          </div>
           <div className={`${styles.items} ${styles.itemAddress}`}>
+            <div className={styles.imgWrapper}>
+              <img src={address} />
+            </div>
             {list.address}
           </div>
           <div className={`${styles.itemTitle} ${styles.titleDate}`}>
@@ -72,16 +87,6 @@ export default function ResidentList(props) {
           </div>
           <div className={`${styles.items} ${styles.itemDate}`}>
             {updateDate}
-          </div>
-          <div className={`${styles.itemTitle} ${styles.titleMembers}`}>
-            住戶成員
-          </div>
-          <div className={`${styles.itemTitle} ${styles.titleName}`}>姓名</div>
-          <div className={`${styles.itemTitle} ${styles.titlePhone}`}>
-            聯絡電話
-          </div>
-          <div className={`${styles.itemTitle} ${styles.titleEmail}`}>
-            Email
           </div>
           <div className={`${styles.items} ${styles.itemMembers}`}>
             {MemberList(list)}

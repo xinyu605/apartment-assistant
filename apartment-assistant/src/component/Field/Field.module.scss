@@ -1,10 +1,74 @@
 @import "./../../common";
 
 .fieldPage {
-  width: 85%;
+  width: 70%;
   max-width: 1000px;
   min-height: 100vh;
   padding: 40px;
   margin-left: $admin-margin-left;
   margin-top: $admin-margin-top;
+
+  .title {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+
+    .imgWrapper {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.fieldTable {
+  width: 100%;
+}
+
+.fieldApply {
+  margin: 20px 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .applyTitle {
+    margin-right: 10px;
+    justify-self: end;
+    font-size: $font-size-small;
+    font-weight: 600;
+  }
+  .selectField {
+    height: 25px;
+    margin-right: auto;
+  }
+
+  .orderBtn {
+    @include button-main;
+    width: 60px;
+    margin-left: 20px;
+  }
+}
+
+.titleWrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.5fr repeat(7, 1fr);
+  grid-template-rows: 50px;
+  align-items: center;
+  justify-items: center;
+
+  .tableTitle {
+    width: 100%;
+    height: 100%;
+    align-self: center;
+    font-size: $font-size-xsmall;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: center;
+    border-bottom: 1px solid $color-steelTeal;
+  }
 }
