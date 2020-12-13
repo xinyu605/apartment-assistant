@@ -4,6 +4,12 @@ import { nativeSignIn, nativeSignUp, signInWithGoogle } from "../firebase";
 import { checkEmailFormat, checkPasswordLength, checkUserName } from "../lib";
 import styles from "./SignIn.module.scss";
 import logo from "./../img/logo.png";
+import user from "./../img/user.svg";
+import user2 from "./../img/user2.svg";
+import email from "./../img/email.svg";
+import email2 from "./../img/email2.svg";
+import lock from "./../img/lock.svg";
+import lock2 from "./../img/lock2.svg";
 import vintage from "./../img/vintage-1149558_1920.jpg";
 
 export default function SignIn() {
@@ -111,7 +117,9 @@ export default function SignIn() {
                 placeholder="請輸入姓名"
                 onChange={getUserInput}
               ></input>
-              <div className={styles.signInName}></div>
+              <div className={styles.inputImgWrapper}>
+                <img className={styles.inputImg} src={user2} />
+              </div>
             </div>
 
             <div className={styles.inputWrapper}>
@@ -121,7 +129,9 @@ export default function SignIn() {
                 placeholder="請輸入Email"
                 onChange={getUserInput}
               ></input>
-              <div className={styles.loginImg}></div>
+              <div className={styles.inputImgWrapper}>
+                <img className={styles.inputImg} src={email2} />
+              </div>
             </div>
 
             <div className={styles.inputWrapper}>
@@ -131,10 +141,16 @@ export default function SignIn() {
                 placeholder="請輸入6位以上英數字"
                 onChange={getUserInput}
               ></input>
-              <div className={styles.lockImg}></div>
+              <div className={styles.inputImgWrapper}>
+                <img className={styles.inputImg} src={lock2} />
+              </div>
             </div>
 
-            <button id="submitSignUp" onClick={submitSignUpData}>
+            <button
+              id="submitSignUp"
+              className={styles.buttonSignUp}
+              onClick={submitSignUpData}
+            >
               註冊
             </button>
             <div
@@ -156,7 +172,9 @@ export default function SignIn() {
                 placeholder="Email"
                 onChange={getUserInput}
               ></input>
-              <div className={styles.loginImg}></div>
+              <div className={styles.inputImgWrapper}>
+                <img className={styles.inputImg} src={email2} />
+              </div>
             </div>
             <div className={styles.inputWrapper}>
               <input
@@ -165,13 +183,21 @@ export default function SignIn() {
                 placeholder="密碼"
                 onChange={getUserInput}
               ></input>
-              <div className={styles.lockImg}></div>
+              <div className={styles.inputImgWrapper}>
+                <img className={styles.inputImg} src={lock2} />
+              </div>
             </div>
 
-            <button id="submitSignIn" onClick={submitSignInData}>
+            <button
+              id="submitSignIn"
+              className={styles.buttonSignIn}
+              onClick={submitSignInData}
+            >
               登入
             </button>
-            <button onClick={googleSignIn}>Google登入</button>
+            <button className={styles.buttonSignIn} onClick={googleSignIn}>
+              Google登入
+            </button>
           </form>
           <div
             id="clickToSignUp"

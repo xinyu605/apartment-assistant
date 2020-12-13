@@ -9,10 +9,10 @@ $color-silverPink: #d0b8ac;
 $color-unbleachedSilk: #f3d8c7;
 $color-linen: #efe5dc;
 $color-babyPowder: #fbfefb;
+$color-dimYellow: #ebd496;
 
 $admin-margin-left: 270px;
 $admin-margin-top: 60px;
-
 $base-text-color: #414535;
 $light-text-color: #fff;
 $light-border-color: #96bbbb;
@@ -37,8 +37,33 @@ $list-border-radius: 10px;
 $list-box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.2);
 $light-box-shadow: 0px 0px 5px 3px rgba(216, 146, 55, 0.52);
 
+$font-size-middle: 24px;
 $font-size-small: 16px;
 $font-size-xsmall: 14px;
+
+@mixin dynamic-background {
+  background: linear-gradient(
+    330deg,
+    rgba(251, 196, 63, 1),
+    #ebd496,
+    #96bbbb,
+    rgba(135, 216, 241, 1)
+  );
+  background-size: 400% 400%;
+  animation: gradient 4s ease infinite;
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+}
 
 @mixin label-list {
   margin: 5px;
@@ -59,9 +84,13 @@ $font-size-xsmall: 14px;
 @mixin button-main {
   width: 100px;
   height: 30px;
+  border: none;
+  border-radius: 5px;
   font-size: $font-size-xsmall;
-  cursor: pointer;
+  letter-spacing: 2px;
+  color: #fff;
   background-color: $color-steelTeal;
+  cursor: pointer;
 
   &:hover {
     background-color: $color-melon;
@@ -72,7 +101,10 @@ $font-size-xsmall: 14px;
 @mixin button-sub {
   width: 70px;
   height: 30px;
+  border: none;
+  border-radius: 5px;
   font-size: $font-size-xsmall;
+  letter-spacing: 2px;
   color: $light-text-color;
   background-color: $small-button-background-color;
   cursor: pointer;
@@ -83,13 +115,36 @@ $font-size-xsmall: 14px;
   }
 }
 
+@mixin button-icon {
+  width: 30px;
+  height: 30px;
+  margin-left: 10px;
+  padding: 5px;
+  border: none;
+  border-radius: 50%;
+  background-color: $color-steelTeal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-fireOpal;
+    transition: all 0.3s ease-in-out;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
 @mixin list-bullet {
   display: inline-block;
   width: 10px;
   height: 10px;
   margin-right: 10px;
   border-radius: 50%;
-  background-color: $color-opal;
+  background-color: $color-melon;
 }
 
 * {

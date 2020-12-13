@@ -7,9 +7,12 @@
 }
 
 .editBtn {
-  @include button-sub;
-  width: 60px;
-  margin-left: 10px;
+  @include button-icon;
+  background-color: $color-opal;
+
+  img {
+    width: 80%;
+  }
 }
 
 .calendar {
@@ -45,12 +48,8 @@
     }
 
     .decideDate {
+      @include button-sub;
       width: 50px;
-      height: 30px;
-      font-size: 14px;
-      color: $light-text-color;
-      background-color: $small-button-background-color;
-      font-size: $font-size-xsmall;
     }
   }
 
@@ -67,15 +66,21 @@
     li {
       margin: 5px;
       padding: 4px;
-      text-align: center;
-      cursor: pointer;
+      font-size: $font-size-xsmall;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .days {
+      font-weight: 700;
     }
 
     .initial,
     .current {
       width: 22px;
       height: 22px;
-      background-color: cadetblue;
+      background-color: $color-steelTeal;
       color: #fff;
       border-radius: 50%;
       padding: 3px;

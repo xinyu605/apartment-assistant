@@ -90,9 +90,25 @@
 
   .informBtn {
     @include button-sub;
-    width: 100px;
+    width: 126px;
+    padding: 0 8px;
     grid-column: 5/7;
     justify-self: end;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .imgWrapper {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 70%;
+      }
+    }
   }
 
   .submitBtn {

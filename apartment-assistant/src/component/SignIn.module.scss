@@ -1,10 +1,11 @@
 @import "./../common";
 
 $card-width: 360px;
-$icon-width: 28px;
-$icon-height: 28px;
+$icon-width: 20px;
+$icon-height: 20px;
 
 .body {
+  // @include dynamic-background;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -12,8 +13,8 @@ $icon-height: 28px;
   align-items: center;
   background: $base-background;
   background: $gradient-background-no-transparent;
-  background-size: cover;
-  background-position: center;
+  // background-size: cover;
+  // background-position: center;
 }
 
 h2 {
@@ -52,13 +53,13 @@ h2 {
   .imgWrapper {
     width: 180px;
     height: 180px;
+    padding: 8px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.9);
     z-index: 10;
     position: absolute;
     top: 60px;
-    // left: 130px;
-    left: 28%;
+    left: 27%;
 
     .logoImg {
       width: 100%;
@@ -105,24 +106,14 @@ h2 {
   background-color: #fff;
 }
 
-.signInName,
-.loginImg,
-.lockImg {
+.inputImgWrapper {
   width: $icon-width;
   height: $icon-height;
   margin-left: 20px;
-}
 
-.signInName {
-  background-image: url("./../img/user.svg");
-}
-
-.loginImg {
-  background-image: url("./../img/email.svg");
-}
-
-.lockImg {
-  background-image: url("./../img/lock.svg");
+  .inputImg {
+    width: 100%;
+  }
 }
 
 input {
@@ -139,19 +130,27 @@ input:focus {
   box-shadow: $light-box-shadow;
 }
 
-button {
+.buttonSignUp,
+.buttonSignIn {
+  @include button-main;
   width: 100%;
-  height: 40px;
+  height: 36px;
   border: none;
   border-radius: $base-border-radius;
   color: #fff;
-  background-color: $base-button-background-color;
-  font-size: $font-size-small;
+  font-size: $font-size-xsmall;
   letter-spacing: 2px;
   cursor: pointer;
+
+  &:hover {
+    background-color: $color-fireOpal;
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+  }
 }
 
 .clickToSignUp {
+  margin-top: 10px;
   display: block;
   text-align: right;
   cursor: pointer;

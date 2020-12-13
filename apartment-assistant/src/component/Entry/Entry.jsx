@@ -65,7 +65,7 @@ export default function Entry(props) {
         <div className={`${styles.content} ${styles.content5}`}>
           {list.receiverName}
         </div>
-        <button className={styles.takenBtn}>已領取</button>
+        {/* <button className={styles.takenBtn}>已領取</button> */}
       </div>
     );
   });

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./SmallCalendar.module.scss";
 import { showCalendar } from "./../../lib";
+import edit from "./../../img/edit.svg";
 
 /************************
  SmallCalendar component 
@@ -133,7 +134,7 @@ export function SmallCalendar(props) {
           className={styles.editBtn}
           onClick={toggleCalendar}
         >
-          修改
+          <img src={edit} />
         </button>
       </div>
     );

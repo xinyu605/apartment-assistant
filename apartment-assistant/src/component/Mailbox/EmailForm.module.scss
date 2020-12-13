@@ -7,7 +7,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
 
   .emailForm {
     width: 500px;
@@ -24,17 +24,17 @@
   align-items: center;
 
   h2 {
-    font-size: 24px;
+    font-size: 28px;
     color: #fff;
   }
 
   .closeBtn {
-    @include button-main;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+    @include button-icon;
     background-color: $color-fireOpal;
-    font-size: 1.2em;
+
+    img {
+      width: 80%;
+    }
   }
 }
 
@@ -43,6 +43,7 @@
   height: 360px;
   margin: auto;
   padding: 20px 30px;
+  border-radius: $list-border-radius;
   background-color: #fff;
   display: grid;
   grid-template-columns: 60px auto;

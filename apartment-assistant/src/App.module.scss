@@ -51,7 +51,7 @@ a {
     height: auto;
     padding: 10px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.7);
   }
 
   img {
@@ -80,17 +80,18 @@ a {
   }
 
   .logout {
+    @include button-main;
     width: 60px;
-    height: 30px;
-    font-size: 14px;
-    opacity: 0.5;
+    background-color: $base-button-background-color;
+    opacity: 0.7;
     position: absolute;
     bottom: 20px;
     right: 20px;
-  }
 
-  .logout:hover {
-    opacity: 1;
-    transition: all 0.7s ease-in-out;
+    &:hover {
+      opacity: 1;
+      background-color: $base-button-background-color;
+      transition: all 0.3s ease-in-out;
+    }
   }
 }

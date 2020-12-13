@@ -2,6 +2,7 @@
 
 .updateResident {
   margin: 20px auto;
+  max-width: 880px;
 }
 
 .titleContainer {
@@ -34,7 +35,7 @@
 
   .submitMemberList {
     @include button-main;
-    width: 120px;
+    width: 100px;
     margin: 0 auto 20px;
   }
 }
@@ -77,25 +78,21 @@
 
     .title {
       margin: 10px;
-      font-size: 1.2em;
+      font-size: 1.1em;
       font-weight: 600;
     }
 
     .buttonContainer {
       margin-left: auto;
       display: grid;
-      grid-template-columns: repeat(2, 60px);
+      grid-template-columns: repeat(2, 45px);
 
       .buttonMemberList {
-        width: 50px;
-        color: $base-text-color;
-        background-color: $color-dutchWhite;
-
-        &:hover {
-          color: $light-text-color;
-          background-color: $color-fireOpal;
-          transition: all 0.3s ease-in-out;
-        }
+        @include button-icon;
+        width: 35px;
+        height: 35px;
+        padding: 8px;
+        background-color: $color-opal;
       }
     }
   }
@@ -109,6 +106,7 @@
 
     &:nth-child(even) {
       border-left: 8px solid #96bbbb;
+      margin-right: 20px;
       grid-column: 1/2;
     }
 

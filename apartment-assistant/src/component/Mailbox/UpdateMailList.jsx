@@ -9,6 +9,7 @@ import {
 } from "./../../firebase";
 import { nanoid } from "nanoid";
 import envelope from "./../../img/envelope.svg";
+import send from "./../../img/send.svg";
 
 export function UpdateMailList(props) {
   const [mailNumber, setMailNumber] = useState("");
@@ -224,6 +225,9 @@ export function UpdateMailList(props) {
             onClick={toggleEmailForm}
           >
             通知收件人
+            <div className={styles.imgWrapper}>
+              <img src={send} />
+            </div>
           </button>
         </form>
         <button

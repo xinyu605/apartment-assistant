@@ -43,6 +43,7 @@ export function showCalendar(element, getYear, getMonth) {
     let date = document.createElement("li");
     date.id = `date${i}`;
     date.classList.add("day");
+    date.style.cursor = "pointer";
     date.innerHTML = i;
     dateContainer.appendChild(date);
   }

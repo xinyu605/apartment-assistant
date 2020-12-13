@@ -97,11 +97,13 @@
         width: 20px;
         height: 20px;
         padding: 5px;
+        border: none;
         border-radius: 50%;
         background-color: $color-steelTeal;
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
 
         &:hover {
           background-color: $color-fireOpal;
@@ -145,25 +147,7 @@
     }
 
     .trashImg {
-      width: 35px;
-      height: 35px;
-      padding: 5px;
-      margin-left: 10px;
-      border-radius: 50%;
-      background-color: $color-opal;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-
-      &:hover {
-        background-color: $color-fireOpal;
-        transition: all 0.3s ease-in-out;
-      }
-
-      img {
-        width: 100%;
-      }
+      @include button-icon;
     }
   }
 

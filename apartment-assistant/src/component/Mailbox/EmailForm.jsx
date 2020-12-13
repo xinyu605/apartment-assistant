@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { sendMail } from "./../../firebase";
 import styles from "./EmailForm.module.scss";
+import close from "./../../img/close.svg";
 
 export function EmailForm(props) {
   const [recipientEmail, setRecipientEmail] = useState("");
@@ -77,7 +78,7 @@ export function EmailForm(props) {
           <div className={styles.informTitle}>
             <h2>通知信件即將寄出，請確認！</h2>
             <button className={styles.closeBtn} onClick={props.toggleEmailForm}>
-              X
+              <img src={close} />
             </button>
           </div>
 

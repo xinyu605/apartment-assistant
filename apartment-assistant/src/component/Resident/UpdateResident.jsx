@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styles from "./UpdateResident.module.scss";
 import { uploadResident, getTimeStamp } from "./../../firebase";
 import memberIcon1 from "./../../img/members1.svg";
+import plus from "./../../img/plus.svg";
+import minus from "./../../img/minus.svg";
 
 export default function UpdateResident() {
   const [familyMembersForm, setFamilyMemberForm] = useState([
@@ -153,13 +155,13 @@ export default function UpdateResident() {
                 className={styles.buttonMemberList}
                 onClick={createInputs}
               >
-                +
+                <img src={plus} />
               </button>
               <button
                 className={styles.buttonMemberList}
                 onClick={deleteLastInput}
               >
-                -
+                <img src={minus} />
               </button>
             </div>
           </div>

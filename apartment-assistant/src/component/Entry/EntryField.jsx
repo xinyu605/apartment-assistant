@@ -19,6 +19,9 @@ export default function EntryField(props) {
     show weekly date choice
   **************************/
   useEffect(() => {
+    const thisField = document.querySelector("#selectField").value;
+    setField(thisField);
+
     /********************** 
       Render weekly title 
     ***********************/
@@ -67,7 +70,19 @@ export default function EntryField(props) {
       /************************************
         get exsisted orders from firebase
       *************************************/
-      getExistedOrders(`${year}`, `${month}`, `${date}`, getOrders);
+      getExistedOrders(`${year}`, `${month}`, `${date}`, thisField, getOrders);
+
+      let allFieldOrders = [];
+      function getOrders(data) {
+        console.log(i, data);
+
+        if (data.length !== 0) {
+          allFieldOrders = [...allFieldOrders, data];
+          console.log(i, allFieldOrders);
+          setOrderRecord(allFieldOrders);
+        }
+      }
+
       // getMyFieldOrders(
       //   `${year}`,
       //   `${month}`,
@@ -76,16 +91,7 @@ export default function EntryField(props) {
       //   getMyOrders
       // );
     }
-  }, []);
-
-  let allFieldOrders = [];
-  function getOrders(data) {
-    if (data.length !== 0) {
-      allFieldOrders = [...allFieldOrders, data];
-      console.log(allFieldOrders);
-      setOrderRecord(allFieldOrders);
-    }
-  }
+  }, [field]);
 
   // function getMyOrders(data) {
   //   console.log(data);

@@ -57,7 +57,7 @@ export function MailList(props) {
             id={`trash${index}`}
             onClick={props.deleteMail}
           >
-            <img src={trashIcon} />
+            <img src={trashIcon} title={stateController} />
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@ export function MailList(props) {
   });
 
   /****************************** 
-   Change individual data status
+    Change individual data status
   *******************************/
 
   function changeMailStatus(e) {
@@ -81,7 +81,7 @@ export function MailList(props) {
   }
 
   /*************************************** 
-   Toggle "未領取" "已領取" controller 外觀 
+    Toggle "未領取" "已領取" controller 外觀 
   ****************************************/
   useEffect(() => {
     const untakenBtn = document.querySelector("#untakenBtn");

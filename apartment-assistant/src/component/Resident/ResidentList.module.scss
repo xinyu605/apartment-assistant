@@ -1,15 +1,18 @@
 @import "./../../common";
+
 .residentList {
   width: 100%;
-  max-height: 700px;
+  max-height: 900px;
   overflow-y: scroll;
   margin: 20px auto;
-  padding: 20px;
+  padding: 10px;
+  // border-radius: $list-border-radius;
+  // box-shadow: $list-box-shadow;
 }
 
 .residentInfo {
   padding: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   display: grid;
   grid-template-columns: 60px auto 60px 120px 50px;
   grid-template-rows: 40px auto;
@@ -94,53 +97,23 @@
   }
 
   .trashImg {
-    width: 30px;
-    height: 30px;
-    padding: 5px;
+    @include button-icon;
     margin-left: 10px;
-    border-radius: 50%;
-    background-color: $color-opal;
     grid-column: 5/6;
     grid-row: 1/2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-
-    &:hover {
-      background-color: $color-melon;
-      transition: all 0.3s ease-in-out;
-    }
-
-    img {
-      width: 100%;
-    }
   }
 }
 
 .editImg {
-  width: 30px;
-  height: 30px;
-  padding: 5px;
-  margin-left: 10px;
+  @include button-icon;
   margin-top: 5px;
-  border-radius: 50%;
   background-color: $color-opal;
   grid-column: 5/6;
   grid-row: 2/3;
   align-self: flex-start;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $color-melon;
-    transition: all 0.3s ease-in-out;
-  }
 
   img {
-    width: 100%;
+    width: 80%;
   }
 }
 
