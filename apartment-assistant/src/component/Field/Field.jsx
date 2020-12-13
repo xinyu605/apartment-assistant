@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ApplyTable from "./ApplyTable";
+import UserApplyForm from "./UserApplyForm";
 import { getExistedOrders, uploadFieldOrder } from "../../firebase";
 import styles from "./Field.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
@@ -9,11 +10,17 @@ export default function Field() {
   const [timeTable, setTimeTable] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
   const [field, setField] = useState("");
+  const [isApplying, setApplying] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   /************************* 
     show weekly date choice
   **************************/
   useEffect(() => {
+    const thisField = document.querySelector("#selectField").value;
+    setField(thisField);
+
     /********************** 
       Render weekly title 
     ***********************/
@@ -62,18 +69,18 @@ export default function Field() {
       /************************************
         get exsisted orders from firebase
       *************************************/
-      getExistedOrders(`${year}`, `${month}`, `${date}`, getOrders);
-    }
-  }, []);
+      getExistedOrders(`${year}`, `${month}`, `${date}`, thisField, getOrders);
 
-  let allFieldOrders = [];
-  function getOrders(data) {
-    if (data.length !== 0) {
-      allFieldOrders = [...allFieldOrders, data];
-      console.log(allFieldOrders);
-      setOrderRecord(allFieldOrders);
+      let allFieldOrders = [];
+      function getOrders(data) {
+        if (data.length !== 0) {
+          allFieldOrders = [...allFieldOrders, data];
+          console.log(allFieldOrders);
+          setOrderRecord(allFieldOrders);
+        }
+      }
     }
-  }
+  }, [field]);
 
   /***************************************** 
     create table elements with specific id
@@ -119,6 +126,13 @@ export default function Field() {
     setField(e.currentTarget.value);
   }
 
+  /**************************************** 
+    Click order button to update orderList
+  *****************************************/
+  function updateFieldApply(e) {
+    e.preventDefault();
+  }
+
   /******************************************* 
   Click order button to submit orderList
 ********************************************/
@@ -129,7 +143,7 @@ export default function Field() {
     const orderBoxes = document.querySelectorAll("input[type=checkbox]");
     const selectedField = document.querySelector("#selectField");
 
-    // 1. collect checked list
+    // 1-1. collect checked list
     for (let i = 0; i < orderBoxes.length; i++) {
       if (orderBoxes[i].checked === true) {
         orderList = [
@@ -142,11 +156,14 @@ export default function Field() {
       }
     }
 
+    // 1-2. get userName and userEmail by input
+    setApplying(true);
+
     // 2. prepare data to upload firebase
     for (let i = 0; i < orderList.length; i++) {
       data[i] = {
-        user: props.userName,
-        userEmail: props.userEmail,
+        user: "",
+        userEmail: "",
         field: selectedField.value,
         date: orderList[i].date,
         startTime: orderList[i].time,
@@ -155,15 +172,29 @@ export default function Field() {
     console.log(data);
 
     // 3. pass data to firebase
-    uploadFieldOrder(data);
+    // uploadFieldOrder(data);
 
     // 4. remind user apply successful
-    window.alert(`${selectedField.value}預約成功！`);
+    // window.alert(`${selectedField.value}預約成功！`);
 
     // 5. clear all checkbox
-    for (let i = 0; i < orderBoxes.length; i++) {
-      orderBoxes[i].checked = false;
-    }
+    // for (let i = 0; i < orderBoxes.length; i++) {
+    //   orderBoxes[i].checked = false;
+    // }
+  }
+
+  function closeApplyForm(e) {
+    e.preventDefault();
+    setApplying(false);
+  }
+
+  function getApplicantInfo(e) {
+    e.preventDefault();
+    const applicantName = document.querySelector("#applicantName").value;
+    const applicantEmail = document.querySelector("#applicantEmail").value;
+    setUserName(applicantName);
+    setUserEmail(applicantEmail);
+    setApplying(false);
   }
 
   return (
@@ -190,6 +221,9 @@ export default function Field() {
         <button id="orderBtn" className={styles.orderBtn} onClick={orderField}>
           預約
         </button>
+        {/* <button className={styles.orderBtn} onClick={updateFieldApply}>
+          新增
+        </button> */}
       </form>
       <div className={styles.fieldTable}>
         <div className={styles.titleWrapper}>
@@ -210,6 +244,11 @@ export default function Field() {
           field={field}
         />
       </div>
+      <UserApplyForm
+        isApplying={isApplying}
+        closeApplyForm={closeApplyForm}
+        getApplicantInfo={getApplicantInfo}
+      />
     </div>
   );
 }

@@ -1,0 +1,71 @@
+@import "./../../common";
+@import "./Field.module.scss";
+
+.userApplyForm {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.applicantInfo {
+  width: 400px;
+  height: 300px;
+  padding: 0 20px;
+  border-radius: $list-border-radius;
+  background-color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .applyTitleWrapper {
+    width: 90%;
+    margin: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .applyTitle {
+      font-size: 24px;
+    }
+
+    .closeBtn {
+      @include button-icon;
+      background-color: $color-fireOpal;
+
+      img {
+        width: 80%;
+      }
+    }
+  }
+
+  .inputWrapper {
+    @include input-base;
+    width: 90%;
+    height: 40px;
+    padding: 4px 8px;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .imgWrapper {
+      width: 28px;
+      height: 28px;
+
+      img {
+        width: 90%;
+      }
+    }
+  }
+
+  .sendBtn {
+    @include button-main;
+    width: 60px;
+  }
+}

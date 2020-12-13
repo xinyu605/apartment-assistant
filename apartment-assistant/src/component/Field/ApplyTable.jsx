@@ -62,13 +62,6 @@ export default function ApplyTable(props) {
       console.log(selectedTime);
       for (let j = 0; j < selectedTime.length; j++) {
         let divId = `time${selectedTime[j].date}${selectedTime[j].startTime}`;
-        let div = document.querySelector(`#${divId}`);
-        // let labelId = `label${selectedTime[j].date}${selectedTime[j].startTime}`;
-        // let label = document.querySelector(`#${labelId}`);
-        let coverBlock = document.createElement("div");
-        // coverBlock.textContent = "已外借";
-        // coverBlock.classList.add("hideCheckbox");
-        // div.insertBefore(coverBlock, label);
         document.querySelector(`#${divId}`).textContent = "已外借";
         document.querySelector(`#${divId}`).style.cssText =
           "background-color:#618985; color: #fff; font-size: 12px";
