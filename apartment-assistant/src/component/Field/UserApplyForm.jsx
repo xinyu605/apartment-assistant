@@ -5,7 +5,7 @@ import user from "./../../img/user.svg";
 import email from "./../../img/email.svg";
 
 export default function UserApplyForm(props) {
-  console.log(props);
+  // console.log(props);
   if (props.isApplying) {
     return (
       <div className={styles.userApplyForm}>

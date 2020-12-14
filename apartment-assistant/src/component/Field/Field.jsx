@@ -13,6 +13,7 @@ export default function Field() {
   const [isApplying, setApplying] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [orderList, setOrderList] = useState([]);
 
   /************************* 
     show weekly date choice
@@ -136,14 +137,30 @@ export default function Field() {
   /******************************************* 
   Click order button to submit orderList
 ********************************************/
-  function orderField(e) {
+
+  function openApplyForm(e) {
+    e.preventDefault();
+    setApplying(true);
+  }
+
+  function closeApplyForm(e) {
+    e.preventDefault();
+    setApplying(false);
+  }
+
+  function getApplicantInfo(e) {
     e.preventDefault();
     let orderList = [];
     let data = [];
     const orderBoxes = document.querySelectorAll("input[type=checkbox]");
     const selectedField = document.querySelector("#selectField");
+    const applicantName = document.querySelector("#applicantName").value;
+    const applicantEmail = document.querySelector("#applicantEmail").value;
+    setUserName(applicantName);
+    setUserEmail(applicantEmail);
+    setApplying(false);
 
-    // 1-1. collect checked list
+    // 1. collect checked list
     for (let i = 0; i < orderBoxes.length; i++) {
       if (orderBoxes[i].checked === true) {
         orderList = [
@@ -155,15 +172,13 @@ export default function Field() {
         ];
       }
     }
-
-    // 1-2. get userName and userEmail by input
-    setApplying(true);
+    setOrderList(orderList);
 
     // 2. prepare data to upload firebase
     for (let i = 0; i < orderList.length; i++) {
       data[i] = {
-        user: "",
-        userEmail: "",
+        user: applicantName,
+        userEmail: applicantEmail,
         field: selectedField.value,
         date: orderList[i].date,
         startTime: orderList[i].time,
@@ -172,29 +187,13 @@ export default function Field() {
     console.log(data);
 
     // 3. pass data to firebase
-    // uploadFieldOrder(data);
-
+    uploadFieldOrder(data);
     // 4. remind user apply successful
-    // window.alert(`${selectedField.value}預約成功！`);
-
+    window.alert(`${selectedField.value}預約成功！`);
     // 5. clear all checkbox
-    // for (let i = 0; i < orderBoxes.length; i++) {
-    //   orderBoxes[i].checked = false;
-    // }
-  }
-
-  function closeApplyForm(e) {
-    e.preventDefault();
-    setApplying(false);
-  }
-
-  function getApplicantInfo(e) {
-    e.preventDefault();
-    const applicantName = document.querySelector("#applicantName").value;
-    const applicantEmail = document.querySelector("#applicantEmail").value;
-    setUserName(applicantName);
-    setUserEmail(applicantEmail);
-    setApplying(false);
+    for (let i = 0; i < orderBoxes.length; i++) {
+      orderBoxes[i].checked = false;
+    }
   }
 
   return (
@@ -210,7 +209,7 @@ export default function Field() {
         <select
           id="selectField"
           className={styles.selectField}
-          // onChange={changeField}
+          onChange={changeField}
         >
           <option value="交誼廳">交誼廳</option>
           <option value="會議室">會議室</option>
@@ -218,8 +217,12 @@ export default function Field() {
           <option value="籃球場A">籃球場A</option>
           <option value="籃球場B">籃球場B</option>
         </select>
-        <button id="orderBtn" className={styles.orderBtn} onClick={orderField}>
-          預約
+        <button
+          id="orderBtn"
+          className={styles.orderBtn}
+          onClick={openApplyForm}
+        >
+          新增
         </button>
         {/* <button className={styles.orderBtn} onClick={updateFieldApply}>
           新增
