@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./ApplyTable.module.scss";
 
 export default function ApplyTable(props) {
-  // console.log(props);
+  // console.log(props.orderRecord);
   const titleList = props.timeTitle;
   const timeList = props.timeTable;
+  const [orderTimeList, setOrderTimeList] = useState([]);
 
   /************************************ 
     time titles (first column in table)
@@ -21,57 +22,20 @@ export default function ApplyTable(props) {
     );
   });
 
-  /************************************ 
-    weekly time schedule content
-  *************************************/
-
-  const Days = timeList.map((timePerDay) => {
-    return timePerDay.map((time) => {
-      // console.log(time);
-      const orderId = time.slice(4);
-      return (
-        <div className={styles.daysInTable} id={`${time}`} key={`${time}`}>
-          {/* {time} */}
-          <label className={styles.orderLabel} id={`label${orderId}`}>
-            <input
-              type="checkbox"
-              value="ordered"
-              id={`order${orderId}`}
-              className={styles.orderBox}
-            />
-            <span></span>
-          </label>
-        </div>
-      );
-    });
-  });
-
-  /********************************************** 
-    change the checkbox status with order record
-  ***********************************************/
+  /******************************************
+    Hide checkbox with order record
+  *******************************************/
   useEffect(() => {
-    const orderRecord = props.orderRecord;
-    console.log(orderRecord);
-    const selectedField = document.querySelector("#selectField").value;
+    console.log(props.orderRecord);
 
-    for (let i = 0; i < orderRecord.length; i++) {
-      // console.log(orderRecord[i]);
-      let selectedTime = orderRecord[i].filter(
-        (item) => item.field === selectedField
-      );
-      console.log(selectedTime);
-      for (let j = 0; j < selectedTime.length; j++) {
-        let divId = `time${selectedTime[j].date}${selectedTime[j].startTime}`;
-        let div = document.querySelector(`#${divId}`);
-        // let labelId = `label${selectedTime[j].date}${selectedTime[j].startTime}`;
-        // let label = document.querySelector(`#${labelId}`);
-        let coverBlock = document.createElement("div");
-        // coverBlock.textContent = "已外借";
-        // coverBlock.classList.add("hideCheckbox");
-        // div.insertBefore(coverBlock, label);
-        document.querySelector(`#${divId}`).textContent = "已外借";
-        document.querySelector(`#${divId}`).style.cssText =
-          "background-color:#618985; color: #fff; font-size: 12px";
+    for (let i = 0; i < props.orderRecord.length; i++) {
+      for (let j = 0; j < props.orderRecord[i].length; j++) {
+        if (props.orderRecord[i][j].length !== 0) {
+          let timeInRecord = `${props.orderRecord[i][j].date}${props.orderRecord[i][j].startTime}`;
+          let newOrderTimeList = [...orderTimeList];
+          newOrderTimeList.push(timeInRecord);
+          setOrderTimeList(newOrderTimeList);
+        }
       }
     }
   }, [props.orderRecord, props.field]);
@@ -79,7 +43,66 @@ export default function ApplyTable(props) {
   return (
     <div className={styles.applyTable}>
       {TimeTitle}
-      {Days}
+      {timeList.map((timePerDay) => {
+        return timePerDay.map((time) => {
+          const orderId = time.slice(4);
+          return (
+            <Day
+              time={time}
+              orderId={orderId}
+              orderTimeList={orderTimeList}
+              key={time}
+            />
+          );
+        });
+      })}
     </div>
   );
+}
+
+/************************************ 
+    weekly time schedule content
+  *************************************/
+
+function Day(props) {
+  const [visible, setVisible] = useState(true);
+  const time = props.time; //ex. time2020121409
+  const orderId = props.orderId; //ex. 2020121409
+
+  useEffect(() => {
+    for (let i = 0; i < props.orderTimeList.length; i++) {
+      if (orderId === props.orderTimeList[i]) {
+        console.log(orderId);
+        setVisible(false);
+      } else {
+        setVisible(true);
+      }
+    }
+  }, [props.orderTimeList]);
+
+  if (visible) {
+    return (
+      <div className={styles.daysInTable} id={`${time}`}>
+        <label className={styles.orderLabel} id={`label${orderId}`}>
+          <input
+            type="checkbox"
+            value="ordered"
+            id={`order${orderId}`}
+            className={styles.orderBox}
+          />
+          <span></span>
+        </label>
+      </div>
+    );
+  } else {
+    return (
+      <div
+        className={styles.daysInTable}
+        id={`${time}`}
+        style={{ backgroundColor: "#618985", color: "#fff", fontSize: "12px" }}
+      >
+        已外借
+      </div>
+    );
+  }
 }

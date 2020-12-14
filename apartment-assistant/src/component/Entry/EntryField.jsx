@@ -9,7 +9,6 @@ import styles from "./EntryField.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
 
 export default function EntryField(props) {
-  // console.log(props);
   const [timeTitle, setTimeTitle] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
@@ -21,12 +20,12 @@ export default function EntryField(props) {
   useEffect(() => {
     const thisField = document.querySelector("#selectField").value;
     setField(thisField);
+    setOrderRecord([]);
 
     /********************** 
       Render weekly title 
     ***********************/
     for (let i = 0; i < 7; i++) {
-      // const optionDay = document.querySelector(`#day${i}`);
       const tableDay = document.querySelector(`#tday${i}`);
       let days = new Date();
       let milliseconds = days.getTime() + 86400000 * i; //get milliseconds of the day
@@ -72,15 +71,11 @@ export default function EntryField(props) {
       *************************************/
       getExistedOrders(`${year}`, `${month}`, `${date}`, thisField, getOrders);
 
-      let allFieldOrders = [];
+      // let allFieldOrders = [];
       function getOrders(data) {
-        console.log(i, data);
+        // console.log(i, data);
 
-        if (data.length !== 0) {
-          allFieldOrders = [...allFieldOrders, data];
-          console.log(i, allFieldOrders);
-          setOrderRecord(allFieldOrders);
-        }
+        setOrderRecord((prevState) => [...prevState, data]);
       }
 
       // getMyFieldOrders(
@@ -174,7 +169,7 @@ export default function EntryField(props) {
         startTime: orderList[i].time,
       };
     }
-    console.log(data);
+    // console.log(data);
 
     // 3. pass data to firebase
     uploadFieldOrder(data);
