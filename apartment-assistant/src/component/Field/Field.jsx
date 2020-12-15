@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ApplyTable from "./ApplyTable";
+import ApplyTable from "./../Common/ApplyTable";
 import UserApplyForm from "./UserApplyForm";
 import { getExistedOrders, uploadFieldOrder } from "../../firebase";
 import styles from "./Field.module.scss";
@@ -9,7 +9,7 @@ export default function Field() {
   const [timeTitle, setTimeTitle] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
-  const [field, setField] = useState("");
+  const [field, setField] = useState("交誼廳");
   const [isApplying, setApplying] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -20,7 +20,7 @@ export default function Field() {
   **************************/
   useEffect(() => {
     const thisField = document.querySelector("#selectField").value;
-    setField(thisField);
+    setOrderRecord([]);
 
     /********************** 
       Render weekly title 
@@ -72,13 +72,9 @@ export default function Field() {
       *************************************/
       getExistedOrders(`${year}`, `${month}`, `${date}`, thisField, getOrders);
 
-      let allFieldOrders = [];
       function getOrders(data) {
-        if (data.length !== 0) {
-          allFieldOrders = [...allFieldOrders, data];
-          console.log(allFieldOrders);
-          setOrderRecord(allFieldOrders);
-        }
+        // console.log(i, data);
+        setOrderRecord((prevState) => [...prevState, data]);
       }
     }
   }, [field]);
@@ -114,8 +110,7 @@ export default function Field() {
         timeTable[i][j] = `time${year}${month}${date}${time}`; // prepare id of each <div> ex. <div id="121109">
       }
     }
-    // console.log(timeTable);
-    // console.log(timeTitle);
+
     setTimeTitle(timeTitle);
     setTimeTable(timeTable);
   }, []);

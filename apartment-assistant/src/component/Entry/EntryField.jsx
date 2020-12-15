@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ApplyTable from "./ApplyTable";
+import ApplyTable from "./../Common/ApplyTable";
 import {
   getExistedOrders,
   getMyFieldOrders,

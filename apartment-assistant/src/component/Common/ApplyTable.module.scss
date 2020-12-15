@@ -1,5 +1,5 @@
 @import "./../../common";
-@import "./Field.module.scss";
+// @import "./Entry.module.scss";
 
 .applyTable {
   margin-top: 10px;
@@ -10,7 +10,6 @@
   align-items: center;
 
   .tableCol1 {
-    padding-right: 10px;
     font-size: $font-size-xsmall;
     font-weight: 600;
     justify-self: center;
@@ -23,13 +22,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    // position: relative;
 
     .orderLabel {
       padding: 0;
       cursor: pointer;
-      // position: absolute;
-      // z-index: 20;
     }
 
     .orderBox {
@@ -52,15 +48,12 @@
       background-size: contain;
     }
   }
+
+  .daysInTableDisable {
+    background-color: $color-steelTeal;
+    color: $light-text-color;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
+  }
 }
-// .hideCheckbox {
-//   width: 100px;
-//   height: 50px;
-//   background-color: $color-steelTeal;
-//   color: $light-text-color;
-//   font-size: 12px;
-//   position: absolute;
-//   top: 0;
-//   left: 0;
-//   z-index: 100;
-// }
