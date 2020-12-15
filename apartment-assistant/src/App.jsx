@@ -65,11 +65,6 @@ function Home(props) {
         path = "/signin";
       }
       history.push(path);
-      // window.location.href = `.${path}`;
-      // history.push({
-      //   pathname: path,
-      //   state: { user: user },
-      // });
     });
   }, []);
   return <div className={styles.App}></div>;

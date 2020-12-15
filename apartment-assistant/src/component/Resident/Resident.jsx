@@ -12,7 +12,7 @@ export default function Resident() {
   const [searchResult, setSearchResult] = useState([]);
 
   /************************************* 
-   get resident list and pass to state
+    get resident list and pass to state
   **************************************/
   useEffect(() => {
     let isMounted = true; // note this flag denote mount status
