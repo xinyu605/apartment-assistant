@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import AskLogin from "./../Common/AskLogin";
 import EntryBoard from "./EntryBoard";
 import EntryField from "./EntryField";
 import styles from "./Entry.module.scss";
@@ -12,6 +13,7 @@ import { showDate } from "./../../lib";
 
 let auth = firebase.auth();
 export default function Entry(props) {
+  const [isLogin, setLogin] = useState(undefined);
   const [mailCount, setMailCount] = useState(0);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -26,6 +28,9 @@ export default function Entry(props) {
         getUserProfile(user.uid).then((profile) => {
           setUserName(profile.userName);
         });
+        setLogin(true);
+      } else {
+        setLogin(false);
       }
     });
     getUserMailList(userEmail).then((mailList) => {
@@ -102,6 +107,7 @@ export default function Entry(props) {
 
   return (
     <div className={styles.entry}>
+      <AskLogin isLogin={isLogin} />
       <div className={styles.topBar}>
         <p>Hi! {userName}</p>
         <button className={styles.logout} onClick={props.logout}>

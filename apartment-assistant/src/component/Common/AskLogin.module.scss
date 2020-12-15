@@ -1,0 +1,83 @@
+@import "./../../common";
+
+.askLogin {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("./../../img/vintage-1149558_1920.jpg");
+  background-position: center;
+  background-size: cover;
+  position: fixed;
+  z-index: 300;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .dialog {
+    width: 300px;
+    height: 400px;
+    padding: 20px;
+    border-radius: $list-border-radius;
+    box-shadow: $light-box-shadow;
+    background-color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    .logoWrapper {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      margin-top: 10px;
+      background-color: $color-dimYellow;
+      display: flex;
+      justify-content: center;
+
+      .logoImg {
+        width: 140px;
+        height: auto;
+      }
+    }
+
+    .topic,
+    .subTopic {
+      width: 100%;
+      margin: 0;
+      text-align: center;
+    }
+
+    .circles {
+      width: 50px;
+      display: flex;
+      justify-content: space-between;
+
+      .circle {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $color-dimYellow;
+        animation: floating 1s alternate infinite ease;
+
+        &:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        &:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+      }
+    }
+  }
+}
+
+@keyframes floating {
+  0% {
+    transform: translateY(-2px);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(-2px);
+    background-color: $color-melon;
+  }
+}

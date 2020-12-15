@@ -7,8 +7,10 @@ import {
   Redirect,
   // useParams,   //nested router
   useRouteMatch,
+  useLocation,
 } from "react-router-dom";
 import logo from "./../img/logo.png";
+import AskLogin from "./Common/AskLogin";
 import Board from "./Board/Board";
 import Resident from "./Resident/Resident";
 import Mailbox from "./Mailbox/Mailbox";
@@ -20,9 +22,21 @@ let auth = firebase.auth();
 
 export function Admin(props) {
   const match = useRouteMatch();
+  const [isLogin, setLogin] = useState(undefined);
+
+  useEffect(() => {
+    auth.onAuthStateChanged(function (user) {
+      if (user) {
+        setLogin(true);
+      } else {
+        setLogin(false);
+      }
+    });
+  }, []);
 
   return (
     <div className={styles.admin}>
+      <AskLogin isLogin={isLogin} />
       <Sidebar logout={props.logout} />
 
       <Switch>
