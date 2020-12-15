@@ -22,24 +22,31 @@ export default function ApplyTable(props) {
     );
   });
 
-  /******************************************
-    Hide checkbox with order record
-  *******************************************/
+  /*******************************************
+    Get order record and turn into day div Id
+  ********************************************/
   useEffect(() => {
     console.log(props.orderRecord);
-
+    setOrderTimeList([]);
+    let newOrderTimeList = [];
     for (let i = 0; i < props.orderRecord.length; i++) {
       for (let j = 0; j < props.orderRecord[i].length; j++) {
         if (props.orderRecord[i][j].length !== 0) {
-          let timeInRecord = `${props.orderRecord[i][j].date}${props.orderRecord[i][j].startTime}`;
-          let newOrderTimeList = [...orderTimeList];
-          newOrderTimeList.push(timeInRecord);
+          let timeInRecord = {
+            time: `${props.orderRecord[i][j].date}${props.orderRecord[i][j].startTime}`,
+            user: props.orderRecord[i][j].user,
+          };
+          newOrderTimeList = [...newOrderTimeList, timeInRecord];
+          console.log(newOrderTimeList);
           setOrderTimeList(newOrderTimeList);
         }
       }
     }
   }, [props.orderRecord, props.field]);
 
+  /*********************************************************************
+    Render TimePeriod <div> with specific Id organized by date and time
+  **********************************************************************/
   return (
     <div className={styles.applyTable}>
       {TimeTitle}
@@ -47,7 +54,7 @@ export default function ApplyTable(props) {
         return timePerDay.map((time) => {
           const orderId = time.slice(4);
           return (
-            <Day
+            <TimePeriod
               time={time}
               orderId={orderId}
               orderTimeList={orderTimeList}
@@ -60,20 +67,22 @@ export default function ApplyTable(props) {
   );
 }
 
-/************************************ 
-    weekly time schedule content
-  *************************************/
-
-function Day(props) {
+/******************************************* 
+  Render TimePeriod <div> (checkbox | div)
+********************************************/
+function TimePeriod(props) {
   const [visible, setVisible] = useState(true);
+  const [user, setUser] = useState("");
   const time = props.time; //ex. time2020121409
   const orderId = props.orderId; //ex. 2020121409
-
+  console.log(props.orderTimeList);
   useEffect(() => {
     for (let i = 0; i < props.orderTimeList.length; i++) {
-      if (orderId === props.orderTimeList[i]) {
+      if (orderId === props.orderTimeList[i].time) {
         console.log(orderId);
+        setUser(props.orderTimeList[i].user);
         setVisible(false);
+        break;
       } else {
         setVisible(true);
       }
@@ -97,11 +106,12 @@ function Day(props) {
   } else {
     return (
       <div
-        className={styles.daysInTable}
+        className={`${styles.daysInTable} ${styles.daysInTableDisable}`}
         id={`${time}`}
-        style={{ backgroundColor: "#618985", color: "#fff", fontSize: "12px" }}
       >
-        已外借
+        {user}
+        <br />
+        已借用
       </div>
     );
   }

@@ -12,14 +12,13 @@ export default function EntryField(props) {
   const [timeTitle, setTimeTitle] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
-  const [field, setField] = useState("");
+  const [field, setField] = useState("交誼廳");
 
   /************************* 
     show weekly date choice
   **************************/
   useEffect(() => {
     const thisField = document.querySelector("#selectField").value;
-    setField(thisField);
     setOrderRecord([]);
 
     /********************** 
@@ -71,10 +70,8 @@ export default function EntryField(props) {
       *************************************/
       getExistedOrders(`${year}`, `${month}`, `${date}`, thisField, getOrders);
 
-      // let allFieldOrders = [];
       function getOrders(data) {
         // console.log(i, data);
-
         setOrderRecord((prevState) => [...prevState, data]);
       }
 
@@ -123,8 +120,7 @@ export default function EntryField(props) {
         timeTable[i][j] = `time${year}${month}${date}${time}`; // prepare id of each <div> ex. <div id="121109">
       }
     }
-    // console.log(timeTable);
-    // console.log(timeTitle);
+
     setTimeTitle(timeTitle);
     setTimeTable(timeTable);
   }, []);

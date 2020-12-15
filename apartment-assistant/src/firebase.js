@@ -365,11 +365,12 @@ export function updateMailStatus(mailId, status) {
 *********************************/
 export function getExistedOrders(year, month, date, field, callback) {
   // console.log(year, month, date, field);
-  let data = [];
+
   refField
     .where("date", "==", `${year}${month}${date}`)
     .where("field", "==", field)
     .onSnapshot((querySnapshot) => {
+      let data = [];
       querySnapshot.forEach((doc) => {
         data = [...data, doc.data()];
       });
