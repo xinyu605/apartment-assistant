@@ -117,6 +117,32 @@
   }
 }
 
+.doneImg {
+  @include button-icon;
+  margin-left: 10px;
+  background-color: $color-opal;
+  grid-column: 5/6;
+  grid-row: 1/2;
+
+  img {
+    width: 80%;
+  }
+}
+
+.closeImg {
+  @include button-icon;
+  margin-left: 10px;
+  margin-top: 5px;
+  background-color: $color-opal;
+  grid-column: 5/6;
+  grid-row: 2/3;
+  align-self: flex-start;
+
+  img {
+    width: 80%;
+  }
+}
+
 .memberInfo {
   width: 100%;
   display: grid;

@@ -6,7 +6,9 @@ import email from "./../../../img/email555.svg";
 export default function Member(props) {
   const familyMembers = props.familyMembers;
   const member = props.member;
-  const index = familyMembers.indexOf(member);
+  const index = props.list.familyMembers.indexOf(member); //original familyMembers
+  console.log(familyMembers);
+  console.log(props.list.familyMembers);
 
   if (props.isEditing === false) {
     return (
@@ -29,6 +31,7 @@ export default function Member(props) {
       </div>
     );
   } else {
+    console.log(index);
     return (
       <div className={`${styles.memberInfo}`} id={`memberList${index}`}>
         <div className={`${styles.members} ${styles.memberName}`}>

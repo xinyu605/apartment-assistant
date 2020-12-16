@@ -4,6 +4,8 @@ import styles from "./ResidentList.module.scss";
 import editIcon from "./../../../img/edit.svg";
 import trashIcon from "./../../../img/trash.svg";
 import address from "./../../../img/address.svg";
+import check from "./../../../img/check.svg";
+import close from "./../../../img/close.svg";
 import { getTimeStamp, editUpdateResident } from "./../../../firebase";
 import { showDate } from "./../../../lib";
 
@@ -11,17 +13,13 @@ export default function ListCard(props) {
   const lists = props.lists;
   const list = props.list;
   const [isEditing, setEditing] = useState(false);
-  const [residentId, setResidentId] = useState(props.list.residentId);
+  const [residentId, setResidentId] = useState(list.residentId);
   const [floor, setFloor] = useState(props.list.floor);
-  const [residentNumbers, setResidentNumbers] = useState(
-    props.list.residentNumbers
-  );
-  const [residentAddress, setResidentAddress] = useState(props.list.address);
-  const [updateDateWhenEdit, setUpdateDateWhenEdit] = useState(
-    props.list.updateDate
-  );
+  const [residentNumbers, setResidentNumbers] = useState(list.residentNumbers);
+  const [residentAddress, setResidentAddress] = useState(list.address);
+  const [updateDateWhenEdit, setUpdateDateWhenEdit] = useState(list.updateDate);
   const [showDateWhenEditing, setDateWhenEditing] = useState("");
-  const [familyMembers, setFamilyMembers] = useState(props.list.familyMembers);
+  const [familyMembers, setFamilyMembers] = useState(list.familyMembers);
 
   let index = lists.indexOf(list);
   let updateDate = "";
@@ -61,7 +59,10 @@ export default function ListCard(props) {
 
   function changeMemberInfo(e) {
     const target = e.currentTarget;
-    let newFamilyMembers = [...familyMembers];
+    console.log(familyMembers);
+    // let newFamilyMembers = [...familyMembers];  //只複製第一層，沒有複製內部的物件，後續處理內部物件會指向原來的陣列
+    let newFamilyMembers = familyMembers.map((member) => ({ ...member })); //完全複製，後續處理內部物件會指向新的陣列
+    console.log(newFamilyMembers);
 
     if (target.id.startsWith("editMemberName")) {
       const index = parseInt(e.currentTarget.id.slice(14));
@@ -75,6 +76,15 @@ export default function ListCard(props) {
     }
 
     setFamilyMembers(newFamilyMembers);
+  }
+
+  function cancelEditing() {
+    console.log(props.list);
+    setResidentNumbers(props.list.residentNumbers);
+    setResidentAddress(props.list.address);
+    setUpdateDateWhenEdit(props.list.updateDate);
+    setFamilyMembers(props.list.familyMembers);
+    setEditing(false);
   }
 
   function packNewResidentInfo() {
@@ -115,13 +125,13 @@ export default function ListCard(props) {
             戶號
           </div>
           <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
-            {list.residentNumbers}
+            {props.list.residentNumbers}
           </div>
           <div className={`${styles.items} ${styles.itemAddress}`}>
             <div className={styles.imgWrapper}>
               <img src={address} />
             </div>
-            {list.address}
+            {props.list.address}
           </div>
           <div className={`${styles.itemTitle} ${styles.titleDate}`}>
             更新日期
@@ -131,14 +141,14 @@ export default function ListCard(props) {
           </div>
           <div className={`${styles.items} ${styles.itemMembers}`}>
             {/* <MemberList list={list} isEditing={isEditing} /> */}
-            {list.familyMembers.map((member) => {
+            {props.list.familyMembers.map((member) => {
               const index = list.familyMembers.indexOf(member);
               return (
                 <Member
                   isEditing={isEditing}
                   list={list}
                   member={member}
-                  familyMembers={familyMembers}
+                  familyMembers={props.list.familyMembers}
                   key={`member${index}`}
                 />
               );
@@ -151,20 +161,21 @@ export default function ListCard(props) {
     return (
       <div>
         <div className={styles.residentInfo} id={`residentInfo${index}`}>
-          {/* <div
-            className={styles.plusImg}
-            id={`plus${index}`}
-            // onClick={props.deleteResident}
-          >
-            +
-          </div> */}
           <div
-            className={styles.done}
+            className={styles.doneImg}
             id={`done${index}`}
             onClick={packNewResidentInfo}
           >
-            確定
+            <img src={check} />
           </div>
+          <div
+            className={styles.closeImg}
+            id={`close${index}`}
+            onClick={cancelEditing}
+          >
+            <img src={close} />
+          </div>
+
           <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
             戶號
           </div>
@@ -203,8 +214,6 @@ export default function ListCard(props) {
                   list={list}
                   member={member}
                   familyMembers={familyMembers}
-                  // changeInput={changeInput}
-                  // changeMemberName={changeMemberName}
                   changeMemberInfo={changeMemberInfo}
                   key={`member${index}`}
                 />
