@@ -92,7 +92,7 @@ export default function UpdateResident() {
   }
 
   /****************************
-   FamilyMembersForm component
+    FamilyMembersForm component
    ****************************/
 
   const FamilyMemberForm = familyMembersForm.map((item) => {

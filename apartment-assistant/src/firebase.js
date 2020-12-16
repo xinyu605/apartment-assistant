@@ -201,6 +201,28 @@ export function deleteResidentData(id) {
 }
 
 /****************************************
+  Edit resident and update residentList
+*****************************************/
+export function editUpdateResident(data) {
+  console.log(data);
+  refResident
+    .doc(data.residentId)
+    .update({
+      residentNumbers: data.residentNumbers,
+      floor: data.floor,
+      address: data.address,
+      familyMembers: data.familyMembers,
+      updateDate: data.updateDate,
+    })
+    .then(() => {
+      console.log("Update resident Info successful");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+/****************************************
   get untaken mailList and taken mailList
  ****************************************/
 export function getMailList(status = false) {

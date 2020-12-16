@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ResidentList from "./ResidentList";
+import ResidentList from "./ResidentList/ResidentList";
 import UpdateResident from "./UpdateResident";
 import { getResidentList, deleteResidentData } from "./../../firebase";
 import { scrollToTarget } from "./../../lib";
@@ -46,6 +46,10 @@ export default function Resident() {
     }
   }
 
+  // function editResident(e) {
+  //   console.log(e.currentTarget.id);
+  // }
+
   return (
     <div className={styles.residentPage}>
       <div className={styles.header}>
@@ -82,6 +86,7 @@ export default function Resident() {
         residentList={residentList}
         searchResult={searchResult}
         deleteResident={deleteResident}
+        // editResident={editResident}
       />
       <UpdateResident />
     </div>
