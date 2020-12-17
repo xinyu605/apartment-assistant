@@ -15,13 +15,10 @@ export default function Resident() {
     get resident list and pass to state
   **************************************/
   useEffect(() => {
-    let isMounted = true; // note this flag denote mount status
-    getResidentList().then((residents) => {
-      if (isMounted) setResidentList(residents);
-    });
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
+    getResidentList(setResidentData);
+    function setResidentData(residents) {
+      setResidentList(residents);
+    }
   }, []);
 
   function searchResident(e) {

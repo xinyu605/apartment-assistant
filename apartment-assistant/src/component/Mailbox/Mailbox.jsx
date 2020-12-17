@@ -1,59 +1,39 @@
 import React, { useEffect, useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-  // useParams,   //nested router
-  // useRouteMatch,
-} from "react-router-dom";
 import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
 import { getMailList, getResidentList, deleteMailData } from "./../../firebase";
 import styles from "./MailList.module.scss";
 
 /*****************************
- Mailbox component:
- 1.Get data from Firestore
- 2.Render 
+  Mailbox component:
+  1.Get data from Firestore
+  2.Render 
 ******************************/
 
 function Mailbox() {
-  // const [isLogined, setLogin]=useState(undefined);
   const [state, setState] = useState(false);
   const [untakenData, setUntakenData] = useState([]);
-  // const [untakenData, setUntakenData] = useState(getMailList(false));
   const [takenData, setTakenData] = useState([]);
-  // const [takenData, setTakenData] = useState(getMailList(true));
-  const [residentData, setResidentData] = useState([]);
+  const [residentList, setResidentList] = useState([]);
 
   const [newMail, setNewMail] = useState(false);
 
-  // useEffect will run only after an initial render, and after an update on data is occurred
   useEffect(() => {
-    // console.log(getMailList(false));
-    // setUntakenData(getMailList(false));
-    // setTakenData(getMailList(true));
-    getMailList(false).then((mailList) => {
-      console.log(mailList);
-      setUntakenData(mailList);
-    });
-    getMailList(true).then((mailList) => {
-      // console.log(mailList);
-      setTakenData(mailList);
-    });
-  }, [state]); //[]內放需要監聽(有變動就要執行function)的state
+    getMailList(false, getUntakenData);
+    function getUntakenData(untakenMails) {
+      setUntakenData(untakenMails);
+    }
+    getMailList(true, getTakenData);
+    function getTakenData(takenMails) {
+      setTakenData(takenMails);
+    }
+  }, []);
 
   useEffect(() => {
-    let isMounted = true; // note this flag denote mount status
-    getResidentList().then((residentList) => {
-      // console.log(residentList);
-      if (isMounted) setResidentData(residentList);
-    });
-    return () => {
-      isMounted = false;
-    }; // use effect cleanup to set flag false, if unmounted
+    getResidentList(setResidentData);
+    function setResidentData(residents) {
+      setResidentList(residents);
+    }
   }, []);
 
   function toggleState(e) {
@@ -109,7 +89,7 @@ function Mailbox() {
       {/* <Route exact path="/admin/mailbox" component={UpdateMailList} /> */}
       <UpdateMailList
         updateNewMail={updateNewMail}
-        residentList={residentData}
+        residentList={residentList}
       />
     </div>
   );

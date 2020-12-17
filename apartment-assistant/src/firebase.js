@@ -63,22 +63,32 @@ export function getUserProfile(uid) {
 /*******************
   get Board list
  *******************/
-export function getBoardList() {
-  let data = [];
-  return refBoard
-    .get()
-    .then((docRef) => {
-      docRef.forEach((doc) => {
-        if (doc.id) {
-          data = [...data, doc.data()];
-          return data;
-        }
-      });
-      return data;
-    })
-    .catch((error) => {
-      console.log(error);
+// export function getBoardList() {
+//   let data = [];
+//   return refBoard
+//     .get()
+//     .then((docRef) => {
+//       docRef.forEach((doc) => {
+//         if (doc.id) {
+//           data = [...data, doc.data()];
+//           return data;
+//         }
+//       });
+//       return data;
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
+
+export function getBoardList(callback) {
+  refBoard.onSnapshot((querySnapshot) => {
+    let data = [];
+    querySnapshot.forEach((doc) => {
+      data = [...data, doc.data()];
     });
+    callback(data);
+  });
 }
 
 /*********************************** 
@@ -124,23 +134,15 @@ export function deleteIssueData(id) {
 /*******************
   get resident list
  *******************/
-export function getResidentList() {
-  let data = [];
-  return refResident
-    .get()
-    .then((docRef) => {
-      docRef.forEach((doc) => {
-        if (doc.id) {
-          // console.log(doc.data());
-          data = [...data, doc.data()];
-          return data;
-        }
-      });
-      return data;
-    })
-    .catch((error) => {
-      console.log(error);
+export function getResidentList(callback) {
+  refResident.onSnapshot((querySnapshot) => {
+    let data = [];
+    querySnapshot.forEach((doc) => {
+      data = [...data, doc.data()];
     });
+    // console.log(data);
+    callback(data);
+  });
 }
 
 /*********************
@@ -225,42 +227,18 @@ export function editUpdateResident(data) {
 /****************************************
   get untaken mailList and taken mailList
  ****************************************/
-export function getMailList(status = false) {
-  let data = [];
-  return refMailbox
+export function getMailList(status = false, callback) {
+  refMailbox
     .where("status", "==", status) //status= true (taken) | false (untaken)
     .orderBy("mailNumbers", "asc")
-    .get()
-    .then((docRef) => {
-      docRef.forEach((doc) => {
-        if (doc.id) {
-          data = [...data, doc.data()];
-          return data;
-        }
+    .onSnapshot(function (querySnapshot) {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data = [...data, doc.data()];
       });
-      return data;
-    })
-    .catch((error) => {
-      console.log(error);
+      callback(data);
     });
 }
-
-// export function getInstantMailList(status = false) {
-//   let data = [];
-//   refMailbox
-//     .where("status", "==", status) //status= true (taken) | false (untaken)
-//     .orderBy("mailNumbers", "asc")
-//     .onSnapshot(function (querySnapshot) {
-//       querySnapshot.forEach((doc) => {
-//         if (doc.id) {
-//           data = [...data, doc.data()];
-//           return data;
-//         }
-//       });
-//       console.log(data);
-//       return data;
-//     });
-// }
 
 /****************************************
   get user's mailList
@@ -299,45 +277,6 @@ export function deleteMailData(id) {
       console.log(error);
     });
 }
-
-/*****************************************************
-  get receiver's familyMembers from resident document
-******************************************************/
-
-// export async function getReceiverInfo(residentNumbers, mailId) {
-//   let receiverData = [];
-//   try {
-//     let residential = await refResident
-//       .where("residentNumbers", "==", residentNumbers)
-//       .get();
-//     residential.forEach((doc) => {
-//       console.log("doc.id:", doc.id, "get data:", doc.data());
-//       refResident
-//         .doc(doc.id)
-//         .collection("familyMembers")
-//         .get()
-//         .then((docRef) => {
-//           docRef.forEach((doc) => {
-//             console.log("doc.id:", doc.id, "get data:", doc.data());
-//             receiverData = [...receiverData, doc.data()];
-//             return receiverData;
-//           });
-//         })
-//         .then(() => {
-//           console.log(receiverData);
-//           refMailbox
-//             .doc(mailId)
-//             .update({ familyMembers: receiverData })
-//             .then(() => {
-//               console.log("success to append familyMembers to receiver info!");
-//               // console.log(callback());
-//             });
-//         });
-//     });
-//   } catch (error) {
-//     console.log("Error getting documents", error);
-//   }
-// }
 
 /****************************************
   upload new mail list to firestore

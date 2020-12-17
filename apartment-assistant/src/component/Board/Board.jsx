@@ -14,10 +14,16 @@ export default function Board() {
   const [issueIndex, setIssueIndex] = useState(0);
 
   useEffect(() => {
-    getBoardList().then((boardList) => {
+    // getBoardList().then((boardList) => {
+    //   setMatters(boardList);
+    //   setDetails(boardList[0]);
+    // });
+
+    getBoardList(handleBoardList);
+    function handleBoardList(boardList) {
       setMatters(boardList);
       setDetails(boardList[0]);
-    });
+    }
   }, []);
 
   const List = matters.map((matter) => {
