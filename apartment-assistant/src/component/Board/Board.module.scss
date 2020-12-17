@@ -41,9 +41,8 @@
 
 .anouncement {
   width: 96%;
-  max-height: 500px;
+  max-height: 480px;
   margin-right: 40px;
-  padding: 20px;
   overflow-y: scroll;
   padding: 10px 5px;
   border-radius: $list-border-radius;
@@ -51,6 +50,7 @@
 
   .title {
     width: 88%;
+    height: 50px;
     font-size: 1.2em;
     font-weight: 600;
     padding: 10px 0;
@@ -71,6 +71,10 @@
       grid-template-rows: 30px auto;
       align-items: center;
 
+      &:last-child {
+        margin-bottom: 0;
+      }
+
       &:hover {
         border-left: 5px solid $color-melon;
         border-radius: 0 10px 10px 0;
@@ -88,6 +92,7 @@
         grid-column: 1/2;
         grid-row: 2/3;
         font-weight: 600;
+        line-height: 1.4;
       }
 
       .readMoreBtn {
@@ -100,6 +105,10 @@
         border: none;
         border-radius: 50%;
         background-color: $color-steelTeal;
+        background-image: url("./../../img/next.svg");
+        background-position: center;
+        background-size: 65%;
+        background-repeat: no-repeat;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -128,26 +137,34 @@
   justify-self: end;
   width: 96%;
   max-height: 500px;
-  padding: 20px;
+  padding: 16px 30px 20px;
   overflow-y: scroll;
   border-radius: $list-border-radius;
   box-shadow: $list-box-shadow;
 
   .detailHeader {
+    margin-bottom: 20px;
+    border-bottom: 3px dotted $color-melon;
     display: grid;
     grid-template-columns: auto 40px;
-    grid-template-rows: 30px;
+    grid-template-rows: 40px;
     align-items: center;
 
     h4 {
       padding-bottom: 10px;
-      border-bottom: 3px dotted $color-silverPink;
       font-size: 1.2em;
       font-weight: 600;
+      line-height: 1.4;
     }
 
     .trashImg {
       @include button-icon;
+      width: 32px;
+      background-color: #fff;
+
+      &:hover {
+        background-color: #eee;
+      }
     }
   }
 
@@ -162,5 +179,65 @@
   .detailDeadline::before {
     content: "";
     @include list-bullet;
+  }
+}
+
+/**********
+  < 850px
+***********/
+
+@media (max-width: 880px) {
+  .boardPage {
+    margin-top: 20px;
+  }
+
+  .boardList {
+    display: block;
+  }
+
+  .anouncement {
+    width: 100%;
+    max-height: 272px;
+    margin-bottom: 30px;
+
+    .readMoreBtn {
+      &:hover {
+        transform: rotate(90deg);
+        transition: all, 0.3s, ease-in-out;
+      }
+    }
+  }
+
+  .matterDetails {
+    width: 100%;
+    padding: 30px;
+  }
+}
+
+/**********
+  < 660px
+***********/
+@media (max-width: 660px) {
+  .boardPage {
+    margin-left: 200px;
+  }
+}
+
+/**********
+  < 600px
+***********/
+@media (max-width: 600px) {
+  .boardPage {
+    width: 94%;
+    margin: 20px auto;
+  }
+}
+
+/**********
+  < 500px
+***********/
+@media (max-width: 500px) {
+  .boardPage {
+    width: 98%;
   }
 }

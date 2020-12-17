@@ -41,6 +41,8 @@ $font-size-middle: 24px;
 $font-size-small: 16px;
 $font-size-xsmall: 14px;
 
+$hamburger-lines-color: $color-opal;
+
 @mixin dynamic-background {
   background: linear-gradient(
     330deg,
@@ -149,6 +151,12 @@ $font-size-xsmall: 14px;
 
 * {
   box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
 
 a {

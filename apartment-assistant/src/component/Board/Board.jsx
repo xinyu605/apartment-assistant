@@ -6,7 +6,7 @@ import { showDate } from "./../../lib";
 import styles from "./Board.module.scss";
 import announcement from "./../../img/promotion.svg";
 import readMore from "./../../img/next.svg";
-import trashIcon from "./../../img/trash.svg";
+import trashIcon from "./../../img/trash555.svg";
 
 export default function Board() {
   const [matters, setMatters] = useState([]);
@@ -14,11 +14,6 @@ export default function Board() {
   const [issueIndex, setIssueIndex] = useState(0);
 
   useEffect(() => {
-    // getBoardList().then((boardList) => {
-    //   setMatters(boardList);
-    //   setDetails(boardList[0]);
-    // });
-
     getBoardList(handleBoardList);
     function handleBoardList(boardList) {
       setMatters(boardList);
@@ -38,7 +33,7 @@ export default function Board() {
           className={styles.readMoreBtn}
           onClick={selectMatterDetail}
         >
-          <img src={readMore} />
+          {/* <img src={readMore} /> */}
         </button>
       </li>
     );

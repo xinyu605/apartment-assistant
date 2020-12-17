@@ -1,0 +1,199 @@
+@import "./../common";
+
+.admin {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.topBar {
+  display: none;
+}
+
+.sidebar {
+  width: 250px;
+  height: 100%;
+  padding-top: 10px;
+  background: $base-background;
+  background: $gradient-background;
+  font-size: 1em;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  .toggleBtn {
+    display: none;
+  }
+
+  .logoArea {
+    width: 100%;
+    height: 120px;
+    padding: 20px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .imgWrapper {
+    width: 120px;
+    height: auto;
+    padding: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+
+  img {
+    width: 100%;
+  }
+
+  .sidebarList {
+    width: 100%;
+    padding: 15px 0 15px 40px;
+    background: rgba(44, 102, 110, 0.363);
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+
+    a {
+      color: #fff;
+      letter-spacing: 3px;
+    }
+  }
+
+  li:first-child {
+    border-top: none;
+  }
+
+  li:hover {
+    width: calc(100%-3px);
+    border-right: 8px solid #455;
+  }
+
+  .footer {
+    width: 250px;
+    height: 50px;
+    padding: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .copyright {
+      font-size: $font-size-xsmall;
+    }
+
+    .logout {
+      @include button-main;
+      width: 46px;
+      background-color: $base-button-background-color;
+      opacity: 0.7;
+      font-size: $font-size-xsmall;
+
+      &:hover {
+        opacity: 1;
+        background-color: $base-button-background-color;
+      }
+    }
+  }
+}
+
+/***********
+  < 660px
+************/
+@media (max-width: 660px) {
+  .sidebar {
+    width: 200px;
+
+    .sidebarList {
+      padding-left: 30px;
+    }
+
+    .footer {
+      width: 220px;
+      padding: 10px;
+      bottom: 35px;
+      display: grid;
+      grid-template-rows: 40px 30px;
+
+      .logout {
+        grid-row: 1/2;
+        justify-self: flex-end;
+      }
+
+      .copyright {
+        grid-row: 2/3;
+      }
+    }
+  }
+}
+
+/***********
+  < 600px
+************/
+@media (max-width: 600px) {
+  .topBar {
+    width: 100%;
+    height: 70px;
+    background-color: $color-steelTeal;
+    position: fixed;
+    top: 0;
+    display: flex;
+    align-items: center;
+
+    .smallLogoWrapper {
+      width: 50px;
+      height: 50px;
+      margin: 0 10px 0 auto;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.8);
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  .sidebar {
+    left: -200px;
+
+    .toggleBtn {
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      position: absolute;
+      top: 15px;
+      right: -50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .hamburgerIcon {
+        width: 28px;
+        height: 3px;
+        border-radius: 15px;
+        display: block;
+        background-color: $hamburger-lines-color;
+        position: relative;
+
+        &::before,
+        &::after {
+          content: "";
+          width: 28px;
+          height: 3px;
+          border-radius: 5px;
+          display: block;
+          background-color: $hamburger-lines-color;
+          position: absolute;
+        }
+
+        &::before {
+          bottom: 10px;
+        }
+
+        &::after {
+          bottom: -10px;
+        }
+      }
+    }
+  }
+}
