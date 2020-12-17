@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Member from "./Member";
+import NewMember from "./NewMember";
 import styles from "./ResidentList.module.scss";
 import editIcon from "./../../../img/edit.svg";
 import trashIcon from "./../../../img/trash.svg";
 import address from "./../../../img/address.svg";
 import check from "./../../../img/check.svg";
 import close from "./../../../img/close.svg";
+import plus from "./../../../img/plus.svg";
 import { getTimeStamp, editUpdateResident } from "./../../../firebase";
 import { showDate } from "./../../../lib";
 
@@ -20,11 +22,12 @@ export default function ListCard(props) {
   const [updateDateWhenEdit, setUpdateDateWhenEdit] = useState(list.updateDate);
   const [showDateWhenEditing, setDateWhenEditing] = useState("");
   const [familyMembers, setFamilyMembers] = useState(list.familyMembers);
+  const [familyMembersForm, setFamilyMemberForm] = useState([]);
 
   let index = lists.indexOf(list);
   let updateDate = "";
 
-  console.log(list);
+  // console.log(list);
 
   if (list.updateDate) {
     updateDate = showDate(list.updateDate.seconds);
@@ -84,7 +87,20 @@ export default function ListCard(props) {
     setResidentAddress(props.list.address);
     setUpdateDateWhenEdit(props.list.updateDate);
     setFamilyMembers(props.list.familyMembers);
+    setFamilyMemberForm([]);
     setEditing(false);
+  }
+
+  function createMemberInput(e) {
+    e.preventDefault();
+    // console.log(familyMembers.length);
+    setFamilyMemberForm([
+      ...familyMembersForm,
+      { id: `member${familyMembers.length}` },
+    ]);
+    let newFamilyMembers = familyMembers.map((member) => ({ ...member }));
+    newFamilyMembers.push({ name: "", phone: "", email: "" });
+    setFamilyMembers(newFamilyMembers);
   }
 
   function packNewResidentInfo() {
@@ -116,7 +132,6 @@ export default function ListCard(props) {
           <div
             className={styles.editImg}
             id={`edit${index}`}
-            // onClick={props.editResident}
             onClick={editResident}
           >
             <img src={editIcon} />
@@ -140,7 +155,6 @@ export default function ListCard(props) {
             {updateDate}
           </div>
           <div className={`${styles.items} ${styles.itemMembers}`}>
-            {/* <MemberList list={list} isEditing={isEditing} /> */}
             {props.list.familyMembers.map((member) => {
               const index = list.familyMembers.indexOf(member);
               return (
@@ -175,12 +189,20 @@ export default function ListCard(props) {
           >
             <img src={close} />
           </div>
+          <div
+            className={styles.plusImg}
+            id={`plus${index}`}
+            onClick={createMemberInput}
+          >
+            <img src={plus} />
+          </div>
 
           <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
             戶號
           </div>
           <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
             <input
+              className={styles.editInput}
               id={`editResidentNumbers${index}`}
               type="text"
               value={residentNumbers}
@@ -192,6 +214,7 @@ export default function ListCard(props) {
               <img src={address} />
             </div>
             <input
+              className={styles.editInput}
               id={`editResidentAddress${index}`}
               type="text"
               value={residentAddress}
@@ -214,8 +237,21 @@ export default function ListCard(props) {
                   list={list}
                   member={member}
                   familyMembers={familyMembers}
+                  familyMembersForm={familyMembersForm}
                   changeMemberInfo={changeMemberInfo}
                   key={`member${index}`}
+                />
+              );
+            })}
+            {familyMembersForm.map((item) => {
+              console.log(item.id);
+              return (
+                <NewMember
+                  familyMembers={familyMembers}
+                  familyMembersForm={familyMembersForm}
+                  thisMember={item}
+                  changeMemberInfo={changeMemberInfo}
+                  key={item.id}
                 />
               );
             })}

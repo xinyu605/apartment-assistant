@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import styles from "./ResidentList.module.scss";
 import phone from "./../../../img/phone.svg";
 import email from "./../../../img/email555.svg";
+import trashcan from "./../../../img/trash.svg";
 
 export default function Member(props) {
   const familyMembers = props.familyMembers;
   const member = props.member;
   const index = props.list.familyMembers.indexOf(member); //original familyMembers
-  console.log(familyMembers);
-  console.log(props.list.familyMembers);
+  // console.log(familyMembers);
+  // console.log(props.list.familyMembers);
 
   if (props.isEditing === false) {
     return (
@@ -31,11 +32,12 @@ export default function Member(props) {
       </div>
     );
   } else {
-    console.log(index);
+    // console.log(index);
     return (
       <div className={`${styles.memberInfo}`} id={`memberList${index}`}>
         <div className={`${styles.members} ${styles.memberName}`}>
           <input
+            className={`${styles.editInput}`}
             id={`editMemberName${index}`}
             type="text"
             value={props.familyMembers[index].name}
@@ -48,6 +50,7 @@ export default function Member(props) {
             <img src={phone} />
           </div>
           <input
+            className={`${styles.editInput}`}
             id={`editMemberPhone${index}`}
             type="text"
             value={props.familyMembers[index].phone}
@@ -60,6 +63,7 @@ export default function Member(props) {
             <img src={email} />
           </div>
           <input
+            className={`${styles.editInput}`}
             id={`editMemberEmail${index}`}
             type="text"
             value={props.familyMembers[index].email}

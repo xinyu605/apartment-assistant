@@ -22,7 +22,6 @@ export default function ResidentList(props) {
             list={list}
             lists={lists}
             deleteResident={props.deleteResident}
-            // editResident={props.editResident}
             key={`residentCard${index}`}
           />
         );
