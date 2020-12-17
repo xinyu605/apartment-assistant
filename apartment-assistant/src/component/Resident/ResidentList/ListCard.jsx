@@ -22,7 +22,7 @@ export default function ListCard(props) {
   const [updateDateWhenEdit, setUpdateDateWhenEdit] = useState(list.updateDate);
   const [showDateWhenEditing, setDateWhenEditing] = useState("");
   const [familyMembers, setFamilyMembers] = useState(list.familyMembers);
-  const [familyMembersForm, setFamilyMemberForm] = useState([]);
+  const [familyMembersForm, setFamilyMembersForm] = useState([]);
 
   let index = lists.indexOf(list);
   let updateDate = "";
@@ -87,20 +87,37 @@ export default function ListCard(props) {
     setResidentAddress(props.list.address);
     setUpdateDateWhenEdit(props.list.updateDate);
     setFamilyMembers(props.list.familyMembers);
-    setFamilyMemberForm([]);
+    setFamilyMembersForm([]);
     setEditing(false);
   }
 
   function createMemberInput(e) {
     e.preventDefault();
     // console.log(familyMembers.length);
-    setFamilyMemberForm([
-      ...familyMembersForm,
-      { id: `member${familyMembers.length}` },
-    ]);
+    let currentFamilyMembersForm = familyMembersForm.map((memberForm) => ({
+      ...memberForm,
+    }));
+    currentFamilyMembersForm.push({ id: `member${familyMembers.length}` });
+    setFamilyMembersForm(currentFamilyMembersForm);
     let newFamilyMembers = familyMembers.map((member) => ({ ...member }));
     newFamilyMembers.push({ name: "", phone: "", email: "" });
     setFamilyMembers(newFamilyMembers);
+  }
+
+  function deleteMember(e) {
+    const target = e.currentTarget;
+    const removeIndex = parseInt(target.id.slice(15));
+    let newFamilyMembers = familyMembers.map((member) => ({ ...member }));
+    newFamilyMembers.splice(removeIndex, 1);
+    console.log(newFamilyMembers);
+    setFamilyMembers(newFamilyMembers);
+    let newFamilyMembersForm = familyMembersForm.map((memberForm) => ({
+      ...memberForm,
+    }));
+    if (familyMembersForm.length !== 0) {
+      newFamilyMembersForm.pop();
+      setFamilyMembersForm(newFamilyMembersForm);
+    }
   }
 
   function packNewResidentInfo() {
@@ -113,9 +130,14 @@ export default function ListCard(props) {
       familyMembers: familyMembers,
       updateDate: updateDateWhenEdit,
     };
-    editUpdateResident(infoPackage);
-    window.alert("成功更新！");
-    setEditing(false);
+
+    if (familyMembers.length < 1) {
+      window.alert("住戶成員不能少於一位！");
+    } else {
+      editUpdateResident(infoPackage);
+      window.alert("成功更新！");
+      setEditing(false);
+    }
   }
 
   if (isEditing === false) {
@@ -239,18 +261,19 @@ export default function ListCard(props) {
                   familyMembers={familyMembers}
                   familyMembersForm={familyMembersForm}
                   changeMemberInfo={changeMemberInfo}
+                  deleteMember={deleteMember}
                   key={`member${index}`}
                 />
               );
             })}
             {familyMembersForm.map((item) => {
-              console.log(item.id);
               return (
                 <NewMember
                   familyMembers={familyMembers}
                   familyMembersForm={familyMembersForm}
                   thisMember={item}
                   changeMemberInfo={changeMemberInfo}
+                  deleteMember={deleteMember}
                   key={item.id}
                 />
               );

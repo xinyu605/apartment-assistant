@@ -120,7 +120,7 @@
 .doneImg {
   @include button-icon;
   margin-left: 10px;
-  background-color: $color-opal;
+  background-color: $color-steelTeal;
   grid-column: 5/6;
   grid-row: 1/2;
 
@@ -160,49 +160,79 @@
   width: 100%;
   grid-column: 1/4;
   display: grid;
-  grid-template-columns: 25% 40% auto;
+  grid-template-columns: 25% 30% auto;
+}
 
-  .members {
+.members {
+  width: 100%;
+  height: 36px;
+  border-bottom: 1px solid $color-melon;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imgWrapper {
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+
+  img {
     width: 100%;
-    height: 36px;
-    border-bottom: 1px solid $color-melon;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
+}
 
-  .imgWrapper {
-    width: 18px;
-    height: 18px;
-    margin-right: 5px;
+.memberName {
+  padding-left: 20px;
+  grid-column: 1/2;
+  display: flex;
+  justify-content: start;
+}
 
-    img {
-      width: 100%;
-    }
-  }
+.memberPhone {
+  grid-column: 2/3;
+  display: flex;
+  justify-content: start;
+}
 
-  .memberName {
-    padding-left: 20px;
-    grid-column: 1/2;
-    display: flex;
-    justify-content: start;
-  }
-
-  .memberPhone {
-    grid-column: 2/3;
-    display: flex;
-    justify-content: start;
-  }
-
-  .memberEmail {
-    grid-column: 3/4;
-    border-right: 1px solid $color-melon;
-    display: flex;
-    justify-content: start;
-  }
+.memberEmail {
+  grid-column: 3/4;
+  border-right: 1px solid $color-melon;
+  display: flex;
+  justify-content: start;
 }
 
 .editInput {
   border: 1px solid $color-opal;
   font-size: $font-size-small;
+}
+
+.memberInfoEdit {
+  width: 100%;
+  grid-column: 1/4;
+  display: grid;
+  grid-template-columns: 20% 30% auto 50px;
+
+  .memberEmail {
+    padding-left: 5px;
+    border-right: none;
+  }
+
+  .trashWrapper {
+    grid-column: 4/5;
+    border-right: 1px solid $color-melon;
+    border-bottom: 1px solid $color-melon;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .trashImg {
+      @include button-icon;
+      background-color: #fff;
+
+      &:hover {
+        background-color: #eee;
+      }
+    }
+  }
 }
