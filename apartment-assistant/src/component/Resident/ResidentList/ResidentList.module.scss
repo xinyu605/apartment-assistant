@@ -6,19 +6,21 @@
   overflow-y: scroll;
   margin: 20px auto;
   padding: 10px;
-  // border-radius: $list-border-radius;
-  // box-shadow: $list-box-shadow;
 }
 
 .residentInfo {
   padding: 20px;
   margin-bottom: 40px;
   display: grid;
-  grid-template-columns: 60px auto 60px 120px 50px;
+  grid-template-columns: 60px auto 60px 120px 40px;
   grid-template-rows: 40px auto;
   align-items: center;
   border-radius: $list-border-radius;
   box-shadow: $list-box-shadow;
+
+  &:last-child {
+    margin-bottom: 20px;
+  }
 
   .itemTitle {
     width: 100%;
@@ -234,5 +236,15 @@
         background-color: #eee;
       }
     }
+  }
+}
+
+/***********
+  < 960px
+************/
+@media (max-width: 960px) {
+  .itemAddress,
+  .itemMembers {
+    font-size: $font-size-xsmall;
   }
 }

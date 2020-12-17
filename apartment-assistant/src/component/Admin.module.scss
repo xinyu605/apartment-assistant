@@ -20,10 +20,6 @@
   top: 0;
   left: 0;
 
-  .toggleBtn {
-    display: none;
-  }
-
   .logoArea {
     width: 100%;
     height: 120px;
@@ -133,39 +129,30 @@
 @media (max-width: 600px) {
   .topBar {
     width: 100%;
-    height: 70px;
+    height: 50px;
     background-color: $color-steelTeal;
     position: fixed;
     top: 0;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
 
-    .smallLogoWrapper {
-      width: 50px;
-      height: 50px;
-      margin: 0 10px 0 auto;
-      border-radius: 50%;
-      background-color: rgba(255, 255, 255, 0.8);
-
-      img {
-        width: 100%;
-      }
-    }
-  }
-
-  .sidebar {
-    left: -200px;
-
     .toggleBtn {
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       border-radius: 5px;
-      position: absolute;
-      top: 15px;
-      right: -50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin-top: 5px;
+      margin-right: 10px;
+      position: relative;
+      -webkit-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+      -webkit-transition: 0.5s ease-in-out;
+      -moz-transition: 0.5s ease-in-out;
+      -o-transition: 0.5s ease-in-out;
+      transition: 0.5s ease-in-out;
+      cursor: pointer;
 
       .hamburgerIcon {
         width: 28px;
@@ -173,27 +160,65 @@
         border-radius: 15px;
         display: block;
         background-color: $hamburger-lines-color;
-        position: relative;
+        position: absolute;
+        opacity: 1;
+        left: 0;
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+        -webkit-transition: 0.25s ease-in-out;
+        -moz-transition: 0.25s ease-in-out;
+        -o-transition: 0.25s ease-in-out;
+        transition: 0.25s ease-in-out;
 
-        &::before,
-        &::after {
-          content: "";
-          width: 28px;
-          height: 3px;
-          border-radius: 5px;
-          display: block;
-          background-color: $hamburger-lines-color;
-          position: absolute;
+        &:nth-child(1) {
+          top: 0;
         }
 
-        &::before {
-          bottom: 10px;
+        &:nth-child(2),
+        &:nth-child(3) {
+          top: 10px;
         }
 
-        &::after {
-          bottom: -10px;
+        &:nth-child(4) {
+          top: 20px;
         }
       }
     }
+
+    .toggleBtn.open {
+      .hamburgerIcon {
+        &:nth-child(1) {
+          top: 10px;
+          width: 0%;
+          left: 50%;
+        }
+
+        &:nth-child(2) {
+          -webkit-transform: rotate(45deg);
+          -moz-transform: rotate(45deg);
+          -o-transform: rotate(45deg);
+          transform: rotate(45deg);
+        }
+
+        &:nth-child(3) {
+          -webkit-transform: rotate(-45deg);
+          -moz-transform: rotate(-45deg);
+          -o-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+        }
+
+        &:nth-child(4) {
+          top: 10px;
+          width: 0%;
+          left: 50%;
+        }
+      }
+    }
+  }
+
+  .sidebar {
+    left: -200px;
   }
 }

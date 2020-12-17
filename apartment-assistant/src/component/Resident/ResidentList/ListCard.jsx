@@ -142,143 +142,137 @@ export default function ListCard(props) {
 
   if (isEditing === false) {
     return (
-      <div>
-        <div className={styles.residentInfo} id={`residentInfo${index}`}>
-          <div
-            className={styles.trashImg}
-            id={`trash${index}`}
-            onClick={props.deleteResident}
-          >
-            <img src={trashIcon} />
+      <div className={styles.residentInfo} id={`residentInfo${index}`}>
+        <div
+          className={styles.trashImg}
+          id={`trash${index}`}
+          onClick={props.deleteResident}
+        >
+          <img src={trashIcon} />
+        </div>
+        <div
+          className={styles.editImg}
+          id={`edit${index}`}
+          onClick={editResident}
+        >
+          <img src={editIcon} />
+        </div>
+        <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
+          戶號
+        </div>
+        <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
+          {props.list.residentNumbers}
+        </div>
+        <div className={`${styles.items} ${styles.itemAddress}`}>
+          <div className={styles.imgWrapper}>
+            <img src={address} />
           </div>
-          <div
-            className={styles.editImg}
-            id={`edit${index}`}
-            onClick={editResident}
-          >
-            <img src={editIcon} />
-          </div>
-          <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
-            戶號
-          </div>
-          <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
-            {props.list.residentNumbers}
-          </div>
-          <div className={`${styles.items} ${styles.itemAddress}`}>
-            <div className={styles.imgWrapper}>
-              <img src={address} />
-            </div>
-            {props.list.address}
-          </div>
-          <div className={`${styles.itemTitle} ${styles.titleDate}`}>
-            更新日期
-          </div>
-          <div className={`${styles.items} ${styles.itemDate}`}>
-            {updateDate}
-          </div>
-          <div className={`${styles.items} ${styles.itemMembers}`}>
-            {props.list.familyMembers.map((member) => {
-              const index = list.familyMembers.indexOf(member);
-              return (
-                <Member
-                  isEditing={isEditing}
-                  list={list}
-                  member={member}
-                  familyMembers={props.list.familyMembers}
-                  key={`member${index}`}
-                />
-              );
-            })}
-          </div>
+          {props.list.address}
+        </div>
+        <div className={`${styles.itemTitle} ${styles.titleDate}`}>
+          更新日期
+        </div>
+        <div className={`${styles.items} ${styles.itemDate}`}>{updateDate}</div>
+        <div className={`${styles.items} ${styles.itemMembers}`}>
+          {props.list.familyMembers.map((member) => {
+            const index = list.familyMembers.indexOf(member);
+            return (
+              <Member
+                isEditing={isEditing}
+                list={list}
+                member={member}
+                familyMembers={props.list.familyMembers}
+                key={`member${index}`}
+              />
+            );
+          })}
         </div>
       </div>
     );
   } else {
     return (
-      <div>
-        <div className={styles.residentInfo} id={`residentInfo${index}`}>
-          <div
-            className={styles.doneImg}
-            id={`done${index}`}
-            onClick={packNewResidentInfo}
-          >
-            <img src={check} />
-          </div>
-          <div
-            className={styles.closeImg}
-            id={`close${index}`}
-            onClick={cancelEditing}
-          >
-            <img src={close} />
-          </div>
-          <div
-            className={styles.plusImg}
-            id={`plus${index}`}
-            onClick={createMemberInput}
-          >
-            <img src={plus} />
-          </div>
+      <div className={styles.residentInfo} id={`residentInfo${index}`}>
+        <div
+          className={styles.doneImg}
+          id={`done${index}`}
+          onClick={packNewResidentInfo}
+        >
+          <img src={check} />
+        </div>
+        <div
+          className={styles.closeImg}
+          id={`close${index}`}
+          onClick={cancelEditing}
+        >
+          <img src={close} />
+        </div>
+        <div
+          className={styles.plusImg}
+          id={`plus${index}`}
+          onClick={createMemberInput}
+        >
+          <img src={plus} />
+        </div>
 
-          <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
-            戶號
+        <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
+          戶號
+        </div>
+        <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
+          <input
+            className={styles.editInput}
+            id={`editResidentNumbers${index}`}
+            type="text"
+            value={residentNumbers}
+            onChange={changeInput}
+          ></input>
+        </div>
+        <div className={`${styles.items} ${styles.itemAddress}`}>
+          <div className={styles.imgWrapper}>
+            <img src={address} />
           </div>
-          <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
-            <input
-              className={styles.editInput}
-              id={`editResidentNumbers${index}`}
-              type="text"
-              value={residentNumbers}
-              onChange={changeInput}
-            ></input>
-          </div>
-          <div className={`${styles.items} ${styles.itemAddress}`}>
-            <div className={styles.imgWrapper}>
-              <img src={address} />
-            </div>
-            <input
-              className={styles.editInput}
-              id={`editResidentAddress${index}`}
-              type="text"
-              value={residentAddress}
-              onChange={changeInput}
-            ></input>
-          </div>
-          <div className={`${styles.itemTitle} ${styles.titleDate}`}>
-            更新日期
-          </div>
-          <div className={`${styles.items} ${styles.itemDate}`}>
-            {showDateWhenEditing}
-          </div>
-          <div className={`${styles.items} ${styles.itemMembers}`}>
-            {/* <MemberList list={list} isEditing={isEditing} /> */}
-            {list.familyMembers.map((member) => {
-              const index = list.familyMembers.indexOf(member);
-              return (
-                <Member
-                  isEditing={isEditing}
-                  list={list}
-                  member={member}
-                  familyMembers={familyMembers}
-                  familyMembersForm={familyMembersForm}
-                  changeMemberInfo={changeMemberInfo}
-                  deleteMember={deleteMember}
-                  key={`member${index}`}
-                />
-              );
-            })}
-            {familyMembersForm.map((item) => {
-              return (
-                <NewMember
-                  familyMembers={familyMembers}
-                  familyMembersForm={familyMembersForm}
-                  thisMember={item}
-                  changeMemberInfo={changeMemberInfo}
-                  deleteMember={deleteMember}
-                  key={item.id}
-                />
-              );
-            })}
-          </div>
+          <input
+            className={styles.editInput}
+            id={`editResidentAddress${index}`}
+            type="text"
+            value={residentAddress}
+            onChange={changeInput}
+          ></input>
+        </div>
+        <div className={`${styles.itemTitle} ${styles.titleDate}`}>
+          更新日期
+        </div>
+        <div className={`${styles.items} ${styles.itemDate}`}>
+          {showDateWhenEditing}
+        </div>
+        <div className={`${styles.items} ${styles.itemMembers}`}>
+          {/* <MemberList list={list} isEditing={isEditing} /> */}
+          {list.familyMembers.map((member) => {
+            const index = list.familyMembers.indexOf(member);
+            return (
+              <Member
+                isEditing={isEditing}
+                list={list}
+                member={member}
+                familyMembers={familyMembers}
+                familyMembersForm={familyMembersForm}
+                changeMemberInfo={changeMemberInfo}
+                deleteMember={deleteMember}
+                key={`member${index}`}
+              />
+            );
+          })}
+          {familyMembersForm.map((item) => {
+            return (
+              <NewMember
+                familyMembers={familyMembers}
+                familyMembersForm={familyMembersForm}
+                thisMember={item}
+                changeMemberInfo={changeMemberInfo}
+                deleteMember={deleteMember}
+                key={item.id}
+              />
+            );
+          })}
         </div>
       </div>
     );
