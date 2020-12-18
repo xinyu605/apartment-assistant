@@ -3,6 +3,7 @@
 .updateMailList {
   width: 100%;
   padding: 10px;
+  margin-top: 20px;
 }
 
 .header {
@@ -37,7 +38,7 @@
   flex-wrap: wrap;
   justify-content: center;
 
-  form {
+  .updateMailListForm {
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(3, 1fr) repeat(1, 2fr) repeat(2, 1fr);
@@ -45,7 +46,7 @@
     align-items: center;
   }
 
-  label {
+  .updateMailLabel {
     margin: 5px;
     padding-right: 10px;
     font-size: 1em;
@@ -54,33 +55,30 @@
     justify-self: end;
   }
 
-  .itemTitle1 {
+  .itemTitle1,
+  .itemTitle4,
+  .itemTitle7 {
     grid-column: 1/2;
   }
 
-  .itemTitle2 {
+  .itemTitle2,
+  .itemTitle5,
+  .itemTitle8 {
     grid-column: 3/4;
   }
 
-  .itemTitle3 {
+  .itemTitle3,
+  .itemTitle6 {
     grid-column: 5/6;
   }
 
   .item {
+    @include input-base;
     height: 35px;
-  }
-
-  input,
-  select {
     width: auto;
-    border: 1px solid $base-border-color;
-    border-radius: $base-border-radius;
-    margin: 10px 0;
-    font-size: $font-size-small;
-    color: $base-text-color;
   }
 
-  select {
+  .itemSelect {
     padding-left: 5px;
   }
 
@@ -88,31 +86,202 @@
     box-shadow: $light-box-shadow;
   }
 
-  .informBtn {
-    @include button-sub;
-    width: 126px;
-    padding: 0 8px;
-    grid-column: 5/7;
-    justify-self: end;
+  .buttonWrapper {
+    width: 250px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
 
-    .imgWrapper {
-      width: 30px;
-      height: 30px;
+    .informBtn {
+      @include button-sub;
+      width: 126px;
+      padding: 0 8px;
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
 
-      img {
-        width: 70%;
+      .imgWrapper {
+        width: 30px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 70%;
+        }
+      }
+    }
+
+    .submitBtn {
+      @include button-main;
+      margin: 0 auto 20px;
+    }
+  }
+}
+
+/**********
+  < 1290px
+***********/
+@media (max-width: 1290px) {
+  .updateForm {
+    .updateMailListForm {
+      width: 96%;
+      grid-template-columns: 1fr 2fr 1fr 2fr;
+      grid-template-rows: repeat(4, 40px);
+
+      .itemTitle3 {
+        grid-column: 1/2;
+        grid-row: 2/3;
+      }
+
+      .item3 {
+        grid-column: 2/3;
+        grid-row: 2/3;
+      }
+
+      .itemTitle4 {
+        grid-column: 3/4;
+        grid-row: 2/3;
+      }
+
+      .item4 {
+        grid-column: 4/5;
+        grid-row: 2/3;
+      }
+
+      .itemTitle5 {
+        grid-column: 1/2;
+        grid-row: 3/4;
+      }
+
+      .itemTitle6 {
+        grid-column: 3/4;
+        grid-row: 3/4;
+      }
+
+      .item6 {
+        grid-column: 4/5;
+        grid-row: 3/4;
+      }
+
+      .itemTitle7 {
+        grid-column: 1/2;
+        grid-row: 4/5;
+      }
+
+      .item7 {
+        grid-column: 2/3;
+        grid-row: 4/5;
+      }
+
+      .itemTitle8 {
+        grid-column: 3/4;
+        grid-row: 4/5;
+      }
+
+      .item8 {
+        grid-column: 4/5;
+        grid-row: 4/5;
       }
     }
   }
+}
 
-  .submitBtn {
-    @include button-main;
-    margin: 0 auto 20px;
+/**********
+  < 1200px
+***********/
+@media (max-width: 1200px) {
+  .updateForm {
+    .updateMailListForm {
+      grid-template-columns: 90px 40% 60px 30%;
+    }
+  }
+}
+
+/**********
+  < 500px
+***********/
+@media (max-width: 500px) {
+  .updateForm {
+    .updateMailListForm {
+      grid-template-columns: 30% 70%;
+      grid-template-rows: repeat(8, 50px);
+      font-size: $font-size-xsmall;
+
+      .itemTitle1 {
+        grid-column: 1/2;
+        grid-row: 1/2;
+      }
+
+      .item1 {
+        grid-column: 2/3;
+        grid-row: 1/2;
+      }
+
+      .itemTitle2 {
+        grid-column: 1/2;
+        grid-row: 2/3;
+      }
+
+      .item2 {
+        grid-column: 2/3;
+        grid-row: 2/3;
+      }
+
+      .itemTitle3 {
+        grid-column: 1/2;
+        grid-row: 3/4;
+      }
+
+      .item3 {
+        grid-column: 2/3;
+        grid-row: 3/4;
+      }
+
+      .itemTitle4 {
+        grid-column: 1/2;
+        grid-row: 4/5;
+      }
+
+      .item4 {
+        grid-column: 2/3;
+        grid-row: 4/5;
+      }
+
+      .itemTitle5 {
+        grid-column: 1/2;
+        grid-row: 5/6;
+      }
+
+      .itemTitle6 {
+        grid-column: 1/2;
+        grid-row: 6/7;
+      }
+
+      .item6 {
+        grid-column: 2/3;
+        grid-row: 6/7;
+      }
+
+      .itemTitle7 {
+        grid-column: 1/2;
+        grid-row: 7/8;
+      }
+
+      .item7 {
+        grid-column: 2/3;
+        grid-row: 7/8;
+      }
+
+      .itemTitle8 {
+        grid-column: 1/2;
+        grid-row: 8/9;
+      }
+
+      .item8 {
+        grid-column: 2/3;
+        grid-row: 8/9;
+      }
+    }
   }
 }

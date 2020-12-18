@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import inboxUntaken from "./../../img/inboxUntaken.svg";
 import inboxTaken from "./../../img/inboxTaken.svg";
 import trashIcon from "./../../img/trash.svg";
+import takeBox from "./../../img/takeBox.svg";
+import noTakeBox from "./../../img/noTakeBox.svg";
 import styles from "./MailList.module.scss";
 import { showDate, scrollToTarget } from "./../../lib";
 import { updateMailStatus } from "./../../firebase";
@@ -12,16 +14,21 @@ export function MailList(props) {
   let lists = [];
   let headerImg;
   let stateController;
+  let description;
   let receiveDate = "";
 
   if (props.state === false) {
     lists = props.untakenMails;
     headerImg = inboxUntaken;
-    stateController = "已領取";
+    // stateController = "已領取";
+    stateController = takeBox;
+    description = "改為已領取";
   } else {
     lists = props.takenMails;
     headerImg = inboxTaken;
-    stateController = "未領取";
+    // stateController = "未領取";
+    stateController = noTakeBox;
+    description = "改為未領取";
   }
   // console.log(props.state);
   // console.log(lists);
@@ -33,31 +40,60 @@ export function MailList(props) {
     }
     return (
       <div className={styles.list} id={`mail${index}`} key={list.mailId}>
-        <div className="mailNumbers">{list.mailNumbers}</div>
-        <div className="residentNumber">
+        <div className={`${styles.listTitle} ${styles.titleMailNumbers}`}>
+          編號
+        </div>
+        <div className={`${styles.listItems} ${styles.itemMailNumbers}`}>
+          {list.mailNumbers}
+        </div>
+        <div className={`${styles.listTitle} ${styles.titleResidentNumbers}`}>
+          戶號
+        </div>
+        <div className={`${styles.listItems} ${styles.itemResidentNumbers}`}>
           {list.residentNumbers}
           {/* {list.receiver ? list.receiver.residentNumbers : ""} */}
         </div>
-        <div className="receiverName">{list.receiverName}</div>
+        <div className={`${styles.listTitle} ${styles.titleReceiverName}`}>
+          收件人
+        </div>
+        <div className={`${styles.listItems} ${styles.itemReceiverName}`}>
+          {list.receiverName}
+        </div>
         {/* {list.receiver ? list.receiver.name : ""} */}
-        <div className="mailType">{list.mailType}</div>
-        <div className="receiveDate">{receiveDate}</div>
-        <div className="place">{list.place}</div>
-        <div className="remark">{list.remark}</div>
+        <div className={`${styles.listTitle} ${styles.titleMailType}`}>
+          類型
+        </div>
+        <div className={`${styles.listItems} ${styles.itemMailType}`}>
+          {list.mailType}
+        </div>
+        <div className={`${styles.listTitle} ${styles.titleReceiveDate}`}>
+          寄達日期
+        </div>
+        <div className={`${styles.listItems} ${styles.itemReceiveDate}`}>
+          {receiveDate}
+        </div>
+        <div className={`${styles.listTitle} ${styles.titlePlace}`}>位置</div>
+        <div className={`${styles.listItems} ${styles.itemPlace}`}>
+          {list.place}
+        </div>
+        <div className={`${styles.listTitle} ${styles.titleRemark}`}>備註</div>
+        <div className={`${styles.listItems} ${styles.itemRemark}`}>
+          {list.remark}
+        </div>
         <div className={styles.mailBtns}>
           <button
             className={styles.status}
             id={`status${list.mailId}`}
             onClick={changeMailStatus}
           >
-            {stateController}
+            <img src={stateController} title={description} />
           </button>
           <div
             className={styles.trashImg}
             id={`trash${index}`}
             onClick={props.deleteMail}
           >
-            <img src={trashIcon} title={stateController} />
+            <img src={trashIcon} />
           </div>
         </div>
       </div>
@@ -144,14 +180,14 @@ export function MailList(props) {
       {/* list body */}
       <div className={styles.mailList} id="mailList">
         <div className={styles.tableTitle}>
-          <div className="mailNumbers">編號</div>
-          <div className="residentNumber">戶號</div>
-          <div className="receiver">收件人</div>
-          <div className="mailType">信件包裹類型</div>
-          <div className="receiveDate">寄達日期</div>
-          <div className="place">位置</div>
-          <div className="remark">備註</div>
-          <div className="status">狀態變更</div>
+          <div className={styles.mailListTitle}>編號</div>
+          <div className={styles.mailListTitle}>戶號</div>
+          <div className={styles.mailListTitle}>收件人</div>
+          <div className={styles.mailListTitle}>類型</div>
+          <div className={styles.mailListTitle}>寄達日期</div>
+          <div className={styles.mailListTitle}>位置</div>
+          <div className={styles.mailListTitle}>備註</div>
+          <div className={styles.mailListTitle}>修改</div>
         </div>
         {List}
       </div>

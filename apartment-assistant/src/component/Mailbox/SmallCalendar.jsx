@@ -77,8 +77,8 @@ export function SmallCalendar(props) {
 
   if (isCalendarShowing) {
     return (
-      <div>
-        <div className={styles.item}>
+      <div className={styles.selectReceiveTime}>
+        <div className={`${styles.item} ${styles.item5}`}>
           {thisYear}年{thisMonth}月{receiveDate}日
         </div>
 

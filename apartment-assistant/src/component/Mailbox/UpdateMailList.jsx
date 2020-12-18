@@ -168,57 +168,91 @@ export function UpdateMailList(props) {
         </div>
       </div>
       <div className={styles.updateForm}>
-        <form>
-          <label className={styles.itemTitle1}>編號</label>
+        <form className={styles.updateMailListForm}>
+          <label className={`${styles.updateMailLabel} ${styles.itemTitle1}`}>
+            編號
+          </label>
           <input
             id="mailNumber"
-            className={styles.item}
+            className={`${styles.item} ${styles.item1}`}
             type="text"
             placeholder="請輸入編號"
             onChange={updateHook}
           ></input>
-          <label className={styles.itemTitle2}>戶號</label>
+          <label className={`${styles.updateMailLabel} ${styles.itemTitle2}`}>
+            戶號
+          </label>
           <input
             id="residentNumber"
-            className={styles.item}
+            className={`${styles.item} ${styles.item2}`}
             type="text"
             placeholder="請輸入戶號"
             onChange={updateHook}
           ></input>
-          <label className={styles.itemTitle3}>收件人</label>
-          <select id="receiver" className={styles.item} onChange={updateHook}>
+          <label className={`${styles.updateMailLabel} ${styles.itemTitle3}`}>
+            收件人
+          </label>
+          <select
+            id="receiver"
+            className={`${styles.itemSelect} ${styles.item} ${styles.item3}`}
+            onChange={updateHook}
+          >
             <option>請選擇</option>
             {ReceiverOptions}
           </select>
-          <label className={styles.itemTitle1}>類型</label>
-          <select id="mailType" className={styles.item} onChange={updateHook}>
+          <label className={`${styles.updateMailLabel} ${styles.itemTitle4}`}>
+            類型
+          </label>
+          <select
+            id="mailType"
+            className={`${styles.itemSelect} ${styles.item} ${styles.item4}`}
+            onChange={updateHook}
+          >
             <option>普通平信</option>
             <option>普通掛號信</option>
             <option>限時掛號信</option>
             <option>小型包裹</option>
             <option>大型包裹</option>
           </select>
-          <label className={styles.itemTitle2}>寄達日期</label>
+          <label className={`${styles.updateMailLabel} ${styles.itemTitle5}`}>
+            寄達日期
+          </label>
           <SmallCalendar updateReceiveDate={updateReceiveDate} />
-          <label className={styles.itemTitle3}>位置</label>
-          <select id="place" className={styles.item} onChange={updateHook}>
+          <label className={`${styles.updateMailLabel} ${styles.itemTitle6}`}>
+            位置
+          </label>
+          <select
+            id="place"
+            className={`${styles.itemSelect} ${styles.item} ${styles.item6}`}
+            onChange={updateHook}
+          >
             <option>信箱</option>
             <option>置物櫃</option>
             <option>管理室</option>
           </select>
-          <label className={styles.itemTitle1}>狀態</label>
-          <select id="status" className={styles.item} onChange={updateHook}>
+          <label className={`${styles.updateMailLabel} ${styles.itemTitle7}`}>
+            狀態
+          </label>
+          <select
+            id="status"
+            className={`${styles.itemSelect} ${styles.item} ${styles.item7}`}
+            onChange={updateHook}
+          >
             <option>未領取</option>
             <option>已領取</option>
           </select>
-          <label className={styles.itemTitle2}>備註</label>
+          <label className={`${styles.updateMailLabel} ${styles.itemTitle8}`}>
+            備註
+          </label>
           <input
             id="remark"
-            className={styles.item}
+            className={`${styles.item} ${styles.item8}`}
             type="text"
             placeholder="其他注意事項"
             onChange={updateHook}
           ></input>
+        </form>
+        <div className={styles.buttonWrapper}>
           <button
             className={styles.informBtn}
             id="informBtn"
@@ -229,14 +263,14 @@ export function UpdateMailList(props) {
               <img src={send} />
             </div>
           </button>
-        </form>
-        <button
-          className={styles.submitBtn}
-          id="sendToFirebase"
-          onClick={prepareToUpload}
-        >
-          確認送出
-        </button>
+          <button
+            className={styles.submitBtn}
+            id="sendToFirebase"
+            onClick={prepareToUpload}
+          >
+            確認送出
+          </button>
+        </div>
       </div>
 
       <EmailForm

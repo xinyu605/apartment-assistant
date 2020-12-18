@@ -44,7 +44,7 @@ export function Admin(props) {
       toggleBtn.className = `${styles.toggleBtn}`;
       setShowing(false);
     } else {
-      sidebar.style.transform = "translateX(200px)";
+      sidebar.style.transform = "translateX(250px)";
       sidebar.style.background =
         "linear-gradient(336deg, rgba(251, 196, 63, 1) 0%, rgba(135, 216, 241, 1) 100%)";
       sidebar.style.transition = "all 0.5s ease";

@@ -18,7 +18,7 @@
 
 .informTitle {
   width: 100%;
-  padding: 0 25%;
+  padding: 0 20%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -105,5 +105,41 @@
     width: 60px;
     grid-column: 2/3;
     grid-row: 4/5;
+  }
+}
+
+/**********
+  < 768px
+***********/
+@media (max-width: 768px) {
+  .informTitle {
+    padding: 0 20px;
+
+    h2 {
+      line-height: 1.4;
+    }
+  }
+
+  .fillPlace {
+    width: 96%;
+  }
+}
+
+/**********
+  < 500px
+***********/
+@media (max-width: 500px) {
+  .informTitle {
+    padding: 0 10px;
+
+    h2 {
+      font-size: 1.4em;
+    }
+
+    .closeBtn {
+      position: absolute;
+      top: 50px;
+      right: 30px;
+    }
   }
 }
