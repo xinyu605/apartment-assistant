@@ -76,7 +76,7 @@ $hamburger-lines-color: $color-opal;
 }
 
 @mixin input-base {
-  border: 1px solid $base-border-color;
+  border: 1px solid $color-opal;
   border-radius: $base-border-radius;
   margin: 10px 0;
   font-size: $font-size-xsmall;

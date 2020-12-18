@@ -72,3 +72,50 @@
     }
   }
 }
+
+/***********
+  < 900px
+************/
+@media (max-width: 900px) {
+  .residentPage {
+    margin-left: 250px;
+  }
+}
+
+/***********
+  < 850px
+************/
+@media (max-width: 850px) {
+  .residentPage {
+    margin-left: 260px;
+    padding: 20px;
+  }
+}
+
+/**********
+  < 660px
+***********/
+@media (max-width: 660px) {
+  .residentPage {
+    margin-left: 200px;
+  }
+}
+
+/**********
+  < 600px
+***********/
+@media (max-width: 600px) {
+  .residentPage {
+    width: 94%;
+    margin: 50px auto;
+  }
+}
+
+/**********
+  < 500px
+***********/
+@media (max-width: 500px) {
+  .residentPage {
+    width: 98%;
+  }
+}
