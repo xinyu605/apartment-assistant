@@ -5,7 +5,6 @@ import { getBoardList, deleteIssueData } from "./../../firebase";
 import { showDate } from "./../../lib";
 import styles from "./Board.module.scss";
 import announcement from "./../../img/promotion.svg";
-import readMore from "./../../img/next.svg";
 import trashIcon from "./../../img/trash555.svg";
 
 export default function Board() {
@@ -32,9 +31,7 @@ export default function Board() {
           id={`showDetailBtn${index}`}
           className={styles.readMoreBtn}
           onClick={selectMatterDetail}
-        >
-          {/* <img src={readMore} /> */}
-        </button>
+        ></button>
       </li>
     );
   });

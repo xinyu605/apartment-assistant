@@ -9,7 +9,7 @@ import {
   useRouteMatch,
   useLocation,
 } from "react-router-dom";
-import logo from "./../img/logo.png";
+import logo from "./../img/logo_apartment.png";
 import AskLogin from "./Common/AskLogin";
 import Board from "./Board/Board";
 import Resident from "./Resident/Resident";

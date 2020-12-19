@@ -3,14 +3,11 @@ import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import { nativeSignIn, nativeSignUp, signInWithGoogle } from "../firebase";
 import { checkEmailFormat, checkPasswordLength, checkUserName } from "../lib";
 import styles from "./SignIn.module.scss";
-import logo from "./../img/logo.png";
+import logo from "./../img/logo_apartment.png";
 import user from "./../img/user.svg";
-import user2 from "./../img/user2.svg";
 import email from "./../img/email.svg";
-import email2 from "./../img/email2.svg";
-import lock from "./../img/lock.svg";
-import lock2 from "./../img/lock2.svg";
-import vintage from "./../img/vintage-1149558_1920.jpg";
+import lock2 from "./../img/lock.svg";
+import vintage from "./../img/vintage.png";
 
 export default function SignIn() {
   const [userName, setUserName] = useState("");
@@ -98,87 +95,67 @@ export default function SignIn() {
     }
   }
 
+  function exchangeCards(e) {
+    const signUpCard = document.querySelector("#signUpCard");
+    const signInCard = document.querySelector("#signInCard");
+    if (e.currentTarget.id === "clickToSignUpMobile") {
+      signUpCard.style.transform = "translateY(-410px)";
+      signUpCard.style.opacity = "1";
+      signUpCard.style.transition = "all 0.5s ease";
+      signInCard.style.transform = "translateY(410px)";
+      signInCard.style.opacity = "0";
+      signInCard.style.transition = "all 0.5s ease";
+    } else {
+      signInCard.style.transform = "translateY(0px)";
+      signInCard.style.opacity = "1";
+      signInCard.style.transition = "all 0.5s ease";
+      signUpCard.style.transform = "translateY(0px)";
+      signUpCard.style.opacity = "0";
+      signUpCard.style.transition = "all 0.5s ease";
+    }
+  }
+
   return (
     <div className={styles.body}>
+      <div className={styles.logoArea}>
+        <div className={styles.imgWrapper}>
+          <img src={logo} />
+        </div>
+      </div>
       <div className={styles.container}>
         <div id="imageCard" className={styles.image}>
-          <img src={vintage} className={styles.coverImg}></img>
+          <img src={vintage} className={styles.coverImg} />
           <div className={styles.imgWrapper}>
             <img src={logo} className={styles.logoImg} />
           </div>
+          <div className={styles.slogan}>
+            <h2 className={styles.sloganTitle}>
+              <b>AT</b> ANY TIME!
+            </h2>
+            <p className={styles.sloganContent}>─ 最貼近生活的社區管理平台</p>
+            <p className={styles.sloganContent}>─ 管理社區大小事的最佳夥伴</p>
+          </div>
         </div>
-        <div className={styles.signUp}>
-          <h2>註冊新帳號</h2>
-          <form className={styles.signInPageForm}>
-            <div className={styles.inputWrapper}>
-              <input
-                id="userName"
-                type="text"
-                placeholder="請輸入姓名"
-                onChange={getUserInput}
-              ></input>
-              <div className={styles.inputImgWrapper}>
-                <img className={styles.inputImg} src={user2} />
-              </div>
-            </div>
 
-            <div className={styles.inputWrapper}>
-              <input
-                id="emailSignUp"
-                type="text"
-                placeholder="請輸入Email"
-                onChange={getUserInput}
-              ></input>
-              <div className={styles.inputImgWrapper}>
-                <img className={styles.inputImg} src={email2} />
-              </div>
-            </div>
-
-            <div className={styles.inputWrapper}>
-              <input
-                id="pwdSignUp"
-                type="password"
-                placeholder="請輸入6位以上英數字"
-                onChange={getUserInput}
-              ></input>
-              <div className={styles.inputImgWrapper}>
-                <img className={styles.inputImg} src={lock2} />
-              </div>
-            </div>
-
-            <button
-              id="submitSignUp"
-              className={styles.buttonSignUp}
-              onClick={submitSignUpData}
-            >
-              註冊
-            </button>
-            <div
-              id="clickToSignIn"
-              className={styles.clickToSignUp}
-              onClick={moveCard}
-            >
-              登入
-            </div>
-          </form>
-        </div>
-        <div className={styles.signIn}>
+        <div id="signInCard" className={styles.signIn}>
           <h2>會員登入</h2>
           <form className={styles.signInPageForm}>
             <div className={styles.inputWrapper}>
               <input
                 id="emailSignIn"
+                className={styles.loginInputs}
                 type="text"
                 placeholder="Email"
                 onChange={getUserInput}
               ></input>
               <div className={styles.inputImgWrapper}>
-                <img className={styles.inputImg} src={email2} />
+                <img className={styles.inputImg} src={email} />
               </div>
             </div>
             <div className={styles.inputWrapper}>
               <input
                 id="pwdSignIn"
+                className={styles.loginInputs}
                 type="password"
                 placeholder="密碼"
                 onChange={getUserInput}
@@ -206,6 +183,79 @@ export default function SignIn() {
           >
             立即註冊
           </div>
+          <div
+            id="clickToSignUpMobile"
+            className={styles.clickToSignUpMobile}
+            onClick={exchangeCards}
+          >
+            立即註冊
+          </div>
+        </div>
+
+        <div id="signUpCard" className={styles.signUp}>
+          <h2>註冊新帳號</h2>
+          <form className={styles.signInPageForm}>
+            <div className={styles.inputWrapper}>
+              <input
+                id="userName"
+                className={styles.loginInputs}
+                type="text"
+                placeholder="請輸入姓名"
+                onChange={getUserInput}
+              ></input>
+              <div className={styles.inputImgWrapper}>
+                <img className={styles.inputImg} src={user} />
+              </div>
+            </div>
+
+            <div className={styles.inputWrapper}>
+              <input
+                id="emailSignUp"
+                className={styles.loginInputs}
+                type="text"
+                placeholder="請輸入Email"
+                onChange={getUserInput}
+              ></input>
+              <div className={styles.inputImgWrapper}>
+                <img className={styles.inputImg} src={email} />
+              </div>
+            </div>
+
+            <div className={styles.inputWrapper}>
+              <input
+                id="pwdSignUp"
+                className={styles.loginInputs}
+                type="password"
+                placeholder="請輸入6位以上英數字"
+                onChange={getUserInput}
+              ></input>
+              <div className={styles.inputImgWrapper}>
+                <img className={styles.inputImg} src={lock2} />
+              </div>
+            </div>
+
+            <button
+              id="submitSignUp"
+              className={styles.buttonSignUp}
+              onClick={submitSignUpData}
+            >
+              註冊
+            </button>
+            <div
+              id="clickToSignIn"
+              className={styles.clickToSignUp}
+              onClick={moveCard}
+            >
+              登入
+            </div>
+            <div
+              id="clickToSignInMobile"
+              className={styles.clickToSignUpMobile}
+              onClick={exchangeCards}
+            >
+              登入
+            </div>
+          </form>
         </div>
       </div>
     </div>

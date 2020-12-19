@@ -9,9 +9,10 @@ export default function EntryBoard() {
   const [issues, setIssues] = useState([]);
 
   useEffect(() => {
-    getBoardList().then((boardList) => {
+    getBoardList(getIssues);
+    function getIssues(boardList) {
       setIssues(boardList);
-    });
+    }
   }, []);
 
   const IssueList = issues.map((issue) => {
@@ -58,7 +59,7 @@ export default function EntryBoard() {
   });
 
   return (
-    <div className={styles.issues}>
+    <div className={styles.issues} id="issues">
       <div className={styles.title}>
         <div className={styles.imgWrapper}>
           <img src={issuesIcon} />

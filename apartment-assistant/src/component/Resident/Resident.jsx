@@ -4,7 +4,7 @@ import UpdateResident from "./UpdateResident";
 import { getResidentList, deleteResidentData } from "./../../firebase";
 import { scrollToTarget } from "./../../lib";
 import styles from "./Resident.module.scss";
-import headerImg from "./../../img/home.svg";
+import headerImg from "./../../img/apartment.svg";
 import searchImg from "./../../img/search.svg";
 
 export default function Resident() {

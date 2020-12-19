@@ -39,7 +39,7 @@ export default function EntryMailList(props) {
   });
 
   return (
-    <div className={styles.mails}>
+    <div className={styles.mails} id="mailList">
       <div className={styles.title}>
         <div className={styles.imgWrapper}>
           <div className={styles.number}>{props.mailCount}</div>

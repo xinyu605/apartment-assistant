@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ApplyTable from "./../Common/ApplyTable";
-import {
-  getExistedOrders,
-  getMyFieldOrders,
-  uploadFieldOrder,
-} from "../../firebase";
+import { getExistedOrders, uploadFieldOrder } from "../../firebase";
 import styles from "./EntryField.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
 
@@ -74,20 +70,8 @@ export default function EntryField(props) {
         // console.log(i, data);
         setOrderRecord((prevState) => [...prevState, data]);
       }
-
-      // getMyFieldOrders(
-      //   `${year}`,
-      //   `${month}`,
-      //   `${date}`,
-      //   props.userEmail,
-      //   getMyOrders
-      // );
     }
   }, [field]);
-
-  // function getMyOrders(data) {
-  //   console.log(data);
-  // }
 
   /***************************************** 
     create table elements with specific id
@@ -180,7 +164,7 @@ export default function EntryField(props) {
   }
 
   return (
-    <div className={styles.field}>
+    <div className={styles.field} id="fieldRecord">
       <div className={styles.title}>
         <div className={styles.imgWrapper}>
           <img src={calendarIcon} />

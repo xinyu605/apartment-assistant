@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./UpdateResident.module.scss";
 import { uploadResident, getTimeStamp } from "./../../firebase";
-import memberIcon1 from "./../../img/members1.svg";
+import memberIcon1 from "./../../img/members.svg";
 import plus from "./../../img/plus.svg";
 import minus from "./../../img/minus.svg";
 

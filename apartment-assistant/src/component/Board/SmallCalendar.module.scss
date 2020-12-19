@@ -97,3 +97,13 @@
     grid-row: 3/4;
   }
 }
+
+/**********
+  < 500px
+***********/
+@media (max-width: 500px) {
+  .selectReceiveTime {
+    grid-column: 1/2;
+    grid-row: 6/7;
+  }
+}

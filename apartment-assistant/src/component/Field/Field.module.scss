@@ -72,3 +72,22 @@
     border-bottom: 1px solid $color-steelTeal;
   }
 }
+
+/**********
+  < 768px
+***********/
+@media (max-width: 768px) {
+  .fieldPage {
+    width: 96%;
+    margin: 40px auto;
+  }
+}
+
+/**********
+  < 520px
+***********/
+@media (max-width: 520px) {
+  .fieldPage {
+    width: 98%;
+  }
+}

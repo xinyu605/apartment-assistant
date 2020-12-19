@@ -8,7 +8,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import styles from "./AskLogin.module.scss";
-import logo from "./../../img/logo.png";
+import logo from "./../../img/logo_apartment.png";
 
 export default function AskLogin(props) {
   let history = useHistory();

@@ -5,7 +5,6 @@ $icon-width: 20px;
 $icon-height: 20px;
 
 .body {
-  // @include dynamic-background;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -13,14 +12,16 @@ $icon-height: 20px;
   align-items: center;
   background: $base-background;
   background: $gradient-background-no-transparent;
-  // background-size: cover;
-  // background-position: center;
 }
 
 h2 {
   margin: 30px 0px;
   font-size: 30px;
   font-weight: 600;
+}
+
+.logoArea {
+  display: none;
 }
 
 .container {
@@ -41,29 +42,70 @@ h2 {
   position: absolute;
   left: 0;
   z-index: 5;
+  transition: all 0.4s ease-in-out;
+
+  &:hover {
+    background-color: $color-steelTeal;
+  }
 
   .coverImg {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.6;
+    object-position: -80px 0;
     z-index: 5;
+    transition: all 0.4s ease-in-out;
+
+    &:hover {
+      object-position: $card-width 0;
+      transition: all 0.4s ease-in-out;
+    }
   }
 
   .imgWrapper {
     width: 180px;
     height: 180px;
-    padding: 8px;
+    padding: 25px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0px 0px 20px 10px rgba(55, 55, 55, 0.7);
     z-index: 10;
     position: absolute;
     top: 60px;
     left: 27%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     .logoImg {
       width: 100%;
-      z-index: 10;
+    }
+  }
+
+  .slogan {
+    width: 100%;
+    padding: 10px 10px 20px 60px;
+    position: absolute;
+    top: 270px;
+    left: 0px;
+    z-index: -1;
+    color: #fff;
+    // background-color: rgba(50, 50, 50, 0.5);
+
+    .sloganTitle {
+      margin: 10px 0 30px;
+      font-size: 35px;
+      font-weight: 400;
+
+      b {
+        font-size: 50px;
+        font-weight: 700;
+      }
+    }
+
+    .sloganContent {
+      font-size: 20px;
+      line-height: 2;
     }
   }
 }
@@ -135,17 +177,12 @@ input:focus {
   @include button-main;
   width: 100%;
   height: 36px;
-  border: none;
-  border-radius: $base-border-radius;
-  color: #fff;
-  font-size: $font-size-xsmall;
-  letter-spacing: 2px;
-  cursor: pointer;
 
   &:hover {
+    color: #fff;
     background-color: $color-fireOpal;
     transform: scale(1.1);
-    transition: all 0.3s ease-in-out;
+    // transition: all 0.3s ease-in-out;
   }
 }
 
@@ -155,4 +192,105 @@ input:focus {
   text-align: right;
   cursor: pointer;
   font-size: $font-size-xsmall;
+}
+
+.clickToSignUpMobile {
+  display: none;
+}
+
+/**********
+  < 920px
+***********/
+@media (max-width: 920px) {
+  .body {
+    height: 100%;
+    flex-wrap: wrap;
+    background-image: url("./../img/vintage.png");
+    background-size: cover;
+
+    .container {
+      .signIn,
+      .signUp {
+        border-radius: $list-border-radius;
+      }
+    }
+  }
+
+  .logoArea {
+    width: 100%;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+
+    .imgWrapper {
+      width: 180px;
+      border-radius: 50%;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: $deep-box-shadow;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+
+  .container {
+    width: 100%;
+    height: 80%;
+    margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    .image {
+      display: none;
+    }
+
+    .signUp,
+    .signIn {
+      width: 80%;
+      background-color: #fff;
+      box-shadow: $deep-box-shadow;
+      text-align: center;
+      padding: 30px 60px 0;
+      border-radius: 0;
+      position: relative;
+      top: 0;
+      left: 0;
+
+      .inputWrapper {
+        border: 1px solid $light-border-color;
+
+        .loginInputs {
+          width: 96%;
+        }
+      }
+    }
+
+    .signUp {
+      opacity: 0;
+    }
+
+    .inputWrapper {
+      justify-content: space-between;
+
+      .inputImgWrapper {
+        margin-right: 10px;
+      }
+    }
+
+    .clickToSignUp {
+      display: none;
+    }
+
+    .clickToSignUpMobile {
+      margin-top: 10px;
+      display: block;
+      text-align: right;
+      cursor: pointer;
+      font-size: $font-size-xsmall;
+    }
+  }
 }

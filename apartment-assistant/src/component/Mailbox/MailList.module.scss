@@ -172,6 +172,7 @@
       }
 
       .list {
+        margin: 5px 10px;
         display: grid;
         grid-template-columns: 15% 30% 20% 35%;
         grid-template-rows: repeat(4, 30px);
@@ -298,9 +299,9 @@
 }
 
 /**********
-  < 500px
+  < 600px
 ***********/
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   .mailBox {
     width: 100%;
 

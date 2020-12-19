@@ -3,7 +3,8 @@ $color-opal: #96bbbb;
 $color-steelTeal: #618985;
 $color-rifleGreen: #414535;
 $color-fireOpal: #f26157;
-$color-melon: #ebb3a9;
+// $color-melon: #ebb3a9;
+$color-melon: #ffd89e;
 $color-dutchWhite: #f2e3bc;
 $color-silverPink: #d0b8ac;
 $color-unbleachedSilk: #f3d8c7;
@@ -35,6 +36,7 @@ $gradient-background-no-transparent: linear-gradient(
 
 $list-border-radius: 10px;
 $list-box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.2);
+$deep-box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.3);
 $light-box-shadow: 0px 0px 5px 3px rgba(216, 146, 55, 0.52);
 
 $font-size-middle: 24px;
@@ -87,16 +89,19 @@ $hamburger-lines-color: $color-opal;
   width: 100px;
   height: 30px;
   border: none;
+  outline: none;
   border-radius: 5px;
   font-size: $font-size-xsmall;
   letter-spacing: 2px;
   color: #fff;
   background-color: $color-steelTeal;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 
   &:hover {
+    color: $base-text-color;
     background-color: $color-melon;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
   }
 }
 
@@ -104,14 +109,17 @@ $hamburger-lines-color: $color-opal;
   width: 70px;
   height: 30px;
   border: none;
+  outline: none;
   border-radius: 5px;
   font-size: $font-size-xsmall;
   letter-spacing: 2px;
   color: $light-text-color;
   background-color: $small-button-background-color;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 
   &:hover {
+    color: $base-text-color;
     background-color: $color-melon;
     transition: all 0.3s ease-in-out;
   }
@@ -123,12 +131,14 @@ $hamburger-lines-color: $color-opal;
   margin-left: 10px;
   padding: 5px;
   border: none;
+  outline: none;
   border-radius: 50%;
   background-color: $color-steelTeal;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  transition: all 0.3s ease-in-out;
 
   &:hover {
     background-color: $color-fireOpal;

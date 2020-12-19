@@ -38,7 +38,7 @@ export default function EntryMailRecord(props) {
     );
   });
   return (
-    <div className={styles.mails}>
+    <div className={styles.mails} id="mailHistory">
       <div className={styles.title}>
         <div className={styles.imgWrapper}>
           <img src={list} />

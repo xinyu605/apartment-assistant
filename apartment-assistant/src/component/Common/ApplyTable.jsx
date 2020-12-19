@@ -26,7 +26,7 @@ export default function ApplyTable(props) {
     Get order record and turn into day div Id
   ********************************************/
   useEffect(() => {
-    console.log(props.orderRecord);
+    // console.log(props.orderRecord);
     setOrderTimeList([]);
     let newOrderTimeList = [];
     for (let i = 0; i < props.orderRecord.length; i++) {
@@ -75,7 +75,7 @@ function TimePeriod(props) {
   const [user, setUser] = useState("");
   const time = props.time; //ex. time2020121409
   const orderId = props.orderId; //ex. 2020121409
-  console.log(props.orderTimeList);
+  // console.log(props.orderTimeList);
   useEffect(() => {
     for (let i = 0; i < props.orderTimeList.length; i++) {
       if (orderId === props.orderTimeList[i].time) {

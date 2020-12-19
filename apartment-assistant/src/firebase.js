@@ -243,23 +243,36 @@ export function getMailList(status = false, callback) {
 /****************************************
   get user's mailList
  ****************************************/
-export function getUserMailList(email, status = false) {
-  let data = [];
+// export function getUserMailList(email, status = false) {
+//   let data = [];
+//   return refMailbox
+//     .where("receiverEmail", "==", email)
+//     .where("status", "==", status)
+//     .get()
+//     .then((docRef) => {
+//       docRef.forEach((doc) => {
+//         if (doc.id) {
+//           data = [...data, doc.data()];
+//           return data;
+//         }
+//       });
+//       return data;
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
+
+export function getUserMailList(email, status = false, callback) {
   return refMailbox
     .where("receiverEmail", "==", email)
     .where("status", "==", status)
-    .get()
-    .then((docRef) => {
-      docRef.forEach((doc) => {
-        if (doc.id) {
-          data = [...data, doc.data()];
-          return data;
-        }
+    .onSnapshot((querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data = [...data, doc.data()];
       });
-      return data;
-    })
-    .catch((error) => {
-      console.log(error);
+      callback(data);
     });
 }
 
@@ -339,20 +352,6 @@ export function getExistedOrders(year, month, date, field, callback) {
       callback(data);
     });
 }
-
-// export function getMyFieldOrders(year, month, date, email, callback) {
-//   let data = [];
-//   refField
-//     .where("userEmail", "==", email)
-//     .where("date", "==", `${year}${month}${date}`)
-//     .onSnapshot((querySnapshot) => {
-//       querySnapshot.forEach((doc) => {
-//         data = [...data, doc.data()];
-//       });
-//       console.log(data);
-//       callback(data);
-//     });
-// }
 
 /******************************** 
   upload Field order lists
