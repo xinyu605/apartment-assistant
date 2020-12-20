@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import Alertbox from "./../Common/Alertbox";
+import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import styles from "./UpdateResident.module.scss";
 import { uploadResident, getTimeStamp } from "./../../firebase";
 import memberIcon1 from "./../../img/members.svg";
@@ -9,6 +11,13 @@ export default function UpdateResident() {
   const [familyMembersForm, setFamilyMemberForm] = useState([
     { id: "member0" },
   ]);
+  const [showAlert, setShowAlert] = useState(false);
+  const [showSuccessAlert, setSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const residentNumbers = useRef(null);
+  const floor = useRef(null);
+  const address = useRef(null);
+  const remark = useRef(null);
 
   /**************************************************
   Create / Delete one more family member input form
@@ -38,14 +47,14 @@ export default function UpdateResident() {
     let message = false;
     let inputs = document.querySelectorAll("input");
 
-    let residentNumbers = document.querySelector("#residentNumbers").value;
-    let floor = parseInt(document.querySelector("#floor").value);
-    let address = document.querySelector("#address").value;
-    let remark = document.querySelector("#remark").value;
+    // let residentNumbers = document.querySelector("#residentNumbers").value;
+    // let floor = parseInt(document.querySelector("#floor").value);
+    // let address = document.querySelector("#address").value;
+    // let remark = document.querySelector("#remark").value;
     let familyMembers = [];
 
-    if (remark === "") {
-      remark = "無";
+    if (remark.current.value === "") {
+      remark.current.value = "無";
     }
 
     for (let i = 0; i < familyMembersForm.length; i++) {
@@ -64,10 +73,10 @@ export default function UpdateResident() {
     // console.log(secondsToFirebase);
 
     const infoPackage = {
-      residentNumbers: residentNumbers,
-      floor: floor,
-      address: address,
-      remark: remark,
+      residentNumbers: residentNumbers.current.value,
+      floor: floor.current.value,
+      address: address.current.value,
+      remark: remark.current.value,
       familyMembers: familyMembers,
       updateDate: secondsToFirebase,
     };
@@ -81,13 +90,34 @@ export default function UpdateResident() {
     }
 
     if (message) {
-      alert("還有空白欄位尚未填寫完成喔！");
-      message = false;
+      // alert("還有空白欄位尚未填寫完成喔！");
+      // message = false;
+      setShowAlert(true);
     } else {
       uploadResident(infoPackage);
+      setSuccessAlert(true);
+      setSuccessMessage("新增住戶成功");
+
       for (let i = 1; i < inputs.length; i++) {
         inputs[i].value = "";
       }
+    }
+  }
+
+  /*********** 
+  Close alert
+  ************/
+  function closeAlert(e) {
+    e.preventDefault();
+    switch (e.currentTarget.id) {
+      case "closeAlertBtn":
+        setShowAlert(false);
+        break;
+      case "closeSuccessMsgBtn":
+        setSuccessAlert(false);
+        break;
+      default:
+        break;
     }
   }
 
@@ -115,6 +145,7 @@ export default function UpdateResident() {
             戶號
           </label>
           <input
+            ref={residentNumbers}
             className={`${styles.detailInput} ${styles.inputResidentNumbers}`}
             id="residentNumbers"
             type="text"
@@ -124,14 +155,16 @@ export default function UpdateResident() {
             樓層
           </label>
           <input
+            ref={floor}
             className={`${styles.detailInput} ${styles.inputFloor}`}
             id="floor"
-            placeholder="請填寫樓層"
+            placeholder="請填寫數字 ex.2"
           ></input>
           <label className={`${styles.detailTitle} ${styles.titleAddress}`}>
             地址
           </label>
           <input
+            ref={address}
             className={`${styles.detailInput} ${styles.inputAddress}`}
             id="address"
             placeholder="請填寫地址"
@@ -140,10 +173,11 @@ export default function UpdateResident() {
             備註
           </label>
           <input
+            ref={remark}
             className={`${styles.detailInput} ${styles.inputRemark}`}
             id="remark"
             type="text"
-            placeholder="請填寫備註"
+            placeholder="請填寫備註 (非必填)"
           ></input>
         </div>
 
@@ -171,7 +205,13 @@ export default function UpdateResident() {
         <button className={styles.submitMemberList} onClick={packingInfo}>
           確認送出
         </button>
+        <Alertbox showAlert={showAlert} closeAlert={closeAlert} />
       </form>
+      <AlertSuccessMsg
+        showSuccessAlert={showSuccessAlert}
+        successMessage={successMessage}
+        closeAlert={closeAlert}
+      />
     </div>
   );
 }

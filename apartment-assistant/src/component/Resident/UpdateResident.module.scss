@@ -33,11 +33,13 @@
   box-shadow: $list-box-shadow;
   display: flex;
   flex-wrap: wrap;
+  position: relative;
 
   .submitMemberList {
     @include button-main;
     width: 100px;
-    margin: 0 auto 20px;
+    margin: 0 40px 40px auto;
+    // margin: 0 auto 20px;
   }
 }
 

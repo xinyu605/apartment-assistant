@@ -3,12 +3,14 @@ import { SmallCalendar } from "./SmallCalendar";
 import { getTimeStamp, uploadAnnouncement } from "./../../firebase";
 import styles from "./UpdateBoardList.module.scss";
 import clipBoard from "./../../img/clipboard.svg";
-import Alertbox from "../Common/Alertbox";
+import Alertbox from "./../Common/Alertbox";
+import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 
 export default function UpdateBoardList() {
   const [deadline, setDeadline] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
-  // const [message, setMessage] = useState(false);
+  const [showSuccessAlert, setSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const author = useRef(null);
   const topic = useRef(null);
@@ -17,12 +19,7 @@ export default function UpdateBoardList() {
 
   function prepareToAnnounce(e) {
     e.preventDefault();
-    // const author = document.querySelector("#matterAuthor").value;
-    // const topic = document.querySelector("#matterTopic").value;
-    // const content = document.querySelector("#matterContent").value;
-    // const updateForm = document.querySelector("#updateForm");
     const inputs = updateForm.current.querySelectorAll("input");
-    // const textarea = updateForm.querySelector("#matterContent");
     let dd = new Date();
     let updateTime = getTimeStamp(
       dd.getFullYear(),
@@ -43,10 +40,8 @@ export default function UpdateBoardList() {
     }
 
     if (message) {
-      // alert("請確實填寫資料");
       setShowAlert(true);
       message = false;
-      // setMessage(false);
     } else {
       data = {
         topic: topic.current.value,
@@ -57,11 +52,15 @@ export default function UpdateBoardList() {
       };
       // console.log(data);
       uploadAnnouncement(data);
-      alert("公告已成功上傳！");
+      setSuccessAlert(true);
+      setSuccessMessage("公告已成功上傳");
+
+      window.setTimeout(() => {
+        setSuccessAlert(false);
+      }, 2000);
       inputs.forEach((input) => {
         input.value = "";
       });
-      // textarea.value = "";
       content.current.value = "";
     }
   }
@@ -71,7 +70,13 @@ export default function UpdateBoardList() {
   ************/
   function closeAlert(e) {
     e.preventDefault();
-    setShowAlert(false);
+    switch (e.currentTarget.id) {
+      case "closeAlertBtn":
+        setShowAlert(false);
+        break;
+      default:
+        break;
+    }
   }
 
   /*****************************
@@ -130,6 +135,11 @@ export default function UpdateBoardList() {
         </button>
         <Alertbox showAlert={showAlert} closeAlert={closeAlert} />
       </form>
+      <AlertSuccessMsg
+        showSuccessAlert={showSuccessAlert}
+        successMessage={successMessage}
+        closeAlert={closeAlert}
+      />
     </div>
   );
 }

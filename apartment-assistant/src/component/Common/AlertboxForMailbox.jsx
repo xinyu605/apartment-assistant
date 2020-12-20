@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
-import styles from "./Alertbox.module.scss";
+import styles from "./AlertboxForMailbox.module.scss";
 import warning from "./../../img/warning.svg";
 
-export default function Alertbox(props) {
+export default function AlertboxForMailbox(props) {
   const alertBox = useRef(null);
 
   if (props.showAlert === true) {

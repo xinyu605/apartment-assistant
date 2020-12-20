@@ -1,0 +1,42 @@
+@import "./../../common";
+
+.alertbox {
+  width: 250px;
+  height: 100px;
+  padding: 20px;
+  border-radius: $list-border-radius;
+  box-shadow: $list-box-shadow;
+  display: grid;
+  grid-template-columns: 70px auto;
+  align-items: center;
+  background-color: #fff;
+  position: fixed;
+  top: 120px;
+  right: 40%;
+  @include animation(
+    "slideUpFadeOut 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) both"
+  );
+
+  .alertIcon {
+    width: 60px;
+    height: auto;
+    grid-column: 1/2;
+    grid-row: 1/2;
+    align-self: center;
+    justify-self: flex-end;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .messageText {
+    margin-left: 20px;
+    grid-column: 2/3;
+    grid-row: 1/2;
+    font-size: $font-size-small;
+    color: $base-text-color;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+}

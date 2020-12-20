@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
+import ConfirmMsg from "../Common/ConfirmMsg";
 import UpdateBoardList from "./UpdateBoardList";
 import { getBoardList, deleteIssueData } from "./../../firebase";
 import { showDate } from "./../../lib";
@@ -11,6 +12,8 @@ export default function Board() {
   const [matters, setMatters] = useState([]);
   const [details, setDetails] = useState({});
   const [issueIndex, setIssueIndex] = useState(0);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
 
   useEffect(() => {
     getBoardList(handleBoardList);
@@ -78,15 +81,23 @@ export default function Board() {
   }
 
   function deleteIssue() {
-    console.log(issueIndex);
-    let ans = window.confirm("刪了就回不去囉！你確定？");
-    if (ans) {
-      let issueList = [...matters];
-      let removeIssue = issueList.splice(issueIndex, 1);
-      setMatters(issueList);
-      setDetails(issueList[0]);
-      deleteIssueData(removeIssue[0].issueId);
-    }
+    setShowDeleteConfirm(true);
+    setConfirmMessage("刪除後無法復原，確定嗎？");
+  }
+
+  function confirmDelete(e) {
+    e.preventDefault();
+    let issueList = [...matters];
+    let removeIssue = issueList.splice(issueIndex, 1);
+    setMatters(issueList);
+    setDetails(issueList[0]);
+    deleteIssueData(removeIssue[0].issueId);
+    setShowDeleteConfirm(false);
+  }
+
+  function cancelConfirm(e) {
+    e.preventDefault();
+    setShowDeleteConfirm(false);
   }
 
   return (
@@ -105,6 +116,12 @@ export default function Board() {
         {detailArea()}
       </div>
       <UpdateBoardList />
+      <ConfirmMsg
+        showConfirm={showDeleteConfirm}
+        confirmMessage={confirmMessage}
+        confirmAction={confirmDelete}
+        cancelConfirm={cancelConfirm}
+      />
     </div>
   );
 }

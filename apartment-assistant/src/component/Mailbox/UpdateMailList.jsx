@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { SmallCalendar } from "./SmallCalendar";
+import AlertboxForMailbox from "./../Common/AlertboxForMailbox";
+import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import { EmailForm } from "./EmailForm";
 import styles from "./UpdateMailList.module.scss";
 import { uploadMailList, getTimeStamp } from "./../../firebase";
@@ -20,6 +22,11 @@ export function UpdateMailList(props) {
   const [familyMembers, setFamilyMembers] = useState([]);
   const [familyMembersEmail, setFamilyMembersEmail] = useState([]);
   const [isEditingMail, setIsEditingMail] = useState(false);
+
+  //alert dialog
+  const [showAlert, setShowAlert] = useState(false);
+  const [showSuccessAlert, setSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // console.log(props);
 
@@ -127,10 +134,16 @@ export function UpdateMailList(props) {
       }
     }
     if (message) {
-      alert("請確實填寫資料");
+      // alert("請確實填寫資料");
+      setShowAlert(true);
       message = false;
     } else {
       uploadMailList(data, data.mailId);
+      setSuccessAlert(true);
+      setSuccessMessage("資料已成功上傳");
+      window.setTimeout(() => {
+        setSuccessAlert(false);
+      }, 2000);
       for (let i = 0; i < inputs.length - 1; i++) {
         inputs[i].value = "";
       }
@@ -144,6 +157,20 @@ export function UpdateMailList(props) {
 
   function closeForm() {
     setIsEditingMail(false);
+  }
+
+  /*********** 
+  Close alert
+  ************/
+  function closeAlert(e) {
+    e.preventDefault();
+    switch (e.currentTarget.id) {
+      case "closeAlertBtn":
+        setShowAlert(false);
+        break;
+      default:
+        break;
+    }
   }
 
   useEffect(() => {
@@ -266,6 +293,7 @@ export function UpdateMailList(props) {
           >
             確認送出
           </button>
+          <AlertboxForMailbox showAlert={showAlert} closeAlert={closeAlert} />
         </div>
       </div>
 
@@ -277,6 +305,11 @@ export function UpdateMailList(props) {
         isEditingMail={isEditingMail}
         toggleEmailForm={toggleEmailForm}
         closeForm={closeForm}
+      />
+      <AlertSuccessMsg
+        showSuccessAlert={showSuccessAlert}
+        successMessage={successMessage}
+        closeAlert={closeAlert}
       />
     </div>
   );

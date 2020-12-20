@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import ConfirmMsg from "./../Common/ConfirmMsg";
 import inboxUntaken from "./../../img/inboxUntaken.svg";
 import inboxTaken from "./../../img/inboxTaken.svg";
 import trashIcon from "./../../img/trash.svg";
@@ -10,6 +11,10 @@ import { updateMailStatus } from "./../../firebase";
 
 export function MailList(props) {
   const [newMail, setNewMail] = useState(props.newMail);
+  const [showChangeStatusConfirm, setShowChangeStatusConfirm] = useState(false);
+  const [changedMailId, setChangedMailId] = useState("");
+  const [confirmMessage, setConfirmMessage] = useState("");
+
   // console.log(props);
   let lists = [];
   let headerImg;
@@ -105,15 +110,25 @@ export function MailList(props) {
   *******************************/
 
   function changeMailStatus(e) {
-    console.log(e.currentTarget.id);
+    // console.log(e.currentTarget.id);
+    setChangedMailId(e.currentTarget.id);
+    setShowChangeStatusConfirm(true);
+    setConfirmMessage("是否確定更新領取狀態？");
+  }
+
+  function confirmChangeStatus(e) {
+    e.preventDefault();
     let status;
-    let ans = window.confirm("是否確定更新領取狀態？");
-    if (ans) {
-      const mailId = e.currentTarget.id.slice(6);
-      props.state ? (status = false) : (status = true);
-      console.log(status);
-      updateMailStatus(mailId, status);
-    }
+    const mailId = changedMailId.slice(6);
+    props.state ? (status = false) : (status = true);
+    console.log(status);
+    updateMailStatus(mailId, status);
+    setShowChangeStatusConfirm(false);
+  }
+
+  function cancelConfirm(e) {
+    e.preventDefault();
+    setShowChangeStatusConfirm(false);
   }
 
   /*************************************** 
@@ -191,6 +206,12 @@ export function MailList(props) {
         </div>
         {List}
       </div>
+      <ConfirmMsg
+        showConfirm={showChangeStatusConfirm}
+        confirmMessage={confirmMessage}
+        confirmAction={confirmChangeStatus}
+        cancelConfirm={cancelConfirm}
+      />
     </div>
   );
 }

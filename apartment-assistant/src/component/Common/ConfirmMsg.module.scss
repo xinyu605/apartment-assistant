@@ -1,21 +1,25 @@
 @import "./../../common";
 
-.alertbox {
-  width: 280px;
+.confirmbox {
+  width: 360px;
   height: 120px;
   padding: 20px 15px;
   border-radius: $list-border-radius;
+  box-shadow: $list-box-shadow;
   display: grid;
   grid-template-columns: 70px auto;
   grid-template-rows: repeat(2, 40px);
   align-items: center;
+  // background-color: #fff;
   background-color: #aaa;
-  position: absolute;
-  bottom: 25px;
-  right: 60px;
-  @include animation("slideUp 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both");
+  position: fixed;
+  top: -50px;
+  right: 40%;
+  @include animation(
+    "slideDown 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both"
+  );
 
-  .alertIcon {
+  .confirmIcon {
     width: 60px;
     height: auto;
     grid-column: 1/2;
@@ -43,28 +47,26 @@
     grid-row: 2/3;
     justify-self: flex-end;
 
-    .alertBtn {
+    .confirmBtn {
       @include button-main;
-      width: 80px;
+      width: 60px;
       padding: 5px;
-      background-color: #555;
+      margin-right: 10px;
+      font-weight: 700;
+
+      &:nth-child(1) {
+        color: #555;
+        background-color: #eee;
+      }
+
+      &:nth-child(2) {
+        background-color: #555;
+      }
 
       &:hover {
         color: #fff;
-        background-color: #555;
+        background-color: $color-fireOpal;
       }
     }
-  }
-
-  &::after {
-    content: "";
-    border-color: #aaa #aaa transparent transparent;
-    border-style: solid solid solid solid;
-    border-width: 15px 12px 15px 12px;
-    width: 0px;
-    height: 0px;
-    right: 40px;
-    bottom: -30px;
-    position: absolute;
   }
 }

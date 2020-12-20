@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
+import ConfirmMsg from "./../Common/ConfirmMsg";
 import { getMailList, getResidentList, deleteMailData } from "./../../firebase";
 import styles from "./MailList.module.scss";
 
@@ -10,13 +11,17 @@ import styles from "./MailList.module.scss";
   2.Render 
 ******************************/
 
-function Mailbox() {
+export default function Mailbox() {
   const [state, setState] = useState(false);
   const [untakenData, setUntakenData] = useState([]);
   const [takenData, setTakenData] = useState([]);
   const [residentList, setResidentList] = useState([]);
-
   const [newMail, setNewMail] = useState(false);
+
+  //confirm dialog
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [deletedMailId, setDeletedMailId] = useState("");
 
   useEffect(() => {
     getMailList(false, getUntakenData);
@@ -53,23 +58,33 @@ function Mailbox() {
     Delete individual mail
   *******************************/
   function deleteMail(e) {
-    let ans = window.confirm("刪了就回不去囉！你確定？");
-    if (ans) {
-      const index = parseInt(e.currentTarget.id.slice(6));
-      let mailList = [];
-      let removedMail = [];
-      if (state) {
-        mailList = [...takenData];
-        removedMail = mailList.splice(index, 1);
-        setTakenData(mailList);
-      } else {
-        mailList = [...untakenData];
-        removedMail = mailList.splice(index, 1);
-        setUntakenData(mailList);
-      }
+    setShowDeleteConfirm(true);
+    setConfirmMessage("刪除後無法復原，確定嗎？");
+    setDeletedMailId(e.currentTarget.id.slice(6));
+  }
 
-      deleteMailData(removedMail[0].mailId);
+  function confirmDelete(e) {
+    e.preventDefault();
+    const index = parseInt(deletedMailId);
+    let mailList = [];
+    let removedMail = [];
+    if (state) {
+      mailList = [...takenData];
+      removedMail = mailList.splice(index, 1);
+      setTakenData(mailList);
+    } else {
+      mailList = [...untakenData];
+      removedMail = mailList.splice(index, 1);
+      setUntakenData(mailList);
     }
+
+    deleteMailData(removedMail[0].mailId);
+    setShowDeleteConfirm(false);
+  }
+
+  function cancelConfirm(e) {
+    e.preventDefault();
+    setShowDeleteConfirm(false);
   }
 
   function updateNewMail() {
@@ -91,8 +106,12 @@ function Mailbox() {
         updateNewMail={updateNewMail}
         residentList={residentList}
       />
+      <ConfirmMsg
+        showConfirm={showDeleteConfirm}
+        confirmMessage={confirmMessage}
+        confirmAction={confirmDelete}
+        cancelConfirm={cancelConfirm}
+      />
     </div>
   );
 }
-
-export default Mailbox;

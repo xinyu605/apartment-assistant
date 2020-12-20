@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Member from "./Member";
 import NewMember from "./NewMember";
+import AlertDownward from "./../../Common/AlertDownward";
+import AlertSuccessMsg from "./../../Common/AlertSuccessMsg";
 import styles from "./ResidentList.module.scss";
 import editIcon from "./../../../img/edit.svg";
 import trashIcon from "./../../../img/trash.svg";
@@ -23,6 +25,12 @@ export default function ListCard(props) {
   const [showDateWhenEditing, setDateWhenEditing] = useState("");
   const [familyMembers, setFamilyMembers] = useState(list.familyMembers);
   const [familyMembersForm, setFamilyMembersForm] = useState([]);
+
+  // alert dialogs
+  const [showAlertDownward, setAlertDownward] = useState(false);
+  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showSuccessAlert, setSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   let index = lists.indexOf(list);
   let updateDate = "";
@@ -132,11 +140,34 @@ export default function ListCard(props) {
     };
 
     if (familyMembers.length < 1) {
-      window.alert("住戶成員不能少於一位！");
+      setAlertDownward(true);
+      setAlertDownwardMessage("住戶成員不能少於一位");
+      // window.alert("住戶成員不能少於一位！");
     } else {
       editUpdateResident(infoPackage);
-      window.alert("成功更新！");
-      setEditing(false);
+      // window.alert("成功更新！");
+      setSuccessAlert(true);
+      setSuccessMessage("住戶資訊更新成功");
+      window.setTimeout(() => {
+        setSuccessAlert(false);
+      }, 2000);
+      window.setTimeout(() => {
+        setEditing(false);
+      }, 2001);
+    }
+  }
+
+  /*********** 
+  Close alert
+  ************/
+  function closeAlert(e) {
+    e.preventDefault();
+    switch (e.currentTarget.id) {
+      case "closeAlertBtn":
+        setAlertDownward(false);
+        break;
+      default:
+        break;
     }
   }
 
@@ -274,6 +305,15 @@ export default function ListCard(props) {
             );
           })}
         </div>
+        <AlertDownward
+          showAlertDownward={showAlertDownward}
+          alertDownwardMessage={alertDownwardMessage}
+          closeAlert={closeAlert}
+        />
+        <AlertSuccessMsg
+          showSuccessAlert={showSuccessAlert}
+          successMessage={successMessage}
+        />
       </div>
     );
   }
