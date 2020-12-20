@@ -13,7 +13,7 @@ import {
 } from "react-router-dom";
 import { Admin } from "./component/Admin";
 import Entry from "./component/Entry/Entry";
-import SignIn from "./component/SignIn";
+import SignIn from "./component/SignIn/SignIn";
 import firebase from "firebase";
 
 let auth = firebase.auth();

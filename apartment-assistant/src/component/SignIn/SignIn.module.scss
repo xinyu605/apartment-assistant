@@ -1,4 +1,4 @@
-@import "./../common";
+@import "./../../common";
 
 $card-width: 360px;
 $icon-width: 20px;
@@ -110,33 +110,35 @@ h2 {
   }
 }
 
-.signUp {
-  width: $card-width;
-  height: 400px;
-  border-radius: 6% 0 0 6%;
-  padding: 30px 40px 0 40px;
-  background-color: rgba(244, 244, 244, 0.5);
-  box-shadow: $list-box-shadow;
-  position: absolute;
-  left: 0;
-  z-index: 1;
-}
-
+.signUp,
 .signIn {
   width: $card-width;
   height: 400px;
-  border-radius: 0 6% 6% 0;
-  padding: 30px 40px 0 40px;
+  padding: 10px 40px 0 40px;
   background-color: rgba(244, 244, 244, 0.5);
   box-shadow: $list-box-shadow;
   position: absolute;
-  left: $card-width;
   z-index: 1;
+}
+
+.signUp {
+  border-radius: 6% 0 0 6%;
+  left: 0;
+}
+
+.signIn {
+  border-radius: 0 6% 6% 0;
+  left: $card-width;
 }
 
 .signInPageForm {
   display: grid;
-  grid-template-rows: repeat(4, 50px);
+  grid-template-rows: 38px 30px 38px 30px repeat(2, 50px);
+}
+
+.signUpPageForm {
+  display: grid;
+  grid-template-rows: 38px 30px 38px 30px 38px 30px 50px;
 }
 
 .inputWrapper {
@@ -146,15 +148,15 @@ h2 {
   display: flex;
   align-items: center;
   background-color: #fff;
-}
 
-.inputImgWrapper {
-  width: $icon-width;
-  height: $icon-height;
-  margin-left: 20px;
+  .inputImgWrapper {
+    width: $icon-width;
+    height: $icon-height;
+    margin-left: 20px;
 
-  .inputImg {
-    width: 100%;
+    .inputImg {
+      width: 100%;
+    }
   }
 }
 
@@ -172,6 +174,15 @@ input:focus {
   box-shadow: $light-box-shadow;
 }
 
+.remindMessage {
+  opacity: 0;
+  margin: 4px 0 0 6px;
+  color: $color-fireOpal;
+  font-size: 12px;
+  letter-spacing: 1px;
+  align-self: flex-start;
+}
+
 .buttonSignUp,
 .buttonSignIn {
   @include button-main;
@@ -182,7 +193,6 @@ input:focus {
     color: #fff;
     background-color: $color-fireOpal;
     transform: scale(1.1);
-    // transition: all 0.3s ease-in-out;
   }
 }
 
@@ -205,7 +215,7 @@ input:focus {
   .body {
     height: 100%;
     flex-wrap: wrap;
-    background-image: url("./../img/vintage.png");
+    background-image: url("./../../img/vintage.png");
     background-size: cover;
 
     .container {
@@ -251,6 +261,7 @@ input:focus {
     .signUp,
     .signIn {
       width: 80%;
+      height: 450px;
       background-color: #fff;
       box-shadow: $deep-box-shadow;
       text-align: center;
@@ -266,6 +277,10 @@ input:focus {
         .loginInputs {
           width: 96%;
         }
+      }
+
+      .remindMessage {
+        justify-self: flex-start;
       }
     }
 

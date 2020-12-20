@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
-import { nativeSignIn, nativeSignUp, signInWithGoogle } from "../firebase";
-import { checkEmailFormat, checkPasswordLength, checkUserName } from "../lib";
+import SignUp from "./SignUp";
+import { nativeSignIn, nativeSignUp, signInWithGoogle } from "./../../firebase";
+import {
+  checkEmailFormat,
+  checkPasswordLength,
+  checkUserName,
+} from "./../../lib";
 import styles from "./SignIn.module.scss";
-import logo from "./../img/logo_apartment.png";
-import user from "./../img/user.svg";
-import email from "./../img/email.svg";
-import lock2 from "./../img/lock.svg";
-import vintage from "./../img/vintage.png";
+import logo from "./../../img/logo_apartment.png";
+import email from "./../../img/email.svg";
+import lock from "./../../img/lock.svg";
+import vintage from "./../../img/vintage.png";
 
 export default function SignIn() {
   const [userName, setUserName] = useState("");
@@ -16,6 +20,44 @@ export default function SignIn() {
   const [emailSignIn, setEmailSignIn] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
   let history = useHistory();
+
+  /***************************************** 
+    useRef instead of document.querySelector
+  ******************************************/
+  const emailSignInInput = useRef(null); //#emailSignIn
+  const passwordSignInInput = useRef(null); //#pwdSignIn
+  const remindEmailSignIn = useRef(null); //#remindEmailSignIn
+  const remindPasswordSignIn = useRef(null); //#remindPasswordSignIn
+
+  /****************************************
+    check signUp and signIn inputs format
+  *****************************************/
+  useEffect(() => {
+    const emailInput = checkEmailFormat(emailSignIn);
+    const passwordInput = checkPasswordLength(passwordSignIn);
+
+    if (emailInput === "Email欄位不可留空" || emailInput === "Email格式錯誤") {
+      remindEmailSignIn.current.textContent = emailInput;
+      remindEmailSignIn.current.style.opacity = "1";
+      remindEmailSignIn.current.style.transition = "all 0.3s ease";
+      emailSignInInput.current.style.border = "1px solid #f26157";
+      emailSignInInput.current.style.transition = "all 0.3s ease";
+    } else {
+      remindEmailSignIn.current.textContent = "";
+      emailSignInInput.current.style.border = "none";
+    }
+
+    if (passwordInput === "密碼需超過6個字元") {
+      remindPasswordSignIn.current.textContent = passwordInput;
+      remindPasswordSignIn.current.style.opacity = "1";
+      remindPasswordSignIn.current.style.transition = "all 0.3s ease";
+      passwordSignInInput.current.style.border = "1px solid #f26157";
+      passwordSignInInput.current.style.transition = "all 0.3s ease";
+    } else {
+      remindPasswordSignIn.current.textContent = "";
+      passwordSignInInput.current.style.border = "none";
+    }
+  }, [emailSignIn, passwordSignIn]);
 
   function getUserInput(e) {
     switch (e.currentTarget.id) {
@@ -42,9 +84,9 @@ export default function SignIn() {
   function submitSignUpData(e) {
     e.preventDefault();
     if (
-      checkEmailFormat(emailSignUp) &&
-      checkPasswordLength(passwordSignUp) &&
-      checkUserName(userName)
+      checkEmailFormat(emailSignUp) === true &&
+      checkPasswordLength(passwordSignUp) === true &&
+      checkUserName(userName) === true
     ) {
       nativeSignUp(emailSignUp, passwordSignUp, userName);
     } else {
@@ -54,9 +96,11 @@ export default function SignIn() {
 
   function submitSignInData(e) {
     e.preventDefault();
-    if (emailSignIn.length === 0 || passwordSignIn.length < 6) {
-      alert("資料尚未填寫完成喔！");
-    } else {
+
+    const emailInput = checkEmailFormat(emailSignIn);
+    const passwordInput = checkPasswordLength(passwordSignIn);
+
+    if (emailInput === true && passwordInput === true) {
       nativeSignIn(emailSignIn, passwordSignIn)
         .then((result) => {
           if (result === "admin") {
@@ -139,9 +183,10 @@ export default function SignIn() {
 
         <div id="signInCard" className={styles.signIn}>
           <h2>會員登入</h2>
-          <form className={styles.signInPageForm}>
+          <form id="signInPageForm" className={styles.signInPageForm}>
             <div className={styles.inputWrapper}>
               <input
+                ref={emailSignInInput}
                 id="emailSignIn"
                 className={styles.loginInputs}
                 type="text"
@@ -152,8 +197,14 @@ export default function SignIn() {
                 <img className={styles.inputImg} src={email} />
               </div>
             </div>
+            <p
+              ref={remindEmailSignIn}
+              id="remindEmailSignIn"
+              className={styles.remindMessage}
+            ></p>
             <div className={styles.inputWrapper}>
               <input
+                ref={passwordSignInInput}
                 id="pwdSignIn"
                 className={styles.loginInputs}
                 type="password"
@@ -161,10 +212,14 @@ export default function SignIn() {
                 onChange={getUserInput}
               ></input>
               <div className={styles.inputImgWrapper}>
-                <img className={styles.inputImg} src={lock2} />
+                <img className={styles.inputImg} src={lock} />
               </div>
             </div>
-
+            <p
+              ref={remindPasswordSignIn}
+              id="remindPasswordSignIn"
+              className={styles.remindMessage}
+            ></p>
             <button
               id="submitSignIn"
               className={styles.buttonSignIn}
@@ -192,71 +247,15 @@ export default function SignIn() {
           </div>
         </div>
 
-        <div id="signUpCard" className={styles.signUp}>
-          <h2>註冊新帳號</h2>
-          <form className={styles.signInPageForm}>
-            <div className={styles.inputWrapper}>
-              <input
-                id="userName"
-                className={styles.loginInputs}
-                type="text"
-                placeholder="請輸入姓名"
-                onChange={getUserInput}
-              ></input>
-              <div className={styles.inputImgWrapper}>
-                <img className={styles.inputImg} src={user} />
-              </div>
-            </div>
-
-            <div className={styles.inputWrapper}>
-              <input
-                id="emailSignUp"
-                className={styles.loginInputs}
-                type="text"
-                placeholder="請輸入Email"
-                onChange={getUserInput}
-              ></input>
-              <div className={styles.inputImgWrapper}>
-                <img className={styles.inputImg} src={email} />
-              </div>
-            </div>
-
-            <div className={styles.inputWrapper}>
-              <input
-                id="pwdSignUp"
-                className={styles.loginInputs}
-                type="password"
-                placeholder="請輸入6位以上英數字"
-                onChange={getUserInput}
-              ></input>
-              <div className={styles.inputImgWrapper}>
-                <img className={styles.inputImg} src={lock2} />
-              </div>
-            </div>
-
-            <button
-              id="submitSignUp"
-              className={styles.buttonSignUp}
-              onClick={submitSignUpData}
-            >
-              註冊
-            </button>
-            <div
-              id="clickToSignIn"
-              className={styles.clickToSignUp}
-              onClick={moveCard}
-            >
-              登入
-            </div>
-            <div
-              id="clickToSignInMobile"
-              className={styles.clickToSignUpMobile}
-              onClick={exchangeCards}
-            >
-              登入
-            </div>
-          </form>
-        </div>
+        <SignUp
+          userName={userName}
+          emailSignUp={emailSignUp}
+          passwordSignUp={passwordSignUp}
+          getUserInput={getUserInput}
+          submitSignUpData={submitSignUpData}
+          moveCard={moveCard}
+          exchangeCards={exchangeCards}
+        />
       </div>
     </div>
   );

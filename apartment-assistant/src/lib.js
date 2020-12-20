@@ -70,7 +70,7 @@ export function scrollToTarget(targetId) {
 
 export function checkUserName(string) {
   if (string.length === 0) {
-    alert("姓名欄位不可留空，請重新輸入！");
+    return "姓名欄位不可留空";
   } else {
     return true;
   }
@@ -84,9 +84,9 @@ export function checkEmailFormat(string) {
   ) {
     return true;
   } else if (string.length === 0) {
-    alert("Email欄位不可留空，請重新輸入！");
+    return "Email欄位不可留空";
   } else {
-    alert("Email格式錯誤，請重新輸入！");
+    return "Email格式錯誤";
   }
 }
 
@@ -94,6 +94,6 @@ export function checkPasswordLength(string) {
   if (string.length >= 6) {
     return true;
   } else {
-    alert("密碼需超過6個字元，請重新輸入！");
+    return "密碼需超過6個字元";
   }
 }
