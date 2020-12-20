@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SmallCalendar } from "./SmallCalendar";
 import { EmailForm } from "./EmailForm";
 import styles from "./UpdateMailList.module.scss";
-import {
-  uploadMailList,
-  getTimeStamp,
-  getReceiverInfo,
-} from "./../../firebase";
+import { uploadMailList, getTimeStamp } from "./../../firebase";
 import { nanoid } from "nanoid";
 import envelope from "./../../img/envelope.svg";
 import send from "./../../img/send.svg";

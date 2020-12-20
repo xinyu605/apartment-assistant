@@ -1,20 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { SmallCalendar } from "./SmallCalendar";
 import { getTimeStamp, uploadAnnouncement } from "./../../firebase";
 import styles from "./UpdateBoardList.module.scss";
 import clipBoard from "./../../img/clipboard.svg";
+import Alertbox from "../Common/Alertbox";
 
 export default function UpdateBoardList() {
   const [deadline, setDeadline] = useState(0);
+  const [showAlert, setShowAlert] = useState(false);
+  // const [message, setMessage] = useState(false);
+
+  const author = useRef(null);
+  const topic = useRef(null);
+  const content = useRef(null);
+  const updateForm = useRef(null);
 
   function prepareToAnnounce(e) {
     e.preventDefault();
-    const author = document.querySelector("#matterAuthor").value;
-    const topic = document.querySelector("#matterTopic").value;
-    const content = document.querySelector("#matterContent").value;
-    const updateForm = document.querySelector("#updateForm");
-    const inputs = updateForm.querySelectorAll("input");
-    const textarea = updateForm.querySelector("#matterContent");
+    // const author = document.querySelector("#matterAuthor").value;
+    // const topic = document.querySelector("#matterTopic").value;
+    // const content = document.querySelector("#matterContent").value;
+    // const updateForm = document.querySelector("#updateForm");
+    const inputs = updateForm.current.querySelectorAll("input");
+    // const textarea = updateForm.querySelector("#matterContent");
     let dd = new Date();
     let updateTime = getTimeStamp(
       dd.getFullYear(),
@@ -25,26 +33,27 @@ export default function UpdateBoardList() {
     let data;
     let message = false;
 
-    for (let i = 0; i < inputs.length; i++) {
-      if (inputs[i].value === "") {
-        message = true;
-      }
-    }
-
-    if (textarea.value === "") {
+    if (
+      author.current.value === "" ||
+      topic.current.value === "" ||
+      content.current.value === ""
+    ) {
+      // setMessage(true);
       message = true;
     }
 
     if (message) {
-      alert("請確實填寫資料");
+      // alert("請確實填寫資料");
+      setShowAlert(true);
       message = false;
+      // setMessage(false);
     } else {
       data = {
-        topic: topic,
-        author: author,
+        topic: topic.current.value,
+        author: author.current.value,
         updateTime: updateTime,
         deadline: deadline,
-        content: content,
+        content: content.current.value,
       };
       // console.log(data);
       uploadAnnouncement(data);
@@ -52,12 +61,21 @@ export default function UpdateBoardList() {
       inputs.forEach((input) => {
         input.value = "";
       });
-      textarea.value = "";
+      // textarea.value = "";
+      content.current.value = "";
     }
   }
 
+  /*********** 
+  Close alert
+  ************/
+  function closeAlert(e) {
+    e.preventDefault();
+    setShowAlert(false);
+  }
+
   /*****************************
-   prepare seconds for firebase
+  prepare seconds for firebase
   ******************************/
   function updateDate(year, month, date) {
     const seconds = getTimeStamp(year, month, date);
@@ -71,11 +89,12 @@ export default function UpdateBoardList() {
         </div>
         <h2 className={styles.title}>新增公告</h2>
       </div>
-      <form id="updateForm" className={styles.updateForm}>
+      <form ref={updateForm} id="updateForm" className={styles.updateForm}>
         <label className={`${styles.formTitle}  ${styles.updateAuthor}`}>
           發布者
         </label>
         <input
+          ref={author}
           id="matterAuthor"
           className={styles.inputAuthor}
           type="text"
@@ -85,6 +104,7 @@ export default function UpdateBoardList() {
           公告標題
         </label>
         <input
+          ref={topic}
           id="matterTopic"
           className={styles.inputTopic}
           type="text"
@@ -99,6 +119,7 @@ export default function UpdateBoardList() {
           公告內容
         </label>
         <textarea
+          ref={content}
           className={styles.inputContent}
           id="matterContent"
           rows="8"
@@ -107,6 +128,7 @@ export default function UpdateBoardList() {
         <button className={styles.submitMatter} onClick={prepareToAnnounce}>
           確認送出
         </button>
+        <Alertbox showAlert={showAlert} closeAlert={closeAlert} />
       </form>
     </div>
   );

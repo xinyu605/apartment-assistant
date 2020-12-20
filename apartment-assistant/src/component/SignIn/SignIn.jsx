@@ -173,9 +173,11 @@ export default function SignIn() {
             <img src={logo} className={styles.logoImg} />
           </div>
           <div className={styles.slogan}>
-            <h2 className={styles.sloganTitle}>
-              <b>AT</b> ANY TIME!
-            </h2>
+            <div className={styles.sloganTitle}>
+              <h2>AT</h2>
+              <p>with you</p>
+              <p>ANY TIME!</p>
+            </div>
             <p className={styles.sloganContent}>─ 最貼近生活的社區管理平台</p>
             <p className={styles.sloganContent}>─ 管理社區大小事的最佳夥伴</p>
           </div>
