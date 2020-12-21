@@ -11,6 +11,7 @@ import check from "./../../../img/check.svg";
 import close from "./../../../img/close.svg";
 import plus from "./../../../img/plus.svg";
 import { getTimeStamp, editUpdateResident } from "./../../../firebase";
+import { nanoid } from "nanoid";
 import { showDate } from "./../../../lib";
 
 export default function ListCard(props) {
@@ -18,6 +19,7 @@ export default function ListCard(props) {
   const list = props.list;
   const [isEditing, setEditing] = useState(false);
   const [residentId, setResidentId] = useState(list.residentId);
+  // console.log(residentId);
   const [floor, setFloor] = useState(props.list.floor);
   const [residentNumbers, setResidentNumbers] = useState(list.residentNumbers);
   const [residentAddress, setResidentAddress] = useState(list.address);
@@ -105,19 +107,21 @@ export default function ListCard(props) {
     let currentFamilyMembersForm = familyMembersForm.map((memberForm) => ({
       ...memberForm,
     }));
+    // .push({ id: `memberForm${nanoid(20)}}` });
     currentFamilyMembersForm.push({ id: `member${familyMembers.length}` });
+
     setFamilyMembersForm(currentFamilyMembersForm);
     let newFamilyMembers = familyMembers.map((member) => ({ ...member }));
-    newFamilyMembers.push({ name: "", phone: "", email: "" });
+    newFamilyMembers.push({ memberId: "", name: "", phone: "", email: "" });
     setFamilyMembers(newFamilyMembers);
   }
 
-  function deleteMember(e) {
-    const target = e.currentTarget;
-    const removeIndex = parseInt(target.id.slice(15));
-    let newFamilyMembers = familyMembers.map((member) => ({ ...member }));
-    newFamilyMembers.splice(removeIndex, 1);
-    console.log(newFamilyMembers);
+  function deleteMember(removeMemberId) {
+    console.log(removeMemberId);
+    let newFamilyMembers = familyMembers
+      .map((member) => ({ ...member }))
+      .filter((member) => member.memberId !== removeMemberId);
+
     setFamilyMembers(newFamilyMembers);
     let newFamilyMembersForm = familyMembersForm.map((memberForm) => ({
       ...memberForm,
@@ -177,7 +181,9 @@ export default function ListCard(props) {
         <div
           className={styles.trashImg}
           id={`trash${index}`}
-          onClick={props.deleteResident}
+          onClick={() => {
+            props.deleteResident(residentId);
+          }}
         >
           <img src={trashIcon} />
         </div>

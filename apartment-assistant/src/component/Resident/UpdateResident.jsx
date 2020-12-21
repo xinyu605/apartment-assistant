@@ -3,6 +3,7 @@ import Alertbox from "./../Common/Alertbox";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import styles from "./UpdateResident.module.scss";
 import { uploadResident, getTimeStamp } from "./../../firebase";
+import { nanoid } from "nanoid";
 import memberIcon1 from "./../../img/members.svg";
 import plus from "./../../img/plus.svg";
 import minus from "./../../img/minus.svg";
@@ -46,11 +47,6 @@ export default function UpdateResident() {
     e.preventDefault();
     let message = false;
     let inputs = document.querySelectorAll("input");
-
-    // let residentNumbers = document.querySelector("#residentNumbers").value;
-    // let floor = parseInt(document.querySelector("#floor").value);
-    // let address = document.querySelector("#address").value;
-    // let remark = document.querySelector("#remark").value;
     let familyMembers = [];
 
     if (remark.current.value === "") {
@@ -59,6 +55,7 @@ export default function UpdateResident() {
 
     for (let i = 0; i < familyMembersForm.length; i++) {
       familyMembers[i] = {
+        memberId: nanoid(20),
         name: document.querySelector(`#inputName${i}`).value,
         phone: document.querySelector(`#inputPhone${i}`).value,
         email: document.querySelector(`#inputEmail${i}`).value,

@@ -9,7 +9,7 @@ export default function Member(props) {
   const member = props.member;
   const index = props.list.familyMembers.indexOf(member); //original familyMembers
   // console.log(familyMembers);
-  // console.log(props.list.familyMembers);
+  console.log(props.member);
 
   if (props.isEditing === false) {
     return (
@@ -74,7 +74,9 @@ export default function Member(props) {
           <div
             className={styles.trashWrapper}
             id={`deleteMemberBtn${index}`}
-            onClick={props.deleteMember}
+            onClick={() => {
+              props.deleteMember(member.memberId);
+            }}
           >
             <div className={styles.trashImg}>
               <img src={trashIcon} />

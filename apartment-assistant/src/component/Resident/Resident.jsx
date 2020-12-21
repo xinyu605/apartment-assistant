@@ -14,6 +14,8 @@ export default function Resident() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
 
+  const [removeResidentId, setRemoveResidentId] = useState("");
+
   /************************************* 
     get resident list and pass to state
   **************************************/
@@ -35,18 +37,23 @@ export default function Resident() {
     setSearchResult(resultResident);
   }
 
-  function deleteResident(e) {
+  /*********************************************** 
+    click delete button and pop up confirm dialog
+  ************************************************/
+  function deleteResident(residentId) {
+    setRemoveResidentId(residentId);
     setShowDeleteConfirm(true);
     setConfirmMessage("刪除後無法復原，確定嗎？");
   }
 
   function confirmDelete(e) {
     e.preventDefault();
-    const index = parseInt(e.currentTarget.id.slice(5));
     let newResidentList = [...residentList];
-    const removedResident = newResidentList.splice(index, 1);
+    newResidentList.filter(
+      (resident) => resident.residentId !== removeResidentId
+    );
     setResidentList(newResidentList);
-    deleteResidentData(removedResident[0].residentId);
+    deleteResidentData(removeResidentId);
     setShowDeleteConfirm(false);
   }
 

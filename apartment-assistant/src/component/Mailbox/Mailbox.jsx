@@ -16,6 +16,7 @@ export default function Mailbox() {
   const [untakenData, setUntakenData] = useState([]);
   const [takenData, setTakenData] = useState([]);
   const [residentList, setResidentList] = useState([]);
+  const [removeMailId, setRemoveMailId] = useState("");
   const [newMail, setNewMail] = useState(false);
 
   //confirm dialog
@@ -54,31 +55,30 @@ export default function Mailbox() {
     }
   }
 
-  /****************************** 
-    Delete individual mail
-  *******************************/
-  function deleteMail(e) {
+  /************************************************* 
+    Delete individual mail (pop up confirm dialog)
+  **************************************************/
+  function deleteMail(rmMailId) {
+    setRemoveMailId(rmMailId);
     setShowDeleteConfirm(true);
     setConfirmMessage("刪除後無法復原，確定嗎？");
-    setDeletedMailId(e.currentTarget.id.slice(6));
+    // setDeletedMailId(e.currentTarget.id.slice(6));
   }
 
   function confirmDelete(e) {
     e.preventDefault();
-    const index = parseInt(deletedMailId);
-    let mailList = [];
-    let removedMail = [];
+
     if (state) {
-      mailList = [...takenData];
-      removedMail = mailList.splice(index, 1);
+      let mailList = [...takenData];
+      mailList.filter((mail) => mail.mailId !== removeMailId);
       setTakenData(mailList);
     } else {
-      mailList = [...untakenData];
-      removedMail = mailList.splice(index, 1);
+      let mailList = [...untakenData];
+      mailList.filter((mail) => mail.mailId !== removeMailId);
       setUntakenData(mailList);
     }
 
-    deleteMailData(removedMail[0].mailId);
+    deleteMailData(removeMailId);
     setShowDeleteConfirm(false);
   }
 

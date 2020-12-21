@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
+import MailListCard from "./MailListCard";
 import ConfirmMsg from "./../Common/ConfirmMsg";
 import inboxUntaken from "./../../img/inboxUntaken.svg";
 import inboxTaken from "./../../img/inboxTaken.svg";
-import trashIcon from "./../../img/trash.svg";
 import takeBox from "./../../img/takeBox.svg";
 import noTakeBox from "./../../img/noTakeBox.svg";
 import styles from "./MailList.module.scss";
-import { showDate, scrollToTarget } from "./../../lib";
+import { scrollToTarget } from "./../../lib";
 import { updateMailStatus } from "./../../firebase";
 
 export function MailList(props) {
@@ -37,77 +37,10 @@ export function MailList(props) {
   }
   // console.log(props.state);
   // console.log(lists);
-  const List = lists.map((list) => {
-    // console.log(list.mailId);
-    const index = lists.indexOf(list);
-    if (list.receiveDate) {
-      receiveDate = showDate(list.receiveDate.seconds);
-    }
-    return (
-      <div className={styles.list} id={`mail${index}`} key={list.mailId}>
-        <div className={`${styles.listTitle} ${styles.titleMailNumbers}`}>
-          編號
-        </div>
-        <div className={`${styles.listItems} ${styles.itemMailNumbers}`}>
-          {list.mailNumbers}
-        </div>
-        <div className={`${styles.listTitle} ${styles.titleResidentNumbers}`}>
-          戶號
-        </div>
-        <div className={`${styles.listItems} ${styles.itemResidentNumbers}`}>
-          {list.residentNumbers}
-          {/* {list.receiver ? list.receiver.residentNumbers : ""} */}
-        </div>
-        <div className={`${styles.listTitle} ${styles.titleReceiverName}`}>
-          收件人
-        </div>
-        <div className={`${styles.listItems} ${styles.itemReceiverName}`}>
-          {list.receiverName}
-        </div>
-        {/* {list.receiver ? list.receiver.name : ""} */}
-        <div className={`${styles.listTitle} ${styles.titleMailType}`}>
-          類型
-        </div>
-        <div className={`${styles.listItems} ${styles.itemMailType}`}>
-          {list.mailType}
-        </div>
-        <div className={`${styles.listTitle} ${styles.titleReceiveDate}`}>
-          寄達日期
-        </div>
-        <div className={`${styles.listItems} ${styles.itemReceiveDate}`}>
-          {receiveDate}
-        </div>
-        <div className={`${styles.listTitle} ${styles.titlePlace}`}>位置</div>
-        <div className={`${styles.listItems} ${styles.itemPlace}`}>
-          {list.place}
-        </div>
-        <div className={`${styles.listTitle} ${styles.titleRemark}`}>備註</div>
-        <div className={`${styles.listItems} ${styles.itemRemark}`}>
-          {list.remark}
-        </div>
-        <div className={styles.mailBtns}>
-          <button
-            className={styles.status}
-            id={`status${list.mailId}`}
-            onClick={changeMailStatus}
-          >
-            <img src={stateController} title={description} />
-          </button>
-          <div
-            className={styles.trashImg}
-            id={`trash${index}`}
-            onClick={props.deleteMail}
-          >
-            <img src={trashIcon} />
-          </div>
-        </div>
-      </div>
-    );
-  });
 
-  /****************************** 
-    Change individual data status
-  *******************************/
+  /******************************************************* 
+    Change individual data status (pop up confirm dialog)
+  ********************************************************/
 
   function changeMailStatus(e) {
     // console.log(e.currentTarget.id);
@@ -204,7 +137,18 @@ export function MailList(props) {
           <div className={styles.mailListTitle}>備註</div>
           <div className={styles.mailListTitle}>修改</div>
         </div>
-        {List}
+
+        {lists.map((list) => {
+          return (
+            <MailListCard
+              list={list}
+              changeMailStatus={changeMailStatus}
+              stateController={stateController}
+              description={description}
+              deleteMail={props.deleteMail}
+            />
+          );
+        })}
       </div>
       <ConfirmMsg
         showConfirm={showChangeStatusConfirm}

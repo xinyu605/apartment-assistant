@@ -95,35 +95,6 @@
 }
 
 /***********
-  < 1024px
-************/
-// @media (max-width: 1024px) {
-//   .sidebar {
-//     .sidebarList {
-//       padding-left: 30px;
-//     }
-
-//     .footer {
-//       // width: 220px;
-//       // padding: 10px;
-//       // bottom: 35px;
-//       // left: 20px;
-//       // display: grid;
-//       // grid-template-rows: 40px 30px;
-
-//       .logout {
-//         grid-row: 1/2;
-//         justify-self: flex-end;
-//       }
-
-//       .copyright {
-//         grid-row: 2/3;
-//       }
-//     }
-//   }
-// }
-
-/***********
   < 768px
 ************/
 @media (max-width: 768px) {
@@ -133,6 +104,7 @@
     background-color: $color-steelTeal;
     position: fixed;
     top: 0;
+    z-index: 100;
     display: flex;
     justify-content: flex-end;
     align-items: center;

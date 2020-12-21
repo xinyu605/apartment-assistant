@@ -172,14 +172,19 @@ export function uploadResident(data) {
         });
 
       for (let i = 0; i < data.familyMembers.length; i++) {
-        refResident.doc(docRef.id).collection("familyMembers").doc().set(
-          {
-            name: data.familyMembers[i].name,
-            phone: data.familyMembers[i].phone,
-            email: data.familyMembers[i].email,
-          },
-          { merge: true }
-        );
+        refResident
+          .doc(docRef.id)
+          .collection("familyMembers")
+          .doc(data.familyMembers[i].memberId)
+          .set(
+            {
+              memberId: data.familyMembers[i].memberId,
+              name: data.familyMembers[i].name,
+              phone: data.familyMembers[i].phone,
+              email: data.familyMembers[i].email,
+            },
+            { merge: true }
+          );
       }
     })
     .catch((error) => {

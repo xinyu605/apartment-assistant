@@ -17,6 +17,7 @@ export default function ResidentList(props) {
     <div className={styles.residentList}>
       {lists.map((list) => {
         const index = lists.indexOf(list);
+        console.log(list);
         return (
           <ListCard
             list={list}

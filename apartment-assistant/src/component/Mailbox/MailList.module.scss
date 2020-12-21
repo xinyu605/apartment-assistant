@@ -113,10 +113,6 @@
       align-items: center;
 
       .status {
-        // @include button-main;
-        // width: 54px;
-        // height: 25px;
-        // font-size: 12px;
         @include button-icon;
       }
 

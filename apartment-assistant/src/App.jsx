@@ -14,18 +14,36 @@ import {
 import { Admin } from "./component/Admin";
 import Entry from "./component/Entry/Entry";
 import SignIn from "./component/SignIn/SignIn";
+import AlertDownward from "./component/Common/AlertDownward";
 import firebase from "firebase";
 
 let auth = firebase.auth();
 
 function App() {
+  const [showAlertDownward, setShowAlertDownward] = useState(false);
+  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+
   function logout() {
+    setShowAlertDownward(true);
+    setAlertDownwardMessage("See You Later!");
+
+    // auth.signOut().then(() => {
+    //   alert("See you later!");
+    //   let user = auth.currentUser;
+    //   console.log(user);
+    //   window.location.href = "/signin";
+    // });
+  }
+
+  function closeAlert(e) {
+    e.preventDefault();
     auth.signOut().then(() => {
-      alert("See you later!");
+      // alert("See you later!");
       let user = auth.currentUser;
       console.log(user);
       window.location.href = "/signin";
     });
+    setShowAlertDownward(false);
   }
 
   return (
@@ -44,6 +62,11 @@ function App() {
             />
             <Route path="/signin" component={SignIn} />
           </Switch>
+          <AlertDownward
+            showAlertDownward={showAlertDownward}
+            alertDownwardMessage={alertDownwardMessage}
+            closeAlert={closeAlert}
+          />
         </div>
       </Route>
     </Router>
