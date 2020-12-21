@@ -7,13 +7,18 @@ import trashIcon from "./../../../img/trash555.svg";
 export default function Member(props) {
   const familyMembers = props.familyMembers;
   const member = props.member;
-  const index = props.list.familyMembers.indexOf(member); //original familyMembers
+  const memberId = props.member.memberId;
+  const index = props.list.familyMembers.findIndex(
+    (element) => element.memberId === memberId
+  );
+  // const index = props.list.familyMembers.indexOf(member); //original familyMembers
   // console.log(familyMembers);
   console.log(props.member);
+  console.log(memberId);
 
   if (props.isEditing === false) {
     return (
-      <div className={`${styles.memberInfo}`} id={`memberList${index}`}>
+      <div className={`${styles.memberInfo}`} id={`memberList${memberId}`}>
         <div className={`${styles.members} ${styles.memberName}`}>
           {member.name}
         </div>
@@ -32,17 +37,23 @@ export default function Member(props) {
       </div>
     );
   } else {
-    console.log(index, props.familyMembers[index]);
+    // console.log(index, props.familyMembers[index]);
     if (props.familyMembers[index]) {
       return (
-        <div className={`${styles.memberInfoEdit}`} id={`memberList${index}`}>
+        <div
+          className={`${styles.memberInfoEdit}`}
+          id={`memberList${memberId}`}
+        >
           <div className={`${styles.members} ${styles.memberName}`}>
             <input
               className={`${styles.editInput}`}
-              id={`editMemberName${index}`}
+              id={`editMemberName${props.member.memberId}`}
               type="text"
               value={props.familyMembers[index].name}
-              onChange={props.changeMemberInfo}
+              // onChange={props.changeMemberInfo}
+              onChange={(e) => {
+                props.changeMemberInfo(e, memberId, index);
+              }}
             ></input>
           </div>
 
@@ -52,10 +63,12 @@ export default function Member(props) {
             </div>
             <input
               className={`${styles.editInput}`}
-              id={`editMemberPhone${index}`}
+              id={`editMemberPhone${props.member.memberId}`}
               type="text"
               value={props.familyMembers[index].phone}
-              onChange={props.changeMemberInfo}
+              onChange={(e) => {
+                props.changeMemberInfo(e, memberId, index);
+              }}
             ></input>
           </div>
 
@@ -65,15 +78,17 @@ export default function Member(props) {
             </div>
             <input
               className={`${styles.editInput}`}
-              id={`editMemberEmail${index}`}
+              id={`editMemberEmail${props.member.memberId}`}
               type="text"
               value={props.familyMembers[index].email}
-              onChange={props.changeMemberInfo}
+              onChange={(e) => {
+                props.changeMemberInfo(e, memberId, index);
+              }}
             ></input>
           </div>
           <div
             className={styles.trashWrapper}
-            id={`deleteMemberBtn${index}`}
+            // id={`deleteMemberBtn${index}`}
             onClick={() => {
               props.deleteMember(member.memberId);
             }}

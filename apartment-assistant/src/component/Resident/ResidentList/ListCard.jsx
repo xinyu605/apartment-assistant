@@ -13,6 +13,7 @@ import plus from "./../../../img/plus.svg";
 import { getTimeStamp, editUpdateResident } from "./../../../firebase";
 import { nanoid } from "nanoid";
 import { showDate } from "./../../../lib";
+import { element } from "prop-types";
 
 export default function ListCard(props) {
   const lists = props.lists;
@@ -70,26 +71,26 @@ export default function ListCard(props) {
     }
   }
 
-  function changeMemberInfo(e) {
-    const target = e.currentTarget;
-    console.log(familyMembers);
-    // let newFamilyMembers = [...familyMembers];  //只複製第一層，沒有複製內部的物件，後續處理內部物件會指向原來的陣列
-    let newFamilyMembers = familyMembers.map((member) => ({ ...member })); //完全複製，後續處理內部物件會指向新的陣列
-    console.log(newFamilyMembers);
+  // function changeMemberInfo(e) {
+  //   const target = e.currentTarget;
+  //   console.log(familyMembers);
+  //   // let newFamilyMembers = [...familyMembers];  //只複製第一層，沒有複製內部的物件，後續處理內部物件會指向原來的陣列
+  //   let newFamilyMembers = familyMembers.map((member) => ({ ...member })); //完全複製，後續處理內部物件會指向新的陣列
+  //   console.log(newFamilyMembers);
 
-    if (target.id.startsWith("editMemberName")) {
-      const index = parseInt(e.currentTarget.id.slice(14));
-      newFamilyMembers[index].name = e.currentTarget.value;
-    } else if (target.id.startsWith("editMemberPhone")) {
-      const index = parseInt(target.id.slice(15));
-      newFamilyMembers[index].phone = target.value;
-    } else if (target.id.startsWith("editMemberEmail")) {
-      const index = parseInt(target.id.slice(15));
-      newFamilyMembers[index].email = target.value;
-    }
+  //   if (target.id.startsWith("editMemberName")) {
+  //     const index = parseInt(e.currentTarget.id.slice(14));
+  //     newFamilyMembers[index].name = e.currentTarget.value;
+  //   } else if (target.id.startsWith("editMemberPhone")) {
+  //     const index = parseInt(target.id.slice(15));
+  //     newFamilyMembers[index].phone = target.value;
+  //   } else if (target.id.startsWith("editMemberEmail")) {
+  //     const index = parseInt(target.id.slice(15));
+  //     newFamilyMembers[index].email = target.value;
+  //   }
 
-    setFamilyMembers(newFamilyMembers);
-  }
+  //   setFamilyMembers(newFamilyMembers);
+  // }
 
   function cancelEditing() {
     console.log(props.list);
@@ -104,32 +105,62 @@ export default function ListCard(props) {
   function createMemberInput(e) {
     e.preventDefault();
     // console.log(familyMembers.length);
+    const newMemberId = nanoid(20);
     let currentFamilyMembersForm = familyMembersForm.map((memberForm) => ({
       ...memberForm,
     }));
-    // .push({ id: `memberForm${nanoid(20)}}` });
-    currentFamilyMembersForm.push({ id: `member${familyMembers.length}` });
+    currentFamilyMembersForm.push({ id: `memberForm${newMemberId}` });
+    // currentFamilyMembersForm.push({ id: `member${familyMembers.length}` });
 
     setFamilyMembersForm(currentFamilyMembersForm);
     let newFamilyMembers = familyMembers.map((member) => ({ ...member }));
-    newFamilyMembers.push({ memberId: "", name: "", phone: "", email: "" });
+    newFamilyMembers.push({
+      memberId: newMemberId,
+      name: "",
+      phone: "",
+      email: "",
+    });
+    // newFamilyMembers.push({ memberId: "", name: "", phone: "", email: "" });
+    setFamilyMembers(newFamilyMembers);
+  }
+
+  function changeMemberInfo(e, newMemberId, index) {
+    const target = e.currentTarget;
+    // console.log(familyMembers);
+    // let newFamilyMembers = [...familyMembers];  //只複製第一層，沒有複製內部的物件，後續處理內部物件會指向原來的陣列
+    let newFamilyMembers = familyMembers.map((member) => ({ ...member })); //完全複製，後續處理內部物件會指向新的陣列
+
+    if (target.id.startsWith("editMemberName")) {
+      newFamilyMembers[index].name = target.value;
+    } else if (target.id.startsWith("editMemberPhone")) {
+      newFamilyMembers[index].phone = target.value;
+    } else if (target.id.startsWith("editMemberEmail")) {
+      newFamilyMembers[index].email = target.value;
+    }
     setFamilyMembers(newFamilyMembers);
   }
 
   function deleteMember(removeMemberId) {
-    console.log(removeMemberId);
+    //update familyMembers input
+    let newFamilyMembersForm = familyMembersForm
+      .map((memberForm) => ({
+        ...memberForm,
+      }))
+      .filter((element) => element.id !== `memberForm${removeMemberId}`);
+    // // if (familyMembersForm.length !== 0) {
+    //   newFamilyMembersForm.pop();
+    setFamilyMembersForm(newFamilyMembersForm);
+    // }
+    if (document.querySelector(`#memberList${removeMemberId}`)) {
+      document.querySelector(`#memberList${removeMemberId}`).style.display =
+        "none";
+    }
+
+    // update familyMembers data
     let newFamilyMembers = familyMembers
       .map((member) => ({ ...member }))
       .filter((member) => member.memberId !== removeMemberId);
-
     setFamilyMembers(newFamilyMembers);
-    let newFamilyMembersForm = familyMembersForm.map((memberForm) => ({
-      ...memberForm,
-    }));
-    if (familyMembersForm.length !== 0) {
-      newFamilyMembersForm.pop();
-      setFamilyMembersForm(newFamilyMembersForm);
-    }
   }
 
   function packNewResidentInfo() {
