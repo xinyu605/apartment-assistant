@@ -3,7 +3,7 @@ $color-opal: #96bbbb;
 $color-steelTeal: #618985;
 $color-rifleGreen: #414535;
 $color-fireOpal: #f26157;
-// $color-melon: #ebb3a9;
+$color-pink: #ebb3a9;
 $color-melon: #ffd89e;
 $color-dutchWhite: #f2e3bc;
 $color-silverPink: #d0b8ac;
@@ -204,6 +204,16 @@ animation and keyframes
   }
   100% {
     transform: translateY(80px);
+  }
+}
+
+@include keyframes(slideRight) {
+  0% {
+    transform: translateX(-20px);
+  }
+  100% {
+    -webkit-transform: translateX(100px);
+    transform: translateX(0px);
   }
 }
 

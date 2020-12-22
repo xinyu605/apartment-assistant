@@ -97,3 +97,12 @@ export function checkPasswordLength(string) {
     return "密碼需超過6個字元";
   }
 }
+
+export function checkNumbers(string) {
+  let regex = /^(0|[1-9][0-9]*)$/;
+  if (string === "") {
+    return undefined;
+  } else {
+    return regex.test(string);
+  }
+}

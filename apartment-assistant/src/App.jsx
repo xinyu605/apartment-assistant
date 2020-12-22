@@ -14,7 +14,7 @@ import {
 import { Admin } from "./component/Admin";
 import Entry from "./component/Entry/Entry";
 import SignIn from "./component/SignIn/SignIn";
-import AlertDownward from "./component/Common/AlertDownward";
+import AlertLogout from "./component/Common/AlertLogout";
 import firebase from "firebase";
 
 let auth = firebase.auth();
@@ -62,7 +62,7 @@ function App() {
             />
             <Route path="/signin" component={SignIn} />
           </Switch>
-          <AlertDownward
+          <AlertLogout
             showAlertDownward={showAlertDownward}
             alertDownwardMessage={alertDownwardMessage}
             closeAlert={closeAlert}

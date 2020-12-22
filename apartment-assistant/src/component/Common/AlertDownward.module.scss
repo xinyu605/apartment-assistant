@@ -10,10 +10,11 @@
   grid-template-columns: 70px auto;
   grid-template-rows: repeat(2, 40px);
   align-items: center;
-  background-color: #aaa;
+  background-color: #ccc;
   position: fixed;
   top: -50px;
-  right: 40%;
+  left: 50%;
+  transform: translateX(-50%);
   @include animation(
     "slideDown 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both"
   );
@@ -59,5 +60,12 @@
         background-color: #555;
       }
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .alertbox {
+    top: 0px;
+    left: 20%;
   }
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ApplyTable from "./../Common/ApplyTable";
+import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import UserApplyForm from "./UserApplyForm";
 import { getExistedOrders, uploadFieldOrder } from "../../firebase";
 import styles from "./Field.module.scss";
@@ -14,6 +15,8 @@ export default function Field() {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [orderList, setOrderList] = useState([]);
+  const [showSuccessAlert, setSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   /************************* 
     show weekly date choice
@@ -184,11 +187,21 @@ export default function Field() {
     // 3. pass data to firebase
     uploadFieldOrder(data);
     // 4. remind user apply successful
-    window.alert(`${selectedField.value}預約成功！`);
+    setSuccessAlert(true);
+    setSuccessMessage(`${selectedField.value}預約成功！`);
+    // window.alert(`${selectedField.value}預約成功！`);
     // 5. clear all checkbox
     for (let i = 0; i < orderBoxes.length; i++) {
       orderBoxes[i].checked = false;
     }
+  }
+
+  /*********** 
+  Close alert
+  ************/
+  function closeAlert(e) {
+    e.preventDefault();
+    setSuccessAlert(false);
   }
 
   return (
@@ -246,6 +259,11 @@ export default function Field() {
         isApplying={isApplying}
         closeApplyForm={closeApplyForm}
         getApplicantInfo={getApplicantInfo}
+      />
+      <AlertSuccessMsg
+        showSuccessAlert={showSuccessAlert}
+        successMessage={successMessage}
+        closeAlert={closeAlert}
       />
     </div>
   );

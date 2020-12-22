@@ -7,6 +7,7 @@ import { nanoid } from "nanoid";
 import memberIcon1 from "./../../img/members.svg";
 import plus from "./../../img/plus.svg";
 import minus from "./../../img/minus.svg";
+import { checkNumbers } from "../../lib";
 
 export default function UpdateResident() {
   const [familyMembersForm, setFamilyMemberForm] = useState([
@@ -19,6 +20,7 @@ export default function UpdateResident() {
   const floor = useRef(null);
   const address = useRef(null);
   const remark = useRef(null);
+  const remindFloor = useRef(null);
 
   /**************************************************
   Create / Delete one more family member input form
@@ -37,6 +39,18 @@ export default function UpdateResident() {
     let newFamilyMembersForm = [...familyMembersForm];
     newFamilyMembersForm.pop();
     setFamilyMemberForm(newFamilyMembersForm);
+  }
+
+  /*********************************
+  Check input when user input value
+  **********************************/
+  function checkRemind(e) {
+    const result = checkNumbers(e.currentTarget.value);
+    if (result || result === undefined) {
+      remindFloor.current.style.display = "none";
+    } else {
+      remindFloor.current.style.display = "block";
+    }
   }
 
   /************************
@@ -156,7 +170,11 @@ export default function UpdateResident() {
             className={`${styles.detailInput} ${styles.inputFloor}`}
             id="floor"
             placeholder="請填寫數字 ex.2"
+            onChange={checkRemind}
           ></input>
+          <div ref={remindFloor} className={styles.remindFloor}>
+            請填寫開頭不為0的純數字
+          </div>
           <label className={`${styles.detailTitle} ${styles.titleAddress}`}>
             地址
           </label>

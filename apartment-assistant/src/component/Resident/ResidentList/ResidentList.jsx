@@ -16,14 +16,12 @@ export default function ResidentList(props) {
   return (
     <div className={styles.residentList}>
       {lists.map((list) => {
-        const index = lists.indexOf(list);
-        console.log(list);
         return (
           <ListCard
             list={list}
             lists={lists}
             deleteResident={props.deleteResident}
-            key={`residentCard${index}`}
+            key={`residentCard${list.residentId}`}
           />
         );
       })}

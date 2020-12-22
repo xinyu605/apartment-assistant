@@ -77,6 +77,7 @@ function TimePeriod(props) {
   const orderId = props.orderId; //ex. 2020121409
   // console.log(props.orderTimeList);
   useEffect(() => {
+    setVisible(true);
     for (let i = 0; i < props.orderTimeList.length; i++) {
       if (orderId === props.orderTimeList[i].time) {
         console.log(orderId);

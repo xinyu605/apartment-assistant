@@ -8,13 +8,13 @@ export default function Member(props) {
   const familyMembers = props.familyMembers;
   const member = props.member;
   const memberId = props.member.memberId;
-  const index = props.list.familyMembers.findIndex(
+  const index = props.familyMembers.findIndex(
     (element) => element.memberId === memberId
   );
-  // const index = props.list.familyMembers.indexOf(member); //original familyMembers
+
   // console.log(familyMembers);
-  console.log(props.member);
-  console.log(memberId);
+  // console.log(props.member);
+  // console.log(memberId);
 
   if (props.isEditing === false) {
     return (
@@ -39,6 +39,8 @@ export default function Member(props) {
   } else {
     // console.log(index, props.familyMembers[index]);
     if (props.familyMembers[index]) {
+      // console.log(props.familyMembers[index]);
+      // console.log(index);
       return (
         <div
           className={`${styles.memberInfoEdit}`}

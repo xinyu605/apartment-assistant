@@ -71,27 +71,6 @@ export default function ListCard(props) {
     }
   }
 
-  // function changeMemberInfo(e) {
-  //   const target = e.currentTarget;
-  //   console.log(familyMembers);
-  //   // let newFamilyMembers = [...familyMembers];  //只複製第一層，沒有複製內部的物件，後續處理內部物件會指向原來的陣列
-  //   let newFamilyMembers = familyMembers.map((member) => ({ ...member })); //完全複製，後續處理內部物件會指向新的陣列
-  //   console.log(newFamilyMembers);
-
-  //   if (target.id.startsWith("editMemberName")) {
-  //     const index = parseInt(e.currentTarget.id.slice(14));
-  //     newFamilyMembers[index].name = e.currentTarget.value;
-  //   } else if (target.id.startsWith("editMemberPhone")) {
-  //     const index = parseInt(target.id.slice(15));
-  //     newFamilyMembers[index].phone = target.value;
-  //   } else if (target.id.startsWith("editMemberEmail")) {
-  //     const index = parseInt(target.id.slice(15));
-  //     newFamilyMembers[index].email = target.value;
-  //   }
-
-  //   setFamilyMembers(newFamilyMembers);
-  // }
-
   function cancelEditing() {
     console.log(props.list);
     setResidentNumbers(props.list.residentNumbers);
@@ -120,7 +99,6 @@ export default function ListCard(props) {
       phone: "",
       email: "",
     });
-    // newFamilyMembers.push({ memberId: "", name: "", phone: "", email: "" });
     setFamilyMembers(newFamilyMembers);
   }
 
@@ -141,20 +119,20 @@ export default function ListCard(props) {
   }
 
   function deleteMember(removeMemberId) {
-    //update familyMembers input
+    // update familyMembers input
     let newFamilyMembersForm = familyMembersForm
       .map((memberForm) => ({
         ...memberForm,
       }))
       .filter((element) => element.id !== `memberForm${removeMemberId}`);
-    // // if (familyMembersForm.length !== 0) {
-    //   newFamilyMembersForm.pop();
+
     setFamilyMembersForm(newFamilyMembersForm);
+
+    // remove blank input after existed member has been removed
+    // if (document.querySelector(`#memberList${removeMemberId}`)) {
+    //   document.querySelector(`#memberList${removeMemberId}`).style.display =
+    //     "none";
     // }
-    if (document.querySelector(`#memberList${removeMemberId}`)) {
-      document.querySelector(`#memberList${removeMemberId}`).style.display =
-        "none";
-    }
 
     // update familyMembers data
     let newFamilyMembers = familyMembers
@@ -183,6 +161,7 @@ export default function ListCard(props) {
       // window.alert("成功更新！");
       setSuccessAlert(true);
       setSuccessMessage("住戶資訊更新成功");
+      setFamilyMembersForm([]);
       window.setTimeout(() => {
         setSuccessAlert(false);
       }, 2000);
@@ -208,21 +187,17 @@ export default function ListCard(props) {
 
   if (isEditing === false) {
     return (
-      <div className={styles.residentInfo} id={`residentInfo${index}`}>
+      <div className={styles.residentInfo} id={`residentInfo${residentId}`}>
         <div
           className={styles.trashImg}
-          id={`trash${index}`}
+          // id={`trash${index}`}
           onClick={() => {
             props.deleteResident(residentId);
           }}
         >
           <img src={trashIcon} />
         </div>
-        <div
-          className={styles.editImg}
-          id={`edit${index}`}
-          onClick={editResident}
-        >
+        <div className={styles.editImg} onClick={editResident}>
           <img src={editIcon} />
         </div>
         <div className={`${styles.itemTitle} ${styles.titleResidentNumbers}`}>
@@ -243,14 +218,13 @@ export default function ListCard(props) {
         <div className={`${styles.items} ${styles.itemDate}`}>{updateDate}</div>
         <div className={`${styles.items} ${styles.itemMembers}`}>
           {props.list.familyMembers.map((member) => {
-            const index = list.familyMembers.indexOf(member);
             return (
               <Member
                 isEditing={isEditing}
                 list={list}
                 member={member}
                 familyMembers={props.list.familyMembers}
-                key={`member${index}`}
+                key={`member${member.memberId}`}
               />
             );
           })}
@@ -267,18 +241,10 @@ export default function ListCard(props) {
         >
           <img src={check} />
         </div>
-        <div
-          className={styles.closeImg}
-          id={`close${index}`}
-          onClick={cancelEditing}
-        >
+        <div className={styles.closeImg} onClick={cancelEditing}>
           <img src={close} />
         </div>
-        <div
-          className={styles.plusImg}
-          id={`plus${index}`}
-          onClick={createMemberInput}
-        >
+        <div className={styles.plusImg} onClick={createMemberInput}>
           <img src={plus} />
         </div>
 
@@ -316,6 +282,7 @@ export default function ListCard(props) {
           {/* <MemberList list={list} isEditing={isEditing} /> */}
           {list.familyMembers.map((member) => {
             const index = list.familyMembers.indexOf(member);
+            console.log(member.memberId);
             return (
               <Member
                 isEditing={isEditing}
@@ -325,7 +292,7 @@ export default function ListCard(props) {
                 familyMembersForm={familyMembersForm}
                 changeMemberInfo={changeMemberInfo}
                 deleteMember={deleteMember}
-                key={`member${index}`}
+                key={`member${member.memberId}`}
               />
             );
           })}
