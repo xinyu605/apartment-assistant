@@ -10,6 +10,7 @@ import address from "./../../../img/address.svg";
 import check from "./../../../img/check.svg";
 import close from "./../../../img/close.svg";
 import plus from "./../../../img/plus.svg";
+import remark from "./../../../img/remark.svg";
 import { getTimeStamp, editUpdateResident } from "./../../../firebase";
 import { nanoid } from "nanoid";
 import { showDate } from "./../../../lib";
@@ -24,6 +25,7 @@ export default function ListCard(props) {
   const [floor, setFloor] = useState(props.list.floor);
   const [residentNumbers, setResidentNumbers] = useState(list.residentNumbers);
   const [residentAddress, setResidentAddress] = useState(list.address);
+  const [residentRemark, setResidentRemark] = useState(list.remark);
   const [updateDateWhenEdit, setUpdateDateWhenEdit] = useState(list.updateDate);
   const [showDateWhenEditing, setDateWhenEditing] = useState("");
   const [familyMembers, setFamilyMembers] = useState(list.familyMembers);
@@ -65,6 +67,9 @@ export default function ListCard(props) {
         break;
       case `editResidentAddress${index}`:
         setResidentAddress(target.value);
+        break;
+      case `editResidentRemark${index}`:
+        setResidentRemark(target.value);
         break;
       default:
         break;
@@ -147,7 +152,7 @@ export default function ListCard(props) {
       residentNumbers: residentNumbers,
       floor: floor,
       address: residentAddress,
-      // remark:""
+      remark: residentRemark,
       familyMembers: familyMembers,
       updateDate: updateDateWhenEdit,
     };
@@ -216,6 +221,12 @@ export default function ListCard(props) {
           更新日期
         </div>
         <div className={`${styles.items} ${styles.itemDate}`}>{updateDate}</div>
+        <div className={`${styles.items} ${styles.itemRemark}`}>
+          <div className={styles.imgWrapper}>
+            <img src={remark} />
+          </div>
+          {props.list.remark}
+        </div>
         <div className={`${styles.items} ${styles.itemMembers}`}>
           {props.list.familyMembers.map((member) => {
             return (
@@ -278,6 +289,19 @@ export default function ListCard(props) {
         <div className={`${styles.items} ${styles.itemDate}`}>
           {showDateWhenEditing}
         </div>
+        <div className={`${styles.items} ${styles.itemRemark}`}>
+          <div className={styles.imgWrapper}>
+            <img src={remark} />
+          </div>
+          <input
+            className={styles.editInput}
+            id={`editResidentRemark${index}`}
+            type="text"
+            value={residentRemark}
+            onChange={changeInput}
+          ></input>
+        </div>
+
         <div className={`${styles.items} ${styles.itemMembers}`}>
           {/* <MemberList list={list} isEditing={isEditing} /> */}
           {list.familyMembers.map((member) => {

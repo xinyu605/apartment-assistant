@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ApplyTable from "./../Common/ApplyTable";
+import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import { getExistedOrders, uploadFieldOrder } from "../../firebase";
 import styles from "./EntryField.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
@@ -9,6 +10,8 @@ export default function EntryField(props) {
   const [timeTable, setTimeTable] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
   const [field, setField] = useState("交誼廳");
+  const [showSuccessAlert, setSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   /************************* 
     show weekly date choice
@@ -155,12 +158,22 @@ export default function EntryField(props) {
     uploadFieldOrder(data);
 
     // 4. remind user apply successful
-    window.alert(`${selectedField.value}預約成功！`);
+    // window.alert(`${selectedField.value}預約成功！`);
+    setSuccessAlert(true);
+    setSuccessMessage(`${selectedField.value}預約成功！`);
 
     // 5. clear all checkbox
     for (let i = 0; i < orderBoxes.length; i++) {
       orderBoxes[i].checked = false;
     }
+  }
+
+  /*********** 
+  Close alert
+  ************/
+  function closeAlert(e) {
+    e.preventDefault();
+    setSuccessAlert(false);
   }
 
   return (
@@ -205,6 +218,11 @@ export default function EntryField(props) {
           timeTitle={timeTitle}
           orderRecord={orderRecord}
           field={field}
+        />
+        <AlertSuccessMsg
+          showSuccessAlert={showSuccessAlert}
+          successMessage={successMessage}
+          closeAlert={closeAlert}
         />
       </div>
     </div>

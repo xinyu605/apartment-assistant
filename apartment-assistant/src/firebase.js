@@ -218,6 +218,7 @@ export function editUpdateResident(data) {
       residentNumbers: data.residentNumbers,
       floor: data.floor,
       address: data.address,
+      remark: data.remark,
       familyMembers: data.familyMembers,
       updateDate: data.updateDate,
     })
