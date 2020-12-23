@@ -49,7 +49,10 @@ export function SmallCalendar(props) {
   }
 
   function hideRemind(e) {
-    remindYear.current.style.opacity = "0";
+    let result = checkYearInput(e.currentTarget);
+    if (result) {
+      remindYear.current.style.opacity = "0";
+    }
   }
 
   function updateMonth(e) {

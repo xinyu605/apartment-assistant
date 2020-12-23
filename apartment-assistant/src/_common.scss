@@ -143,7 +143,7 @@ $hamburger-lines-color: $color-opal;
 animation and keyframes
 ************************/
 @mixin keyframes($animation-name) {
-  @-wekit-keyframes #{$animation-name} {
+  -wekit-keyframes #{$animation-name} {
     @content;
   }
   @keyframes #{$animation-name} {

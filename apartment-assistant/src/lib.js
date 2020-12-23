@@ -127,3 +127,15 @@ export function checkYearInput(string) {
   let result = regex.test(string);
   return result;
 }
+
+export function checkUserPhone(string) {
+  let regex = /^09\d{8}$/;
+  let result = regex.test(string);
+  if (result === true) {
+    return true;
+  } else if (string.length === 0) {
+    return "手機號碼不可留空";
+  } else {
+    return "請填寫正確格式，如0912345678";
+  }
+}

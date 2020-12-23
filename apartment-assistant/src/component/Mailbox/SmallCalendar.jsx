@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./SmallCalendar.module.scss";
-import { showCalendar } from "./../../lib";
+import { showCalendar, checkYearInput } from "./../../lib";
 import edit from "./../../img/edit.svg";
 
 /************************
@@ -11,6 +11,9 @@ export function SmallCalendar(props) {
   const [thisYear, setThisYear] = useState(new Date().getFullYear());
   const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
   const [receiveDate, setReceiveDate] = useState(new Date().getDate());
+
+  const containerElement = useRef(null);
+  const remindYear = useRef(null);
 
   // send initial date to UpdateMailList at beginning
   useEffect(() => {
@@ -28,7 +31,22 @@ export function SmallCalendar(props) {
   }
 
   function updateYear(e) {
-    setThisYear(parseInt(e.currentTarget.value));
+    const todayYear = new Date().getFullYear();
+    let result = checkYearInput(e.currentTarget.value);
+    if (result === false) {
+      remindYear.current.style.opacity = "1";
+      remindYear.current.textContent = "請填寫四位數字";
+    } else {
+      remindYear.current.style.opacity = "0";
+      setThisYear(parseInt(e.currentTarget.value));
+    }
+  }
+
+  function hideRemind(e) {
+    let result = checkYearInput(e.currentTarget);
+    if (result) {
+      remindYear.current.style.opacity = "0";
+    }
   }
 
   function updateMonth(e) {
@@ -90,6 +108,7 @@ export function SmallCalendar(props) {
               placeholder={thisYear.toString()}
               id="year"
               onChange={updateYear}
+              onBlur={hideRemind}
             ></input>
 
             <select className={styles.month} id="months" onChange={updateMonth}>
@@ -109,6 +128,7 @@ export function SmallCalendar(props) {
             <button className={styles.decideDate} onClick={toggleCalendar}>
               確定
             </button>
+            <div ref={remindYear} className={styles.remindYear}></div>
           </div>
           <div className={styles.calendarBody}>
             <ul className={styles.days} id="days">

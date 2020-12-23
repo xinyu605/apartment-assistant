@@ -182,12 +182,18 @@ input:focus {
 }
 
 .remindMessage {
-  opacity: 0;
   margin: 4px 0 0 6px;
-  color: $color-fireOpal;
+  color: $color-opal;
   font-size: 12px;
   letter-spacing: 1px;
   align-self: flex-start;
+  transition: all, 0.3s, ease;
+}
+
+.remindMsgSignUp {
+  color: $color-fireOpal;
+  opacity: 0;
+  transition: all, 0.3s, ease;
 }
 
 .buttonSignUp,

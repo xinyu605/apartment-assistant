@@ -13,7 +13,12 @@ import plus from "./../../../img/plus.svg";
 import remark from "./../../../img/remark.svg";
 import { getTimeStamp, editUpdateResident } from "./../../../firebase";
 import { nanoid } from "nanoid";
-import { showDate } from "./../../../lib";
+import {
+  checkEmailFormat,
+  checkUserName,
+  checkUserPhone,
+  showDate,
+} from "./../../../lib";
 import { element } from "prop-types";
 
 export default function ListCard(props) {
@@ -30,6 +35,8 @@ export default function ListCard(props) {
   const [showDateWhenEditing, setDateWhenEditing] = useState("");
   const [familyMembers, setFamilyMembers] = useState(list.familyMembers);
   const [familyMembersForm, setFamilyMembersForm] = useState([]);
+
+  // const [nameInputError, setNameInputError] = useState(0);
 
   // alert dialogs
   const [showAlertDownward, setAlertDownward] = useState(false);
@@ -133,13 +140,6 @@ export default function ListCard(props) {
 
     setFamilyMembersForm(newFamilyMembersForm);
 
-    // remove blank input after existed member has been removed
-    // if (document.querySelector(`#memberList${removeMemberId}`)) {
-    //   document.querySelector(`#memberList${removeMemberId}`).style.display =
-    //     "none";
-    // }
-
-    // update familyMembers data
     let newFamilyMembers = familyMembers
       .map((member) => ({ ...member }))
       .filter((member) => member.memberId !== removeMemberId);
@@ -157,13 +157,83 @@ export default function ListCard(props) {
       updateDate: updateDateWhenEdit,
     };
 
-    if (familyMembers.length < 1) {
+    /*******************
+      check input value
+    ********************/
+    //init input border
+    for (let i = 0; i < familyMembers.length; i++) {
+      const memberId = familyMembers[i].memberId;
+      const editMemberNameInput = document.querySelector(
+        `#editMemberName${memberId}`
+      );
+      const editMemberPhoneInput = document.querySelector(
+        `#editMemberPhone${memberId}`
+      );
+      const editMemberEmailInput = document.querySelector(
+        `#editMemberEmail${memberId}`
+      );
+      editMemberNameInput.style.border = "1px solid #96bbbb";
+      editMemberPhoneInput.style.border = "1px solid #96bbbb";
+      editMemberEmailInput.style.border = "1px solid #96bbbb";
+    }
+
+    let nameInputEmpty = 0;
+    let phoneInputError = 0;
+    let phoneInputEmpty = 0;
+    let emailInputError = 0;
+    let emailInputEmpty = 0;
+    const focusBorder = "2px solid #f26157";
+
+    for (let i = 0; i < familyMembers.length; i++) {
+      const checkNameResult = checkUserName(familyMembers[i].name);
+      const checkPhoneResult = checkUserPhone(familyMembers[i].phone);
+      const checkEmailResult = checkEmailFormat(familyMembers[i].email);
+      const memberId = familyMembers[i].memberId;
+      const editMemberNameInput = document.querySelector(
+        `#editMemberName${memberId}`
+      );
+      const editMemberPhoneInput = document.querySelector(
+        `#editMemberPhone${memberId}`
+      );
+      const editMemberEmailInput = document.querySelector(
+        `#editMemberEmail${memberId}`
+      );
+
+      if (checkNameResult === "姓名欄位不可留空") {
+        editMemberNameInput.style.border = focusBorder;
+        nameInputEmpty += 1;
+      }
+      if (checkPhoneResult === "手機號碼不可留空") {
+        editMemberPhoneInput.style.border = focusBorder;
+        phoneInputEmpty += 1;
+      } else if (checkPhoneResult === "請填寫正確格式，如0912345678") {
+        editMemberPhoneInput.style.border = focusBorder;
+        phoneInputError += 1;
+      }
+
+      if (checkEmailResult === "Email欄位不可留空") {
+        editMemberEmailInput.style.border = focusBorder;
+        emailInputEmpty += 1;
+      } else if (checkEmailResult === "Email格式錯誤") {
+        editMemberEmailInput.style.border = focusBorder;
+        emailInputError += 1;
+      }
+    }
+
+    if (nameInputEmpty > 0 || phoneInputEmpty > 0 || emailInputEmpty > 0) {
+      setAlertDownward(true);
+      setAlertDownwardMessage("欄位不可留空");
+    } else if (phoneInputError > 0) {
+      setAlertDownward(true);
+      setAlertDownwardMessage("請填寫正確的手機號碼格式，如0912345678");
+    } else if (emailInputError > 0) {
+      setAlertDownward(true);
+      setAlertDownwardMessage("請填寫正確的Email格式");
+    } else if (familyMembers.length < 1) {
       setAlertDownward(true);
       setAlertDownwardMessage("住戶成員不能少於一位");
-      // window.alert("住戶成員不能少於一位！");
     } else {
       editUpdateResident(infoPackage);
-      // window.alert("成功更新！");
       setSuccessAlert(true);
       setSuccessMessage("住戶資訊更新成功");
       setFamilyMembersForm([]);

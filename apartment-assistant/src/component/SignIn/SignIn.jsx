@@ -1,12 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import SignUp from "./SignUp";
-import { nativeSignIn, nativeSignUp, signInWithGoogle } from "./../../firebase";
-import {
-  checkEmailFormat,
-  checkPasswordLength,
-  checkUserName,
-} from "./../../lib";
+import { nativeSignIn, signInWithGoogle } from "./../../firebase";
+import { checkEmailFormat, checkPasswordLength } from "./../../lib";
 import styles from "./SignIn.module.scss";
 import logo from "./../../img/logo_apartment.png";
 import email from "./../../img/email.svg";
@@ -14,9 +10,6 @@ import lock from "./../../img/lock.svg";
 import vintage from "./../../img/vintage.png";
 
 export default function SignIn() {
-  const [userName, setUserName] = useState("");
-  const [emailSignUp, setEmailSignUp] = useState("");
-  const [passwordSignUp, setPasswordSignUp] = useState("");
   const [emailSignIn, setEmailSignIn] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
   let history = useHistory();
@@ -29,68 +22,45 @@ export default function SignIn() {
   const remindEmailSignIn = useRef(null); //#remindEmailSignIn
   const remindPasswordSignIn = useRef(null); //#remindPasswordSignIn
 
-  /****************************************
-    check signUp and signIn inputs format
-  *****************************************/
-  useEffect(() => {
-    const emailInput = checkEmailFormat(emailSignIn);
-    const passwordInput = checkPasswordLength(passwordSignIn);
+  /*****************************
+    check signIn inputs format
+  *****************************/
 
-    if (emailInput === "Email欄位不可留空" || emailInput === "Email格式錯誤") {
-      remindEmailSignIn.current.textContent = emailInput;
-      remindEmailSignIn.current.style.opacity = "1";
-      remindEmailSignIn.current.style.transition = "all 0.3s ease";
-      emailSignInInput.current.style.border = "1px solid #f26157";
-      emailSignInInput.current.style.transition = "all 0.3s ease";
-    } else {
-      remindEmailSignIn.current.textContent = "";
-      emailSignInInput.current.style.border = "none";
-    }
-
-    if (passwordInput === "密碼需超過6個字元") {
-      remindPasswordSignIn.current.textContent = passwordInput;
-      remindPasswordSignIn.current.style.opacity = "1";
-      remindPasswordSignIn.current.style.transition = "all 0.3s ease";
-      passwordSignInInput.current.style.border = "1px solid #f26157";
-      passwordSignInInput.current.style.transition = "all 0.3s ease";
-    } else {
-      remindPasswordSignIn.current.textContent = "";
-      passwordSignInInput.current.style.border = "none";
-    }
-  }, [emailSignIn, passwordSignIn]);
-
-  function getUserInput(e) {
-    switch (e.currentTarget.id) {
-      case "userName":
-        setUserName(e.currentTarget.value);
-        break;
-      case "emailSignUp":
-        setEmailSignUp(e.currentTarget.value);
-        break;
+  function checkSignInInput(e) {
+    const target = e.currentTarget;
+    switch (target.id) {
       case "emailSignIn":
-        setEmailSignIn(e.currentTarget.value);
+        const emailInput = checkEmailFormat(target.value);
+        if (
+          emailInput === "Email欄位不可留空" ||
+          emailInput === "Email格式錯誤"
+        ) {
+          remindEmailSignIn.current.textContent = emailInput;
+          remindEmailSignIn.current.style.color = "#f26157";
+          emailSignInInput.current.style.border = "1px solid #f26157";
+          emailSignInInput.current.style.transition = "all 0.3s ease";
+        } else {
+          remindEmailSignIn.current.textContent = "";
+          emailSignInInput.current.style.border = "none";
+          setEmailSignIn(target.value);
+        }
         break;
-      case "pwdSignUp":
-        setPasswordSignUp(e.currentTarget.value);
-        break;
+
       case "pwdSignIn":
-        setPasswordSignIn(e.currentTarget.value);
-        break;
+        const passwordInput = checkPasswordLength(target.value);
+        if (passwordInput === "密碼需超過6個字元") {
+          remindPasswordSignIn.current.textContent = passwordInput;
+          remindPasswordSignIn.current.style.color = "#f26157";
+          passwordSignInInput.current.style.border = "1px solid #f26157";
+          passwordSignInInput.current.style.transition = "all 0.3s ease";
+        } else {
+          remindPasswordSignIn.current.textContent = "";
+          passwordSignInInput.current.style.border = "none";
+          setPasswordSignIn(target.value);
+        }
+
       default:
         break;
-    }
-  }
-
-  function submitSignUpData(e) {
-    e.preventDefault();
-    if (
-      checkEmailFormat(emailSignUp) === true &&
-      checkPasswordLength(passwordSignUp) === true &&
-      checkUserName(userName) === true
-    ) {
-      nativeSignUp(emailSignUp, passwordSignUp, userName);
-    } else {
-      console.log("Sign up failed");
     }
   }
 
@@ -193,7 +163,7 @@ export default function SignIn() {
                 className={styles.loginInputs}
                 type="text"
                 placeholder="Email"
-                onChange={getUserInput}
+                onChange={checkSignInInput}
               ></input>
               <div className={styles.inputImgWrapper}>
                 <img className={styles.inputImg} src={email} />
@@ -203,7 +173,9 @@ export default function SignIn() {
               ref={remindEmailSignIn}
               id="remindEmailSignIn"
               className={styles.remindMessage}
-            ></p>
+            >
+              管理員Email：admin@apartment.com
+            </p>
             <div className={styles.inputWrapper}>
               <input
                 ref={passwordSignInInput}
@@ -211,7 +183,7 @@ export default function SignIn() {
                 className={styles.loginInputs}
                 type="password"
                 placeholder="密碼"
-                onChange={getUserInput}
+                onChange={checkSignInInput}
               ></input>
               <div className={styles.inputImgWrapper}>
                 <img className={styles.inputImg} src={lock} />
@@ -221,7 +193,9 @@ export default function SignIn() {
               ref={remindPasswordSignIn}
               id="remindPasswordSignIn"
               className={styles.remindMessage}
-            ></p>
+            >
+              管理員密碼：apartment
+            </p>
             <button
               id="submitSignIn"
               className={styles.buttonSignIn}
@@ -249,15 +223,7 @@ export default function SignIn() {
           </div>
         </div>
 
-        <SignUp
-          userName={userName}
-          emailSignUp={emailSignUp}
-          passwordSignUp={passwordSignUp}
-          getUserInput={getUserInput}
-          submitSignUpData={submitSignUpData}
-          moveCard={moveCard}
-          exchangeCards={exchangeCards}
-        />
+        <SignUp moveCard={moveCard} exchangeCards={exchangeCards} />
       </div>
     </div>
   );
