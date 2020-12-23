@@ -8,6 +8,7 @@ import { uploadMailList, getTimeStamp } from "./../../firebase";
 import { nanoid } from "nanoid";
 import envelope from "./../../img/envelope.svg";
 import send from "./../../img/send.svg";
+import { checkNumbers } from "../../lib";
 
 export function UpdateMailList(props) {
   const [mailNumber, setMailNumber] = useState("");
@@ -25,10 +26,15 @@ export function UpdateMailList(props) {
 
   //alert dialog
   const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  // console.log(props);
+  //ref
+  const mailNumberInput = useRef(null);
+  const residentNumberInput = useRef(null);
+  const receiverSelect = useRef(null);
+  const statusSelect = useRef(null);
 
   function updateReceiveDate(year, month, date) {
     // console.log(year, month, date);
@@ -102,41 +108,53 @@ export function UpdateMailList(props) {
 
   function prepareToUpload() {
     let data;
-    let message = false;
+    // let message = false;
+    const focusBorder = "2px solid #f26157";
     const inputs = document.querySelectorAll("input");
-    for (let i = 0; i < inputs.length - 1; i++) {
-      inputs[i].classList.remove(styles.focus);
-      if (inputs[i].value === "") {
-        inputs[i].classList.add(styles.focus);
-        message = true;
-      } else {
-        // const index = familyMembers.indexOf(receiver);
-        // const receiverEmail = familyMembersEmail[index];
-        // console.log(receiverEmail);
-        data = {
-          mailNumbers: parseInt(mailNumber),
-          mailId: nanoid(),
-          mailType: mailType,
-          place: place,
-          receiveDate: receiveDate,
-          receiverName: receiver,
-          receiverEmail: receiverEmail,
-          residentNumbers: residentNumber,
-          // receiver: { name: receiver, residentNumbers: residentNumber }, //待刪
-          // familyMembers: "",
-          status: status,
-          takerName: "",
-          takeDate: "",
-          // taker: { name: "", takeDate: "" }, //待刪
-          remark: remark,
-        };
-        console.log(data);
-      }
+    const checkMailNumberResult = checkNumbers(mailNumberInput.current.value);
+
+    // init inputs style before checking format
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].style.border = "1px solid #96bbbb";
     }
-    if (message) {
-      // alert("請確實填寫資料");
+
+    const index = familyMembers.indexOf(receiver);
+    const receiverEmail = familyMembersEmail[index];
+    console.log(receiverEmail);
+    data = {
+      mailNumbers: parseInt(mailNumber),
+      mailId: nanoid(),
+      mailType: mailType,
+      place: place,
+      receiveDate: receiveDate,
+      receiverName: receiver,
+      receiverEmail: receiverEmail,
+      residentNumbers: residentNumber,
+      status: status,
+      remark: remark,
+    };
+    console.log(data);
+
+    /********************* 
+      Check inputs format
+    **********************/
+
+    if (checkMailNumberResult === false) {
       setShowAlert(true);
-      message = false;
+      setAlertMessage("信件編號需為純數字");
+      mailNumberInput.current.style.border = focusBorder;
+    } else if (mailNumberInput.current.value === "") {
+      setShowAlert(true);
+      setAlertMessage("請填寫信件編號(純數字)");
+      mailNumberInput.current.style.border = focusBorder;
+    } else if (residentNumberInput.current.value === "") {
+      setShowAlert(true);
+      setAlertMessage("請填寫戶號");
+      residentNumberInput.current.style.border = focusBorder;
+    } else if (data.receiverName === "") {
+      setShowAlert(true);
+      setAlertMessage("請選擇收件人");
+      receiverSelect.current.style.border = focusBorder;
     } else {
       uploadMailList(data, data.mailId);
       setSuccessAlert(true);
@@ -144,9 +162,24 @@ export function UpdateMailList(props) {
       window.setTimeout(() => {
         setSuccessAlert(false);
       }, 2000);
-      for (let i = 0; i < inputs.length - 1; i++) {
+
+      for (let i = 0; i < inputs.length; i++) {
         inputs[i].value = "";
       }
+      receiverSelect.current.value = "";
+      receiverSelect.current.style.border = "1px solid #96bbbb";
+      statusSelect.current.value = "未領取";
+      setMailNumber("");
+      setResidentNumber("");
+      setReceiver("");
+      setMailType("");
+      setPlace("");
+      setStatus(false);
+      updateReceiveDate(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        new Date().getDate()
+      );
     }
   }
 
@@ -196,6 +229,7 @@ export function UpdateMailList(props) {
             編號
           </label>
           <input
+            ref={mailNumberInput}
             id="mailNumber"
             className={`${styles.item} ${styles.item1}`}
             type="text"
@@ -206,6 +240,7 @@ export function UpdateMailList(props) {
             戶號
           </label>
           <input
+            ref={residentNumberInput}
             id="residentNumber"
             className={`${styles.item} ${styles.item2}`}
             type="text"
@@ -216,6 +251,7 @@ export function UpdateMailList(props) {
             收件人
           </label>
           <select
+            ref={receiverSelect}
             id="receiver"
             value={receiver}
             className={`${styles.itemSelect} ${styles.item} ${styles.item3}`}
@@ -260,6 +296,7 @@ export function UpdateMailList(props) {
             狀態
           </label>
           <select
+            ref={statusSelect}
             id="status"
             className={`${styles.itemSelect} ${styles.item} ${styles.item7}`}
             onChange={updateHook}
@@ -296,7 +333,11 @@ export function UpdateMailList(props) {
           >
             確認送出
           </button>
-          <AlertboxForMailbox showAlert={showAlert} closeAlert={closeAlert} />
+          <AlertboxForMailbox
+            alertMessage={alertMessage}
+            showAlert={showAlert}
+            closeAlert={closeAlert}
+          />
         </div>
       </div>
 

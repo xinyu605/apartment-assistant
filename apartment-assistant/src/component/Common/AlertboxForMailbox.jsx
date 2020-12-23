@@ -11,7 +11,7 @@ export default function AlertboxForMailbox(props) {
         <div className={styles.alertIcon}>
           <img src={warning} />
         </div>
-        <p className={styles.messageText}>資料尚未填寫完成！</p>
+        <p className={styles.messageText}>{props.alertMessage}</p>
         <div className={styles.btnWrapper}>
           <button
             id="closeAlertBtn"

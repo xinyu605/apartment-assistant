@@ -9,6 +9,7 @@ import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 export default function UpdateBoardList() {
   const [deadline, setDeadline] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -28,20 +29,14 @@ export default function UpdateBoardList() {
     );
 
     let data;
-    let message = false;
 
     if (
       author.current.value === "" ||
       topic.current.value === "" ||
       content.current.value === ""
     ) {
-      // setMessage(true);
-      message = true;
-    }
-
-    if (message) {
       setShowAlert(true);
-      message = false;
+      setAlertMessage("請確實填寫空白欄位");
     } else {
       data = {
         topic: topic.current.value,
@@ -133,7 +128,11 @@ export default function UpdateBoardList() {
         <button className={styles.submitMatter} onClick={prepareToAnnounce}>
           確認送出
         </button>
-        <Alertbox showAlert={showAlert} closeAlert={closeAlert} />
+        <Alertbox
+          alertMessage={alertMessage}
+          showAlert={showAlert}
+          closeAlert={closeAlert}
+        />
       </form>
       <AlertSuccessMsg
         showSuccessAlert={showSuccessAlert}
