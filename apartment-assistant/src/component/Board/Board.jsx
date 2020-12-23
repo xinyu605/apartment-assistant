@@ -40,7 +40,8 @@ export default function Board() {
   });
 
   const detailArea = () => {
-    if (details.topic) {
+    if (details?.topic) {
+      // 避免detail是undefined時網頁報錯
       return (
         <div className={styles.matterDetails}>
           <div className={styles.detailHeader}>

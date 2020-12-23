@@ -9,7 +9,13 @@ export function showDate(seconds) {
   return `${year}年${month}月${date}日`;
 }
 
-export function showCalendar(element, getYear, getMonth) {
+export function showCalendar(element, getYear, getMonth, blockPast = false) {
+  // const todayTime = new Date().getTime();
+  const todayYear = new Date().getFullYear();
+  const todayMonth = new Date().getMonth();
+  const todayDate = new Date().getDate();
+  const todayTime = new Date(todayYear, todayMonth, todayDate).getTime();
+
   //1.create months in normal year and olympic year
   const monthNormal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const monthOlympic = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -40,11 +46,20 @@ export function showCalendar(element, getYear, getMonth) {
   }
   //填滿當月日期
   for (let i = 1; i <= totalDaysThisMonth; i++) {
+    const selectedTime = new Date(getYear, getMonth - 1, i).getTime();
+
     let date = document.createElement("li");
     date.id = `date${i}`;
     date.classList.add("day");
-    date.style.cursor = "pointer";
     date.innerHTML = i;
+
+    // optional: 阻擋今天以前的舊日期
+    if (blockPast && selectedTime < todayTime) {
+      date.style.color = "#aaa";
+    } else {
+      date.style.cursor = "pointer";
+    }
+
     dateContainer.appendChild(date);
   }
 }
@@ -105,4 +120,10 @@ export function checkNumbers(string) {
   } else {
     return regex.test(string);
   }
+}
+
+export function checkYearInput(string) {
+  let regex = /^(\d{4})$/;
+  let result = regex.test(string);
+  return result;
 }

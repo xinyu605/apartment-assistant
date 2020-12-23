@@ -141,6 +141,7 @@ export function MailList(props) {
         {lists.map((list) => {
           return (
             <MailListCard
+              key={`mailListCard${list.mailId}`}
               list={list}
               changeMailStatus={changeMailStatus}
               stateController={stateController}

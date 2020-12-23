@@ -47,7 +47,7 @@
 
   .inputAuthor {
     @include input-base;
-    width: 95%;
+    width: 100%;
     grid-column: 2/3;
     grid-row: 1/2;
   }
@@ -83,6 +83,7 @@
 
   .inputContent {
     @include input-base;
+    resize: none;
     margin-top: 20px;
     padding: 8px;
     width: 100%;
@@ -101,7 +102,7 @@
 }
 
 /***********
-  < 1200px
+  < 1120px
 ************/
 @media (max-width: 1120px) {
   .updateForm {

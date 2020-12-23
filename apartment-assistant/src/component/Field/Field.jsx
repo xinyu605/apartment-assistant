@@ -5,6 +5,7 @@ import UserApplyForm from "./UserApplyForm";
 import { getExistedOrders, uploadFieldOrder } from "../../firebase";
 import styles from "./Field.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
+import next from "./../../img/next.svg";
 
 export default function Field() {
   const [timeTitle, setTimeTitle] = useState([]);
@@ -118,20 +119,6 @@ export default function Field() {
     setTimeTable(timeTable);
   }, []);
 
-  /************************
-    Change selected field
-  *************************/
-  function changeField(e) {
-    setField(e.currentTarget.value);
-  }
-
-  /**************************************** 
-    Click order button to update orderList
-  *****************************************/
-  function updateFieldApply(e) {
-    e.preventDefault();
-  }
-
   /******************************************* 
   Click order button to submit orderList
 ********************************************/
@@ -217,7 +204,9 @@ export default function Field() {
         <select
           id="selectField"
           className={styles.selectField}
-          onChange={changeField}
+          onChange={(e) => {
+            setField(e.currentTarget.value);
+          }}
         >
           <option value="交誼廳">交誼廳</option>
           <option value="會議室">會議室</option>
@@ -225,6 +214,7 @@ export default function Field() {
           <option value="籃球場A">籃球場A</option>
           <option value="籃球場B">籃球場B</option>
         </select>
+
         <button
           id="orderBtn"
           className={styles.orderBtn}
@@ -232,9 +222,6 @@ export default function Field() {
         >
           新增
         </button>
-        {/* <button className={styles.orderBtn} onClick={updateFieldApply}>
-          新增
-        </button> */}
       </form>
       <div className={styles.fieldTable}>
         <div className={styles.titleWrapper}>

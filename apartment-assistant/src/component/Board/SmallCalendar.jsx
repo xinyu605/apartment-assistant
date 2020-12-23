@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./SmallCalendar.module.scss";
-import { showCalendar } from "./../../lib";
+import { showCalendar, checkYearInput } from "./../../lib";
 import edit from "./../../img/edit.svg";
 
 /************************
@@ -10,17 +10,20 @@ export function SmallCalendar(props) {
   const [isCalendarShowing, setCalendarShowing] = useState(false);
   const [thisYear, setThisYear] = useState(new Date().getFullYear());
   const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
-  const [receiveDate, setReceiveDate] = useState(new Date().getDate());
+  const [deadline, setDeadline] = useState(new Date().getDate());
+
+  const containerElement = useRef(null);
+  const remindYear = useRef(null);
 
   // send initial date to UpdateMailList at beginning
   useEffect(() => {
-    props.updateDate(thisYear, thisMonth, receiveDate);
+    props.updateDate(thisYear, thisMonth, deadline);
   }, []);
 
   // send updated date to UpdateMailList when selected date changing
   useEffect(() => {
-    props.updateDate(thisYear, thisMonth, receiveDate);
-  }, [isCalendarShowing, thisYear, thisMonth, receiveDate]);
+    props.updateDate(thisYear, thisMonth, deadline);
+  }, [isCalendarShowing, thisYear, thisMonth, deadline]);
 
   function toggleCalendar(e) {
     e.preventDefault();
@@ -28,7 +31,25 @@ export function SmallCalendar(props) {
   }
 
   function updateYear(e) {
-    setThisYear(parseInt(e.currentTarget.value));
+    const todayYear = new Date().getFullYear();
+    let result = checkYearInput(e.currentTarget.value);
+    if (result === false) {
+      remindYear.current.style.opacity = "1";
+      remindYear.current.textContent = "請填寫四位數字";
+    } else {
+      if (e.currentTarget.value && e.currentTarget.value >= todayYear) {
+        remindYear.current.style.opacity = "0";
+        setThisYear(parseInt(e.currentTarget.value));
+      } else {
+        remindYear.current.style.opacity = "1";
+        remindYear.current.textContent = "請填寫有效年份";
+        setThisYear(todayYear);
+      }
+    }
+  }
+
+  function hideRemind(e) {
+    remindYear.current.style.opacity = "0";
   }
 
   function updateMonth(e) {
@@ -43,15 +64,15 @@ export function SmallCalendar(props) {
       days[i].classList.remove(styles.initial, styles.current);
     }
     e.currentTarget.classList.add(styles.current);
-    setReceiveDate(parseInt(date));
+    setDeadline(parseInt(date));
   }
 
   // show the small calendar of selected month
   useEffect(() => {
     if (isCalendarShowing) {
-      const containerElement = document.querySelector("#calendar");
-      showCalendar(containerElement, thisYear, thisMonth);
-      const selectMonth = containerElement.querySelectorAll("option");
+      // const containerElement = document.querySelector("#calendar");
+      showCalendar(containerElement, thisYear, thisMonth, true);
+      const selectMonth = containerElement.current.querySelectorAll("option");
       selectMonth[thisMonth - 1].setAttribute("selected", true);
     }
   }, [isCalendarShowing, thisYear, thisMonth]);
@@ -59,18 +80,20 @@ export function SmallCalendar(props) {
   // show today's date at beginning
   useEffect(() => {
     if (isCalendarShowing) {
-      const selectDay = document.querySelector(`#date${receiveDate}`);
+      const selectDay = document.querySelector(`#date${deadline}`);
       // console.log(selectDay);
       selectDay.classList.add(styles.initial);
     }
   }, [isCalendarShowing]);
 
-  // add "click" eventListener to each date
+  // add "click" eventListener to each date (block dates before today)
   useEffect(() => {
     if (isCalendarShowing) {
       const days = document.querySelectorAll(".day");
       for (let i = 0; i < days.length; i++) {
-        days[i].addEventListener("click", selectDate);
+        if (days[i].style.cursor === "pointer") {
+          days[i].addEventListener("click", selectDate);
+        }
       }
     }
   }, [isCalendarShowing, thisYear, thisMonth]);
@@ -79,10 +102,10 @@ export function SmallCalendar(props) {
     return (
       <div>
         <div className={styles.item}>
-          {thisYear}年{thisMonth}月{receiveDate}日
+          {thisYear}年{thisMonth}月{deadline}日
         </div>
 
-        <div className={styles.calendar} id="calendar">
+        <div ref={containerElement} className={styles.calendar} id="calendar">
           <div className={styles.title} id="calendarTitle">
             <input
               className={styles.year}
@@ -90,6 +113,7 @@ export function SmallCalendar(props) {
               placeholder={thisYear.toString()}
               id="year"
               onChange={updateYear}
+              onBlur={hideRemind}
             ></input>
 
             <select className={styles.month} id="months" onChange={updateMonth}>
@@ -109,6 +133,7 @@ export function SmallCalendar(props) {
             <button className={styles.decideDate} onClick={toggleCalendar}>
               確定
             </button>
+            <div ref={remindYear} className={styles.remindYear}></div>
           </div>
           <div className={styles.calendarBody}>
             <ul className={styles.days} id="days">
@@ -128,7 +153,7 @@ export function SmallCalendar(props) {
   } else {
     return (
       <div className={styles.selectReceiveTime}>
-        {thisYear}年{thisMonth}月{receiveDate}日
+        {thisYear}年{thisMonth}月{deadline}日
         <button
           type="button"
           className={styles.editBtn}

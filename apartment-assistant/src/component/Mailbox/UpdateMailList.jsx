@@ -217,6 +217,7 @@ export function UpdateMailList(props) {
           </label>
           <select
             id="receiver"
+            value={receiver}
             className={`${styles.itemSelect} ${styles.item} ${styles.item3}`}
             onChange={updateHook}
           >
@@ -229,6 +230,7 @@ export function UpdateMailList(props) {
           <select
             id="mailType"
             className={`${styles.itemSelect} ${styles.item} ${styles.item4}`}
+            value={mailType}
             onChange={updateHook}
           >
             <option>普通平信</option>
@@ -247,6 +249,7 @@ export function UpdateMailList(props) {
           <select
             id="place"
             className={`${styles.itemSelect} ${styles.item} ${styles.item6}`}
+            value={place}
             onChange={updateHook}
           >
             <option>信箱</option>
