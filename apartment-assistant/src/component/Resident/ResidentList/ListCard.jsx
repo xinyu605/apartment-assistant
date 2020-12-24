@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Member from "./Member";
 import NewMember from "./NewMember";
 import AlertDownward from "./../../Common/AlertDownward";
 import AlertSuccessMsg from "./../../Common/AlertSuccessMsg";
 import styles from "./ResidentList.module.scss";
-import editIcon from "./../../../img/edit.svg";
-import trashIcon from "./../../../img/trash.svg";
+import editIcon from "./../../../img/edit555.svg";
+import trashIcon from "./../../../img/trash555.svg";
 import address from "./../../../img/address.svg";
 import check from "./../../../img/check.svg";
 import close from "./../../../img/close.svg";
-import plus from "./../../../img/plus.svg";
+import plus from "./../../../img/plus555.svg";
 import remark from "./../../../img/remark.svg";
 import { getTimeStamp, editUpdateResident } from "./../../../firebase";
 import { nanoid } from "nanoid";
@@ -26,7 +26,6 @@ export default function ListCard(props) {
   const list = props.list;
   const [isEditing, setEditing] = useState(false);
   const [residentId, setResidentId] = useState(list.residentId);
-  // console.log(residentId);
   const [floor, setFloor] = useState(props.list.floor);
   const [residentNumbers, setResidentNumbers] = useState(list.residentNumbers);
   const [residentAddress, setResidentAddress] = useState(list.address);
@@ -36,13 +35,14 @@ export default function ListCard(props) {
   const [familyMembers, setFamilyMembers] = useState(list.familyMembers);
   const [familyMembersForm, setFamilyMembersForm] = useState([]);
 
-  // const [nameInputError, setNameInputError] = useState(0);
-
   // alert dialogs
   const [showAlertDownward, setAlertDownward] = useState(false);
   const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+
+  //ref
+  const trashIconImg = useRef(null);
 
   let index = lists.indexOf(list);
   let updateDate = "";
@@ -182,7 +182,7 @@ export default function ListCard(props) {
     let phoneInputEmpty = 0;
     let emailInputError = 0;
     let emailInputEmpty = 0;
-    const focusBorder = "2px solid #f26157";
+    const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";
 
     for (let i = 0; i < familyMembers.length; i++) {
       const checkNameResult = checkUserName(familyMembers[i].name);
@@ -200,22 +200,22 @@ export default function ListCard(props) {
       );
 
       if (checkNameResult === "姓名欄位不可留空") {
-        editMemberNameInput.style.border = focusBorder;
+        editMemberNameInput.style.boxShadow = focusBoxShadow;
         nameInputEmpty += 1;
       }
       if (checkPhoneResult === "手機號碼不可留空") {
-        editMemberPhoneInput.style.border = focusBorder;
+        editMemberPhoneInput.style.boxShadow = focusBoxShadow;
         phoneInputEmpty += 1;
       } else if (checkPhoneResult === "請填寫正確格式，如0912345678") {
-        editMemberPhoneInput.style.border = focusBorder;
+        editMemberPhoneInput.style.boxShadow = focusBoxShadow;
         phoneInputError += 1;
       }
 
       if (checkEmailResult === "Email欄位不可留空") {
-        editMemberEmailInput.style.border = focusBorder;
+        editMemberEmailInput.style.boxShadow = focusBoxShadow;
         emailInputEmpty += 1;
       } else if (checkEmailResult === "Email格式錯誤") {
-        editMemberEmailInput.style.border = focusBorder;
+        editMemberEmailInput.style.boxShadow = focusBoxShadow;
         emailInputError += 1;
       }
     }
@@ -270,7 +270,7 @@ export default function ListCard(props) {
             props.deleteResident(residentId);
           }}
         >
-          <img src={trashIcon} />
+          <img ref={trashIconImg} src={trashIcon} />
         </div>
         <div className={styles.editImg} onClick={editResident}>
           <img src={editIcon} />

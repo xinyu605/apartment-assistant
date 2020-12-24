@@ -125,7 +125,7 @@ h2 {
   background-color: rgba(244, 244, 244, 0.5);
   box-shadow: $list-box-shadow;
   position: absolute;
-  z-index: 1;
+  // z-index: 1;
 }
 
 .signUp {
@@ -150,7 +150,7 @@ h2 {
 
 .inputWrapper {
   height: 36px;
-  padding: 4px;
+  padding: 4px 15px 4px 4px;
   border-radius: $base-border-radius;
   display: flex;
   align-items: center;

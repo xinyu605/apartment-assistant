@@ -385,7 +385,7 @@ export function uploadFieldOrder(data) {
 
 //native sign up and create user information in firestore
 export function nativeSignUp(email, password, name) {
-  auth
+  return auth
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       console.log("sign up successful!, userID:", auth.currentUser.uid);
@@ -396,13 +396,15 @@ export function nativeSignUp(email, password, name) {
         email: auth.currentUser.email,
         userId: auth.currentUser.uid,
       });
-      alert("註冊完成！請按確定繼續");
+      // alert("註冊完成！請按確定繼續");
+      return "success";
     })
     .catch((error) => {
       let errorCode = error.code;
       let errorMessage = error.message;
-      window.alert(`註冊失敗！請重新註冊 (Error: ${errorMessage})`);
-      console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
+      return error;
+      // window.alert(`註冊失敗！請重新註冊 (Error: ${errorMessage})`);
+      // console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
     });
 }
 
@@ -421,8 +423,9 @@ export function nativeSignIn(email, password) {
     .catch((error) => {
       let errorCode = error.code;
       let errorMessage = error.message;
-      window.alert(`登入失敗！請重新登入 (Error: ${errorMessage})`);
-      console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
+      return error;
+      // window.alert(`登入失敗！請重新登入 (Error: ${errorMessage})`);
+      // console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
     });
 }
 

@@ -18,7 +18,6 @@ export function UpdateMailList(props) {
   const [mailType, setMailType] = useState("普通平信");
   const [receiveDate, setReceiveDate] = useState(0);
   const [place, setPlace] = useState("信箱");
-  const [status, setStatus] = useState(false);
   const [remark, setRemark] = useState("無");
   const [familyMembers, setFamilyMembers] = useState([]);
   const [familyMembersEmail, setFamilyMembersEmail] = useState([]);
@@ -35,11 +34,11 @@ export function UpdateMailList(props) {
   const [successMessage, setSuccessMessage] = useState("");
 
   //ref
-  const remindResidentNumbers = useRef(null);
   const mailNumberInput = useRef(null);
+  const remindMailNumber = useRef(null);
   const residentNumberInput = useRef(null);
+  const remindResidentNumbers = useRef(null);
   const receiverSelect = useRef(null);
-  const statusSelect = useRef(null);
 
   function updateReceiveDate(year, month, date) {
     // console.log(year, month, date);
@@ -91,10 +90,22 @@ export function UpdateMailList(props) {
     }
   }
 
-  function hideRemind() {
-    if (residentNumber === "") {
-      remindResidentNumbers.current.style.opacity = "0";
-      remindResidentNumbers.current.style.height = "0px";
+  function hideRemind(e) {
+    switch (e.currentTarget.id) {
+      case "residentNumber":
+        if (residentNumber === "") {
+          remindResidentNumbers.current.style.opacity = "0";
+          remindResidentNumbers.current.style.height = "0px";
+        }
+        break;
+      case "mailNumber":
+        if (mailNumber === "") {
+          remindMailNumber.current.style.opacity = "0";
+          remindMailNumber.current.style.height = "0px";
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -102,6 +113,17 @@ export function UpdateMailList(props) {
     // console.log(e.currentTarget.id);
     switch (e.currentTarget.id) {
       case "mailNumber":
+        const checkMailNumberResult = checkNumbers(
+          mailNumberInput.current.value
+        );
+        if (checkMailNumberResult === false) {
+          remindMailNumber.current.style.opacity = "1";
+          remindMailNumber.current.style.height = "20px";
+        } else {
+          remindMailNumber.current.style.opacity = "0";
+          remindMailNumber.current.style.height = "0px";
+        }
+
         setMailNumber(e.currentTarget.value);
         break;
       case "residentNumber":
@@ -116,11 +138,6 @@ export function UpdateMailList(props) {
       case "place":
         setPlace(e.currentTarget.value);
         break;
-      case "status":
-        if (e.currentTarget.value === "已領取") {
-          setStatus(true);
-        }
-        break;
       case "remark":
         setRemark(e.currentTarget.value);
         break;
@@ -131,14 +148,13 @@ export function UpdateMailList(props) {
 
   function prepareToUpload() {
     let data;
-    // let message = false;
-    const focusBorder = "2px solid #f26157";
+    const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";
     const inputs = document.querySelectorAll("input");
     const checkMailNumberResult = checkNumbers(mailNumberInput.current.value);
 
     // init inputs style before checking format
     for (let i = 0; i < inputs.length; i++) {
-      inputs[i].style.border = "1px solid #96bbbb";
+      inputs[i].style.boxShadow = "none";
     }
 
     const index = familyMembers.indexOf(receiver);
@@ -153,7 +169,7 @@ export function UpdateMailList(props) {
       receiverName: receiver,
       receiverEmail: receiverEmail,
       residentNumbers: residentNumber,
-      status: status,
+      status: false,
       remark: remark,
     };
     console.log(data);
@@ -165,19 +181,19 @@ export function UpdateMailList(props) {
     if (checkMailNumberResult === false) {
       setShowAlert(true);
       setAlertMessage("信件編號需為純數字");
-      mailNumberInput.current.style.border = focusBorder;
+      mailNumberInput.current.style.boxShadow = focusBoxShadow;
     } else if (mailNumberInput.current.value === "") {
       setShowAlert(true);
-      setAlertMessage("請填寫信件編號(純數字)");
-      mailNumberInput.current.style.border = focusBorder;
+      setAlertMessage("請填寫信件編號");
+      mailNumberInput.current.style.boxShadow = focusBoxShadow;
     } else if (residentNumberInput.current.value === "") {
       setShowAlert(true);
       setAlertMessage("請填寫戶號");
-      residentNumberInput.current.style.border = focusBorder;
+      residentNumberInput.current.style.boxShadow = focusBoxShadow;
     } else if (data.receiverName === "") {
       setShowAlert(true);
       setAlertMessage("請選擇收件人");
-      receiverSelect.current.style.border = focusBorder;
+      receiverSelect.current.style.boxShadow = focusBoxShadow;
     } else {
       uploadMailList(data, data.mailId);
       setSuccessAlert(true);
@@ -192,14 +208,12 @@ export function UpdateMailList(props) {
       }
       receiverSelect.current.value = "";
       receiverSelect.current.style.border = "1px solid #96bbbb";
-      statusSelect.current.value = "未領取";
       setMailNumber("");
       setResidentNumber("");
       setReceiver("");
       setFamilyMembers([]);
       setMailType("普通平信");
       setPlace("信箱");
-      setStatus(false);
       updateReceiveDate(
         new Date().getFullYear(),
         new Date().getMonth() + 1,
@@ -260,9 +274,16 @@ export function UpdateMailList(props) {
             id="mailNumber"
             className={`${styles.item} ${styles.item1}`}
             type="text"
-            placeholder="請輸入編號"
+            placeholder="請輸入數字編號"
             onChange={updateHook}
+            onBlur={hideRemind}
           ></input>
+          <div
+            ref={remindMailNumber}
+            className={`${styles.remindMessage} ${styles.remindMailNumber}`}
+          >
+            限填數字
+          </div>
           <label
             className={`${styles.updateMailLabel} ${styles.itemTitleResidentNumber}`}
           >
@@ -341,20 +362,6 @@ export function UpdateMailList(props) {
             <option>信箱</option>
             <option>置物櫃</option>
             <option>管理室</option>
-          </select>
-          <label
-            className={`${styles.updateMailLabel} ${styles.itemTitleStatus}`}
-          >
-            狀態
-          </label>
-          <select
-            ref={statusSelect}
-            id="status"
-            className={`${styles.itemSelect} ${styles.item} ${styles.itemStatus}`}
-            onChange={updateHook}
-          >
-            <option>未領取</option>
-            <option>已領取</option>
           </select>
           <label
             className={`${styles.updateMailLabel} ${styles.itemTitleRemark}`}

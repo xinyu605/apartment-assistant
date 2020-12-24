@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import SignUp from "./SignUp";
+import AlertDownward from "./../Common/AlertDownward";
 import { nativeSignIn, signInWithGoogle } from "./../../firebase";
 import { checkEmailFormat, checkPasswordLength } from "./../../lib";
 import styles from "./SignIn.module.scss";
@@ -10,9 +11,13 @@ import lock from "./../../img/lock.svg";
 import vintage from "./../../img/vintage.png";
 
 export default function SignIn() {
+  let history = useHistory();
   const [emailSignIn, setEmailSignIn] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
-  let history = useHistory();
+
+  // alert dialogs
+  const [showAlertDownward, setAlertDownward] = useState(false);
+  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
 
   /***************************************** 
     useRef instead of document.querySelector
@@ -28,6 +33,8 @@ export default function SignIn() {
 
   function checkSignInInput(e) {
     const target = e.currentTarget;
+    const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";
+
     switch (target.id) {
       case "emailSignIn":
         const emailInput = checkEmailFormat(target.value);
@@ -37,11 +44,11 @@ export default function SignIn() {
         ) {
           remindEmailSignIn.current.textContent = emailInput;
           remindEmailSignIn.current.style.color = "#f26157";
-          emailSignInInput.current.style.border = "1px solid #f26157";
+          emailSignInInput.current.style.boxShadow = focusBoxShadow;
           emailSignInInput.current.style.transition = "all 0.3s ease";
         } else {
           remindEmailSignIn.current.textContent = "";
-          emailSignInInput.current.style.border = "none";
+          emailSignInInput.current.style.boxShadow = "none";
           setEmailSignIn(target.value);
         }
         break;
@@ -51,14 +58,14 @@ export default function SignIn() {
         if (passwordInput === "密碼需超過6個字元") {
           remindPasswordSignIn.current.textContent = passwordInput;
           remindPasswordSignIn.current.style.color = "#f26157";
-          passwordSignInInput.current.style.border = "1px solid #f26157";
+          passwordSignInInput.current.style.boxShadow = focusBoxShadow;
           passwordSignInInput.current.style.transition = "all 0.3s ease";
         } else {
           remindPasswordSignIn.current.textContent = "";
-          passwordSignInInput.current.style.border = "none";
+          passwordSignInInput.current.style.boxShadow = "none";
           setPasswordSignIn(target.value);
         }
-
+        break;
       default:
         break;
     }
@@ -73,15 +80,26 @@ export default function SignIn() {
     if (emailInput === true && passwordInput === true) {
       nativeSignIn(emailSignIn, passwordSignIn)
         .then((result) => {
+          console.log(result);
           if (result === "admin") {
             history.push("/admin");
-          } else {
+          } else if (result === "general") {
             history.push("/entry");
+          } else {
+            setAlertDownward(true);
+            setAlertDownwardMessage("登入失敗！請重新登入");
+            setEmailSignIn("");
+            setPasswordSignIn("");
+            emailSignInInput.current.value = "";
+            passwordSignInInput.current.value = "";
           }
         })
         .catch((error) => {
           console.log(error);
         });
+    } else {
+      setAlertDownward(true);
+      setAlertDownwardMessage("資料填寫不完整，請重新登入");
     }
   }
 
@@ -99,7 +117,7 @@ export default function SignIn() {
 
   function moveCard(e) {
     const imageCard = document.querySelector("#imageCard");
-    console.log(imageCard);
+    // console.log(imageCard);
     if (e.currentTarget.id === "clickToSignUp") {
       imageCard.style.transform = "translateX(360px)";
       imageCard.style.transition = "all 0.5s ease";
@@ -126,6 +144,20 @@ export default function SignIn() {
       signUpCard.style.transform = "translateY(0px)";
       signUpCard.style.opacity = "0";
       signUpCard.style.transition = "all 0.5s ease";
+    }
+  }
+
+  /*********** 
+  Close alert
+  ************/
+  function closeAlert(e) {
+    e.preventDefault();
+    switch (e.currentTarget.id) {
+      case "closeAlertBtn":
+        setAlertDownward(false);
+        break;
+      default:
+        break;
     }
   }
 
@@ -164,6 +196,7 @@ export default function SignIn() {
                 type="text"
                 placeholder="Email"
                 onChange={checkSignInInput}
+                onBlur={checkSignInInput}
               ></input>
               <div className={styles.inputImgWrapper}>
                 <img className={styles.inputImg} src={email} />
@@ -184,6 +217,7 @@ export default function SignIn() {
                 type="password"
                 placeholder="密碼"
                 onChange={checkSignInInput}
+                onBlur={checkSignInInput}
               ></input>
               <div className={styles.inputImgWrapper}>
                 <img className={styles.inputImg} src={lock} />
@@ -225,6 +259,11 @@ export default function SignIn() {
 
         <SignUp moveCard={moveCard} exchangeCards={exchangeCards} />
       </div>
+      <AlertDownward
+        showAlertDownward={showAlertDownward}
+        alertDownwardMessage={alertDownwardMessage}
+        closeAlert={closeAlert}
+      />
     </div>
   );
 }

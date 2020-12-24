@@ -33,6 +33,14 @@
       }
     }
 
+    .undoBtn {
+      @include button-icon;
+      width: 25px;
+      height: 25px;
+      margin-right: 10px;
+      background-color: $color-opal;
+    }
+
     .addBtn {
       @include button-main;
       width: 60px;
@@ -42,7 +50,7 @@
       width: 110px;
       height: 30px;
       margin-left: auto;
-      margin-right: 10px;
+      margin-right: 5px;
       border: 1px solid $light-border-color;
       border-radius: $base-border-radius;
       display: flex;

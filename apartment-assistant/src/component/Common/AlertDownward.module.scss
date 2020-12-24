@@ -12,6 +12,7 @@
   align-items: center;
   background-color: #ccc;
   position: fixed;
+  z-index: 999;
   top: -50px;
   left: 50%;
   transform: translateX(-50%);

@@ -48,7 +48,7 @@
   padding: 20px 20px 0 20px;
   display: grid;
   grid-template-columns: 60px 2fr 80px 2fr;
-  grid-template-rows: 1fr 12px 1fr 12px 1fr;
+  grid-template-rows: 50px auto 50px 50px;
   align-items: center;
 
   .detailTitle {
@@ -61,14 +61,25 @@
     width: 100%;
   }
 
-  .remindFloor {
+  .remindMessage {
     color: $color-fireOpal;
     font-size: 12px;
     letter-spacing: 1px;
     padding-left: 4px;
+  }
+
+  .remindResidentNumbers {
+    height: 0;
+    grid-column: 2/3;
+    grid-row: 2/3;
+    opacity: 0;
+  }
+
+  .remindFloor {
+    height: 0;
     grid-column: 4/5;
     grid-row: 2/3;
-    display: none;
+    opacity: 0;
   }
 
   .titleAddress {
@@ -83,12 +94,12 @@
 
   .titleRemark {
     grid-column: 1/2;
-    grid-row: 5/6;
+    grid-row: 4/5;
   }
 
   .inputRemark {
     grid-column: 2/5;
-    grid-row: 5/6;
+    grid-row: 4/5;
   }
 }
 
@@ -120,7 +131,11 @@
         width: 35px;
         height: 35px;
         padding: 8px;
-        background-color: $color-opal;
+        // background-color: $color-opal;
+
+        &:hover {
+          background-color: $color-melon;
+        }
       }
     }
   }

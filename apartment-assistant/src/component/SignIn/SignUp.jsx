@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import AlertDownward from "./../Common/AlertDownward";
 import styles from "./SignIn.module.scss";
 import user from "./../../img/user.svg";
 import email from "./../../img/email.svg";
@@ -9,11 +10,18 @@ import {
   checkPasswordLength,
 } from "../../lib";
 import { nativeSignUp } from "./../../firebase";
+import AlertSuccessMsg from "../Common/AlertSuccessMsg";
 
 export default function SignUp(props) {
   const [userName, setUserName] = useState("");
   const [emailSignUp, setEmailSignUp] = useState("");
   const [passwordSignUp, setPasswordSignUp] = useState("");
+
+  // alert dialogs
+  const [showAlertDownward, setAlertDownward] = useState(false);
+  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showSuccessAlert, setSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const nameSignUpInput = useRef(null);
   const emailSignUpInput = useRef(null);
@@ -27,6 +35,7 @@ export default function SignUp(props) {
   *****************************************/
   function checkSignUpInput(e) {
     const target = e.currentTarget;
+    const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";
     switch (target.id) {
       case "userName":
         const nameInput = checkUserName(target.value);
@@ -34,11 +43,11 @@ export default function SignUp(props) {
           remindNameSignUp.current.textContent = nameInput;
           remindNameSignUp.current.style.opacity = "1";
           remindNameSignUp.current.style.transition = "all 0.3s ease";
-          nameSignUpInput.current.style.border = "1px solid #f26157";
+          nameSignUpInput.current.style.boxShadow = focusBoxShadow;
           nameSignUpInput.current.style.transition = "all 0.3s ease";
         } else {
           remindNameSignUp.current.textContent = "";
-          nameSignUpInput.current.style.border = "none";
+          nameSignUpInput.current.style.boxShadow = "none";
           setUserName(target.value);
         }
 
@@ -52,11 +61,11 @@ export default function SignUp(props) {
           remindEmailSignUp.current.textContent = emailInput;
           remindEmailSignUp.current.style.opacity = "1";
           remindEmailSignUp.current.style.transition = "all 0.3s ease";
-          emailSignUpInput.current.style.border = "1px solid #f26157";
+          emailSignUpInput.current.style.boxShadow = focusBoxShadow;
           emailSignUpInput.current.style.transition = "all 0.3s ease";
         } else {
           remindEmailSignUp.current.textContent = "";
-          emailSignUpInput.current.style.border = "none";
+          emailSignUpInput.current.style.boxShadow = "none";
           setEmailSignUp(target.value);
         }
         break;
@@ -67,14 +76,14 @@ export default function SignUp(props) {
           remindPasswordSignUp.current.textContent = passwordInput;
           remindPasswordSignUp.current.style.opacity = "1";
           remindPasswordSignUp.current.style.transition = "all 0.3s ease";
-          passwordSignUpInput.current.style.border = "1px solid #f26157";
+          passwordSignUpInput.current.style.boxShadow = focusBoxShadow;
           passwordSignUpInput.current.style.transition = "all 0.3s ease";
         } else {
           remindPasswordSignUp.current.textContent = "";
-          passwordSignUpInput.current.style.border = "none";
+          passwordSignUpInput.current.style.boxShadow = "none";
           setPasswordSignUp(target.value);
         }
-
+        break;
       default:
         break;
     }
@@ -87,9 +96,48 @@ export default function SignUp(props) {
       checkPasswordLength(passwordSignUp) === true &&
       checkUserName(userName) === true
     ) {
-      nativeSignUp(emailSignUp, passwordSignUp, userName);
+      nativeSignUp(emailSignUp, passwordSignUp, userName)
+        .then((result) => {
+          console.log(result);
+          if (result === "success") {
+            setSuccessAlert(true);
+            setSuccessMessage("註冊成功！請重新登入");
+
+            setUserName("");
+            setEmailSignUp("");
+            setPasswordSignUp("");
+
+            //move image card
+
+            const imageCard = document.querySelector("#imageCard");
+            imageCard.style.transform = "translateX(0px)";
+            imageCard.style.transition = "all 0.5s ease";
+          } else {
+            setAlertDownward(true);
+            setAlertDownwardMessage(result.message);
+            console.log(result.message);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
-      console.log("Sign up failed");
+      setAlertDownward(true);
+      setAlertDownwardMessage("註冊失敗！請重新註冊");
+    }
+  }
+
+  /*********** 
+  Close alert
+  ************/
+  function closeAlert(e) {
+    e.preventDefault();
+    switch (e.currentTarget.id) {
+      case "closeAlertBtn":
+        setAlertDownward(false);
+        break;
+      default:
+        break;
     }
   }
 
@@ -124,6 +172,7 @@ export default function SignUp(props) {
             type="text"
             placeholder="請輸入Email"
             onChange={checkSignUpInput}
+            onBlur={checkSignUpInput}
           ></input>
           <div className={styles.inputImgWrapper}>
             <img className={styles.inputImg} src={email} />
@@ -142,6 +191,7 @@ export default function SignUp(props) {
             type="password"
             placeholder="請輸入6位以上英數字"
             onChange={checkSignUpInput}
+            onBlur={checkSignUpInput}
           ></input>
           <div className={styles.inputImgWrapper}>
             <img className={styles.inputImg} src={lock} />
@@ -174,6 +224,15 @@ export default function SignUp(props) {
           登入
         </div>
       </form>
+      <AlertSuccessMsg
+        showSuccessAlert={showSuccessAlert}
+        successMessage={successMessage}
+      />
+      <AlertDownward
+        showAlertDownward={showAlertDownward}
+        alertDownwardMessage={alertDownwardMessage}
+        closeAlert={closeAlert}
+      />
     </div>
   );
 }

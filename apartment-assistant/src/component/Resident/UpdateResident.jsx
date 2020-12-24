@@ -4,9 +4,9 @@ import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import styles from "./UpdateResident.module.scss";
 import { uploadResident, getTimeStamp } from "./../../firebase";
 import { nanoid } from "nanoid";
-import memberIcon1 from "./../../img/members.svg";
-import plus from "./../../img/plus.svg";
-import minus from "./../../img/minus.svg";
+import memberIcon from "./../../img/members.svg";
+import plus from "./../../img/plus555.svg";
+import minus from "./../../img/minus555.svg";
 import {
   checkEmailFormat,
   checkNumbers,
@@ -14,10 +14,11 @@ import {
   checkUserPhone,
 } from "../../lib";
 
-export default function UpdateResident() {
+export default function UpdateResident(props) {
   const [familyMembersForm, setFamilyMemberForm] = useState([
     { id: "member0" },
   ]);
+  const [repeatResidentNumbers, setRepeatResidentNumbers] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
@@ -27,6 +28,7 @@ export default function UpdateResident() {
   const address = useRef(null);
   const remark = useRef(null);
   const remindFloor = useRef(null);
+  const remindResidentNumbers = useRef(null);
 
   /**************************************************
   Create / Delete one more family member input form
@@ -51,11 +53,37 @@ export default function UpdateResident() {
   Check input when user input value
   **********************************/
   function checkRemind(e) {
-    const result = checkNumbers(e.currentTarget.value);
-    if (result || result === undefined) {
-      remindFloor.current.style.display = "none";
-    } else {
-      remindFloor.current.style.display = "block";
+    switch (e.currentTarget.id) {
+      case "floor":
+        const result = checkNumbers(e.currentTarget.value);
+        if (result || result === undefined) {
+          remindFloor.current.style.height = "0px";
+          remindFloor.current.style.opacity = "0";
+        } else {
+          remindFloor.current.style.height = "12px";
+          remindFloor.current.style.opacity = "1";
+        }
+        break;
+      case "residentNumbers":
+        let residentNumbersExist = false;
+        for (let i = 0; i < props.residentList.length; i++) {
+          if (e.currentTarget.value === props.residentList[i].residentNumbers) {
+            residentNumbersExist = true;
+            break;
+          }
+        }
+        if (residentNumbersExist) {
+          remindResidentNumbers.current.style.height = "12px";
+          remindResidentNumbers.current.style.opacity = "1";
+          setRepeatResidentNumbers(true);
+        } else {
+          remindResidentNumbers.current.style.height = "0px";
+          remindResidentNumbers.current.style.opacity = "0";
+          setRepeatResidentNumbers(false);
+        }
+        break;
+      default:
+        break;
     }
   }
 
@@ -65,7 +93,6 @@ export default function UpdateResident() {
 
   function packingInfo(e) {
     e.preventDefault();
-    let message = false;
     let inputs = document.querySelectorAll("input");
     let familyMembers = [];
 
@@ -76,14 +103,15 @@ export default function UpdateResident() {
     // check name, phone, email input format
     // init
     for (let i = 0; i < inputs.length; i++) {
-      inputs[i].style.border = "1px solid #96bbbb";
+      inputs[i].style.boxShadow = "none";
     }
     let nameInputEmpty = 0;
     let phoneInputError = 0;
     let phoneInputEmpty = 0;
     let emailInputError = 0;
     let emailInputEmpty = 0;
-    const focusBorder = "2px solid #f26157";
+    const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";
+    const remindEmptyMessage = "請補填此欄位";
 
     for (let i = 0; i < familyMembersForm.length; i++) {
       const inputName = document.querySelector(`#inputName${i}`);
@@ -102,22 +130,25 @@ export default function UpdateResident() {
       const checkPhoneResult = checkUserPhone(familyMembers[i].phone);
       const checkEmailResult = checkEmailFormat(familyMembers[i].email);
       if (checkNameResult === "姓名欄位不可留空") {
-        inputName.style.border = focusBorder;
+        inputName.style.boxShadow = focusBoxShadow;
+        inputName.placeholder = remindEmptyMessage;
         nameInputEmpty += 1;
       }
       if (checkPhoneResult === "手機號碼不可留空") {
-        inputPhone.style.border = focusBorder;
+        inputPhone.style.boxShadow = focusBoxShadow;
+        inputPhone.placeholder = remindEmptyMessage;
         phoneInputEmpty += 1;
       } else if (checkPhoneResult === "請填寫正確格式，如0912345678") {
-        inputPhone.style.border = focusBorder;
+        inputPhone.style.boxShadow = focusBoxShadow;
         phoneInputError += 1;
       }
 
       if (checkEmailResult === "Email欄位不可留空") {
-        inputEmail.style.border = focusBorder;
+        inputEmail.style.boxShadow = focusBoxShadow;
+        inputEmail.placeholder = remindEmptyMessage;
         emailInputEmpty += 1;
       } else if (checkEmailResult === "Email格式錯誤") {
-        inputEmail.style.border = focusBorder;
+        inputEmail.style.boxShadow = focusBoxShadow;
         emailInputError += 1;
       }
     }
@@ -138,33 +169,23 @@ export default function UpdateResident() {
       updateDate: secondsToFirebase,
     };
 
-    // console.log(inputs);
-    // for (let i = 1; i < inputs.length; i++) {
-    //   if (inputs[i].value === "") {
-    //     inputs[i].classList.add(styles.focus);
-    //     message = true;
-    //   }
-    // }
     if (residentNumbers.current.value === "") {
-      residentNumbers.current.style.border = focusBorder;
+      residentNumbers.current.style.boxShadow = focusBoxShadow;
+
+      residentNumbers.current.placeholder = remindEmptyMessage;
     }
     if (floor.current.value === "") {
-      floor.current.style.border = focusBorder;
+      floor.current.style.boxShadow = focusBoxShadow;
+      floor.current.placeholder = remindEmptyMessage;
     }
     if (address.current.value === "") {
-      address.current.style.border = focusBorder;
+      address.current.style.boxShadow = focusBoxShadow;
+      address.current.placeholder = remindEmptyMessage;
     }
 
-    if (
-      residentNumbers.current.value === "" ||
-      floor.current.value === "" ||
-      address.current.value === "" ||
-      nameInputEmpty > 0 ||
-      phoneInputEmpty > 0 ||
-      emailInputEmpty > 0
-    ) {
+    if (repeatResidentNumbers) {
       setShowAlert(true);
-      setAlertMessage("欄位不可留空");
+      setAlertMessage("此戶號已存在，請重新輸入或更新住戶資訊");
     } else if (phoneInputError > 0) {
       setShowAlert(true);
       setAlertMessage("請填寫正確的手機號碼格式，如0912345678");
@@ -174,29 +195,36 @@ export default function UpdateResident() {
     } else if (familyMembers.length < 1) {
       setShowAlert(true);
       setAlertMessage("住戶成員不能少於一位");
+    } else if (
+      residentNumbers.current.value === "" ||
+      floor.current.value === "" ||
+      address.current.value === "" ||
+      nameInputEmpty > 0 ||
+      phoneInputEmpty > 0 ||
+      emailInputEmpty > 0
+    ) {
+      setShowAlert(true);
+      setAlertMessage("欄位不可留空");
     } else {
       uploadResident(infoPackage);
       setSuccessAlert(true);
       setSuccessMessage("新增住戶成功");
 
+      // back to default placeholer
+      residentNumbers.current.placeholder = "請填寫戶號";
+      floor.current.placeholder = "請填寫數字";
+      address.current.placeholder = "請填寫地址";
+      remark.current.placeholder = "請填寫備註 (非必填)";
+      for (let i = 0; i < familyMembersForm.length; i++) {
+        document.querySelector(`#inputName${i}`).placeholder = "請填寫姓名";
+        document.querySelector(`#inputPhone${i}`).placeholder =
+          "請填寫手機號碼";
+        document.querySelector(`#inputEmail${i}`).placeholder = "請填寫Email";
+      }
       for (let i = 1; i < inputs.length; i++) {
         inputs[i].value = "";
       }
     }
-
-    // if (message) {
-    //   // alert("還有空白欄位尚未填寫完成喔！");
-    //   // message = false;
-    //   setShowAlert(true);
-    // } else {
-    //   uploadResident(infoPackage);
-    //   setSuccessAlert(true);
-    //   setSuccessMessage("新增住戶成功");
-
-    //   for (let i = 1; i < inputs.length; i++) {
-    //     inputs[i].value = "";
-    //   }
-    // }
   }
 
   /*********** 
@@ -228,7 +256,7 @@ export default function UpdateResident() {
     <div className={styles.updateResident} id="updateResident">
       <div className={styles.titleContainer}>
         <div className={styles.titleImg}>
-          <img src={memberIcon1} />
+          <img src={memberIcon} />
         </div>
         <h2 className={styles.title}>新增住戶</h2>
       </div>
@@ -245,7 +273,14 @@ export default function UpdateResident() {
             id="residentNumbers"
             type="text"
             placeholder="請填寫戶號"
+            onChange={checkRemind}
           ></input>
+          <div
+            ref={remindResidentNumbers}
+            className={`${styles.remindMessage} ${styles.remindResidentNumbers}`}
+          >
+            此戶號已存在
+          </div>
           <label className={`${styles.detailTitle} ${styles.titleFloor}`}>
             樓層
           </label>
@@ -253,10 +288,13 @@ export default function UpdateResident() {
             ref={floor}
             className={`${styles.detailInput} ${styles.inputFloor}`}
             id="floor"
-            placeholder="請填寫數字 ex.2"
+            placeholder="請填寫數字"
             onChange={checkRemind}
           ></input>
-          <div ref={remindFloor} className={styles.remindFloor}>
+          <div
+            ref={remindFloor}
+            className={`${styles.remindMessage} ${styles.remindFloor}`}
+          >
             請填寫開頭不為0的純數字
           </div>
           <label className={`${styles.detailTitle} ${styles.titleAddress}`}>
@@ -335,7 +373,7 @@ function FamilyMembers(props) {
         className={styles.familyInput}
         id={`inputPhone${number}`}
         type="text"
-        placeholder="請填寫聯絡電話"
+        placeholder="請填寫手機號碼"
       ></input>
       <label className={styles.familyTitle}>Email</label>
       <input

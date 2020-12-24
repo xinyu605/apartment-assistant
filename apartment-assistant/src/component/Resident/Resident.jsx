@@ -7,6 +7,7 @@ import { scrollToTarget } from "./../../lib";
 import styles from "./Resident.module.scss";
 import headerImg from "./../../img/apartment.svg";
 import searchImg from "./../../img/search.svg";
+import undo from "./../../img/undo.svg";
 
 export default function Resident() {
   const [residentList, setResidentList] = useState([]);
@@ -37,6 +38,12 @@ export default function Resident() {
     setSearchResult(resultResident);
     setSearchNumber("");
     searchInput.current.value = "";
+  }
+
+  function cancelSearch(e) {
+    e.preventDefault();
+    setSearchNumber("");
+    setSearchResult([]);
   }
 
   /*********************************************** 
@@ -89,7 +96,9 @@ export default function Resident() {
             <img src={searchImg} />
           </button>
         </form>
-
+        <button className={styles.undoBtn} onClick={cancelSearch}>
+          <img src={undo} />
+        </button>
         <button
           className={styles.addBtn}
           onClick={() => {
@@ -105,7 +114,7 @@ export default function Resident() {
         searchResult={searchResult}
         deleteResident={deleteResident}
       />
-      <UpdateResident />
+      <UpdateResident residentList={residentList} />
       <ConfirmMsg
         showConfirm={showDeleteConfirm}
         confirmMessage={confirmMessage}

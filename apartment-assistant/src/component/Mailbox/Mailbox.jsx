@@ -103,6 +103,7 @@ export default function Mailbox() {
       />
       {/* <Route exact path="/admin/mailbox" component={UpdateMailList} /> */}
       <UpdateMailList
+        untakenMails={untakenData}
         updateNewMail={updateNewMail}
         residentList={residentList}
       />

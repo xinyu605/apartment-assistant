@@ -41,7 +41,7 @@
     width: 140px;
     height: 25px;
     margin: 10px 50px;
-    border: 1px solid $base-border-color;
+    border: 1px solid $color-opal;
     border-radius: $base-border-radius;
     font-size: $font-size-xsmall;
     display: flex;
@@ -67,7 +67,7 @@
       border-radius: $base-border-radius;
       position: absolute;
       z-index: 1;
-      background-color: $base-button-background-color;
+      background-color: $color-opal;
     }
     .left {
       left: 0;
@@ -85,7 +85,7 @@
 
 .mailList {
   width: 100%;
-  max-height: 500px;
+  height: 420px;
   overflow-y: scroll;
   margin: 20px auto;
   padding: 10px 5px;
@@ -114,22 +114,17 @@
 
       .status {
         @include button-icon;
+        background-color: #fff;
+
+        &:hover {
+          background-color: #eee;
+        }
       }
 
       .trashImg {
-        width: 30px;
-        height: 30px;
-        padding: 5px;
-        margin-left: 10px;
-        border-radius: 50%;
-        background-color: $color-opal;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
+        @include button-icon;
 
         &:hover {
-          background-color: $color-fireOpal;
           transition: all 0.3s ease-in-out;
         }
 

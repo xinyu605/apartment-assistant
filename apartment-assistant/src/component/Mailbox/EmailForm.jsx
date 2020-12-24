@@ -1,12 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { sendMail } from "./../../firebase";
 import styles from "./EmailForm.module.scss";
 import close from "./../../img/close.svg";
+import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
+import { checkEmailFormat } from "../../lib";
+import AlertDownward from "../Common/AlertDownward";
 
 export function EmailForm(props) {
   const [recipientEmail, setRecipientEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [content, setContent] = useState("");
+
+  //alert dialog
+  const [showAlertDownward, setAlertDownward] = useState(false);
+  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showSuccessAlert, setSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  //ref
+  const recipientEmailInput = useRef(null);
+  const subjectInput = useRef(null);
+  const contentTextarea = useRef(null);
 
   /******************************************* 
     Put default values into email form inputs
@@ -67,8 +81,48 @@ export function EmailForm(props) {
       content: content,
     };
     // console.log(data);
-    props.closeForm();
-    sendMail(data); //call firebase cloud function
+    const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";
+    const checkEmailResult = checkEmailFormat(data.email);
+
+    if (
+      checkEmailResult === "Email格式錯誤" ||
+      checkEmailResult === "Email欄位不可留空"
+    ) {
+      recipientEmailInput.current.style.boxShadow = focusBoxShadow;
+      setAlertDownward(true);
+      setAlertDownwardMessage(checkEmailResult);
+    } else if (subjectInput.current.value === "") {
+      subjectInput.current.style.boxShadow = focusBoxShadow;
+      setAlertDownward(true);
+      setAlertDownwardMessage("信件主旨不可留空");
+    } else if (contentTextarea.current.value === "") {
+      contentTextarea.current.style.boxShadow = focusBoxShadow;
+      setAlertDownward(true);
+      setAlertDownwardMessage("信件內容不可留空");
+    } else {
+      sendMail(data); //call firebase cloud function
+      setSuccessAlert(true);
+      setSuccessMessage("信件成功寄出");
+      window.setTimeout(() => {
+        setSuccessAlert(false);
+      }, 2000);
+      window.setTimeout(() => {
+        props.closeForm();
+      }, 2001);
+
+      //back to default
+      recipientEmailInput.current.style.boxShadow = "none";
+      subjectInput.current.style.boxShadow = "none";
+      contentTextarea.current.style.boxShadow = "none";
+    }
+  }
+
+  /*********** 
+  Close alert
+  ************/
+  function closeAlert(e) {
+    e.preventDefault();
+    setAlertDownward(false);
   }
 
   if (props.isEditingMail) {
@@ -89,6 +143,7 @@ export function EmailForm(props) {
               收件者
             </p>
             <input
+              ref={recipientEmailInput}
               id="recipientEmail"
               className={`${styles.emailInput} ${styles.emailInput1}`}
               type="text"
@@ -102,6 +157,7 @@ export function EmailForm(props) {
               主旨
             </p>
             <input
+              ref={subjectInput}
               id="subject"
               className={`${styles.emailInput} ${styles.emailInput2}`}
               type="text"
@@ -115,6 +171,7 @@ export function EmailForm(props) {
               內容
             </p>
             <textarea
+              ref={contentTextarea}
               id="content"
               className={`${styles.emailInput} ${styles.emailInput3}`}
               rows="8"
@@ -126,6 +183,15 @@ export function EmailForm(props) {
             </button>
           </form>
         </div>
+        <AlertDownward
+          showAlertDownward={showAlertDownward}
+          alertDownwardMessage={alertDownwardMessage}
+          closeAlert={closeAlert}
+        />
+        <AlertSuccessMsg
+          showSuccessAlert={showSuccessAlert}
+          successMessage={successMessage}
+        />
       </div>
     );
   } else {
