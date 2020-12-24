@@ -23,6 +23,10 @@ export function UpdateMailList(props) {
   const [familyMembers, setFamilyMembers] = useState([]);
   const [familyMembersEmail, setFamilyMembersEmail] = useState([]);
   const [isEditingMail, setIsEditingMail] = useState(false);
+  //
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [date, setDate] = useState(new Date().getDate());
 
   //alert dialog
   const [showAlert, setShowAlert] = useState(false);
@@ -31,6 +35,7 @@ export function UpdateMailList(props) {
   const [successMessage, setSuccessMessage] = useState("");
 
   //ref
+  const remindResidentNumbers = useRef(null);
   const mailNumberInput = useRef(null);
   const residentNumberInput = useRef(null);
   const receiverSelect = useRef(null);
@@ -41,6 +46,9 @@ export function UpdateMailList(props) {
     const seconds = getTimeStamp(year, month, date);
     // console.log(seconds);
     setReceiveDate(seconds);
+    setYear(year);
+    setMonth(month);
+    setDate(date);
   }
 
   const ReceiverOptions = familyMembers.map((member) => {
@@ -52,13 +60,14 @@ export function UpdateMailList(props) {
     setFamilyMembers([]);
     setFamilyMembersEmail([]);
     const residentList = props.residentList;
-    // console.log(residentList);
+    console.log(residentList);
     let familyMembersName = [];
     let familyMembersEmail = [];
+    let residentNumberExist = false;
     for (let i = 0; i < residentList.length; i++) {
       if (residentList[i].residentNumbers === residentNumber) {
         // console.log(residentList[i]);
-
+        residentNumberExist = true;
         for (let j = 0; j < residentList[i].familyMembers.length; j++) {
           familyMembersName = [
             ...familyMembersName,
@@ -72,6 +81,20 @@ export function UpdateMailList(props) {
           setFamilyMembersEmail(familyMembersEmail);
         }
       }
+    }
+    if (residentNumberExist || residentNumber === "") {
+      remindResidentNumbers.current.style.opacity = "0";
+      remindResidentNumbers.current.style.height = "0px";
+    } else {
+      remindResidentNumbers.current.style.opacity = "1";
+      remindResidentNumbers.current.style.height = "20px";
+    }
+  }
+
+  function hideRemind() {
+    if (residentNumber === "") {
+      remindResidentNumbers.current.style.opacity = "0";
+      remindResidentNumbers.current.style.height = "0px";
     }
   }
 
@@ -163,6 +186,7 @@ export function UpdateMailList(props) {
         setSuccessAlert(false);
       }, 2000);
 
+      // back to initial condition
       for (let i = 0; i < inputs.length; i++) {
         inputs[i].value = "";
       }
@@ -172,8 +196,9 @@ export function UpdateMailList(props) {
       setMailNumber("");
       setResidentNumber("");
       setReceiver("");
-      setMailType("");
-      setPlace("");
+      setFamilyMembers([]);
+      setMailType("普通平信");
+      setPlace("信箱");
       setStatus(false);
       updateReceiveDate(
         new Date().getFullYear(),
@@ -225,7 +250,9 @@ export function UpdateMailList(props) {
       </div>
       <div className={styles.updateForm}>
         <form className={styles.updateMailListForm}>
-          <label className={`${styles.updateMailLabel} ${styles.itemTitle1}`}>
+          <label
+            className={`${styles.updateMailLabel} ${styles.itemTitleMailNumber}`}
+          >
             編號
           </label>
           <input
@@ -236,36 +263,49 @@ export function UpdateMailList(props) {
             placeholder="請輸入編號"
             onChange={updateHook}
           ></input>
-          <label className={`${styles.updateMailLabel} ${styles.itemTitle2}`}>
+          <label
+            className={`${styles.updateMailLabel} ${styles.itemTitleResidentNumber}`}
+          >
             戶號
           </label>
           <input
             ref={residentNumberInput}
             id="residentNumber"
-            className={`${styles.item} ${styles.item2}`}
+            className={`${styles.item} ${styles.itemResidentNumber}`}
             type="text"
-            placeholder="請輸入戶號"
+            placeholder="請輸入已建檔之住戶戶號"
             onChange={updateHook}
+            onBlur={hideRemind}
           ></input>
-          <label className={`${styles.updateMailLabel} ${styles.itemTitle3}`}>
+          <div
+            ref={remindResidentNumbers}
+            className={`${styles.remindMessage} ${styles.remindResidentNumbers}`}
+          >
+            此戶號不存在
+          </div>
+          <label
+            className={`${styles.updateMailLabel} ${styles.itemTitleReceiver}`}
+          >
             收件人
           </label>
           <select
             ref={receiverSelect}
             id="receiver"
             value={receiver}
-            className={`${styles.itemSelect} ${styles.item} ${styles.item3}`}
+            className={`${styles.itemSelect} ${styles.item} ${styles.itemReceiver}`}
             onChange={updateHook}
           >
             <option>請選擇</option>
             {ReceiverOptions}
           </select>
-          <label className={`${styles.updateMailLabel} ${styles.itemTitle4}`}>
+          <label
+            className={`${styles.updateMailLabel} ${styles.itemTitleMailType}`}
+          >
             類型
           </label>
           <select
             id="mailType"
-            className={`${styles.itemSelect} ${styles.item} ${styles.item4}`}
+            className={`${styles.itemSelect} ${styles.item} ${styles.itemMailType}`}
             value={mailType}
             onChange={updateHook}
           >
@@ -275,16 +315,26 @@ export function UpdateMailList(props) {
             <option>小型包裹</option>
             <option>大型包裹</option>
           </select>
-          <label className={`${styles.updateMailLabel} ${styles.itemTitle5}`}>
+          <label
+            className={`${styles.updateMailLabel} ${styles.itemTitleReceiveDate}`}
+          >
             寄達日期
           </label>
-          <SmallCalendar updateReceiveDate={updateReceiveDate} />
-          <label className={`${styles.updateMailLabel} ${styles.itemTitle6}`}>
+          <SmallCalendar
+            receiveDate={receiveDate}
+            updateReceiveDate={updateReceiveDate}
+            year={year}
+            month={month}
+            date={date}
+          />
+          <label
+            className={`${styles.updateMailLabel} ${styles.itemTitlePlace}`}
+          >
             位置
           </label>
           <select
             id="place"
-            className={`${styles.itemSelect} ${styles.item} ${styles.item6}`}
+            className={`${styles.itemSelect} ${styles.item} ${styles.itemPlace}`}
             value={place}
             onChange={updateHook}
           >
@@ -292,24 +342,28 @@ export function UpdateMailList(props) {
             <option>置物櫃</option>
             <option>管理室</option>
           </select>
-          <label className={`${styles.updateMailLabel} ${styles.itemTitle7}`}>
+          <label
+            className={`${styles.updateMailLabel} ${styles.itemTitleStatus}`}
+          >
             狀態
           </label>
           <select
             ref={statusSelect}
             id="status"
-            className={`${styles.itemSelect} ${styles.item} ${styles.item7}`}
+            className={`${styles.itemSelect} ${styles.item} ${styles.itemStatus}`}
             onChange={updateHook}
           >
             <option>未領取</option>
             <option>已領取</option>
           </select>
-          <label className={`${styles.updateMailLabel} ${styles.itemTitle8}`}>
+          <label
+            className={`${styles.updateMailLabel} ${styles.itemTitleRemark}`}
+          >
             備註
           </label>
           <input
             id="remark"
-            className={`${styles.item} ${styles.item8}`}
+            className={`${styles.item} ${styles.itemRemark}`}
             type="text"
             placeholder="其他注意事項"
             onChange={updateHook}

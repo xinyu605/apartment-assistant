@@ -42,7 +42,7 @@
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(3, 1fr) repeat(1, 2fr) repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: 50px auto 60px 60px;
     align-items: center;
   }
 
@@ -53,23 +53,6 @@
     font-weight: 600;
     line-height: 1.2;
     justify-self: end;
-  }
-
-  .itemTitle1,
-  .itemTitle4,
-  .itemTitle7 {
-    grid-column: 1/2;
-  }
-
-  .itemTitle2,
-  .itemTitle5,
-  .itemTitle8 {
-    grid-column: 3/4;
-  }
-
-  .itemTitle3,
-  .itemTitle6 {
-    grid-column: 5/6;
   }
 
   .item {
@@ -85,6 +68,96 @@
 
   .focus {
     box-shadow: $light-box-shadow;
+  }
+
+  .remindMessage {
+    margin-top: 4px;
+    margin-left: 10px;
+    align-self: start;
+    color: $color-fireOpal;
+    font-size: $font-size-xsmall;
+    opacity: 0;
+    height: 0;
+    transition: all, 0.5s, ease;
+  }
+
+  .itemTitleMailNumber {
+    grid-column: 1/2;
+    grid-row: 1/2;
+  }
+  .itemMailNumber {
+    grid-column: 2/3;
+    grid-row: 1/2;
+  }
+
+  .itemTitleResidentNumber {
+    grid-column: 3/4;
+    grid-row: 1/2;
+  }
+
+  .itemResidentNumber {
+    grid-column: 4/5;
+    grid-row: 1/2;
+  }
+
+  .itemTitleReceiver {
+    grid-column: 5/6;
+    grid-row: 1/2;
+  }
+
+  .itemReceiver {
+    grid-column: 6/7;
+    grid-row: 1/2;
+  }
+
+  .remindResidentNumbers {
+    grid-column: 4/5;
+    grid-row: 2/3;
+  }
+
+  .itemTitleMailType {
+    grid-column: 1/2;
+    grid-row: 3/4;
+  }
+
+  .itemMailType {
+    grid-column: 2/3;
+    grid-row: 3/4;
+  }
+
+  .itemTitleReceiveDate {
+    grid-column: 3/4;
+    grid-row: 3/4;
+  }
+
+  .itemTitlePlace {
+    grid-column: 5/6;
+    grid-row: 3/4;
+  }
+
+  .itemPlace {
+    grid-column: 6/7;
+    grid-row: 3/4;
+  }
+
+  .itemTitleStatus {
+    grid-column: 1/2;
+    grid-row: 4/5;
+  }
+
+  .itemStatus {
+    grid-column: 2/3;
+    grid-row: 4/5;
+  }
+
+  .itemTitleRemark {
+    grid-column: 3/4;
+    grid-row: 4/5;
+  }
+
+  .itemRemark {
+    grid-column: 4/5;
+    grid-row: 4/5;
   }
 
   .buttonWrapper {
@@ -129,61 +202,66 @@
     .updateMailListForm {
       width: 96%;
       grid-template-columns: 1fr 2fr 1fr 2fr;
-      grid-template-rows: repeat(4, 40px);
+      grid-template-rows: 40px auto repeat(3, 40px);
 
-      .itemTitle3 {
-        grid-column: 1/2;
+      .remindResidentNumbers {
+        grid-column: 4/5;
         grid-row: 2/3;
       }
 
-      .item3 {
+      .itemTitleReceiver {
+        grid-column: 1/2;
+        grid-row: 3/4;
+      }
+
+      .itemReceiver {
         grid-column: 2/3;
-        grid-row: 2/3;
-      }
-
-      .itemTitle4 {
-        grid-column: 3/4;
-        grid-row: 2/3;
-      }
-
-      .item4 {
-        grid-column: 4/5;
-        grid-row: 2/3;
-      }
-
-      .itemTitle5 {
-        grid-column: 1/2;
         grid-row: 3/4;
       }
 
-      .itemTitle6 {
+      .itemTitleMailType {
         grid-column: 3/4;
         grid-row: 3/4;
       }
 
-      .item6 {
+      .itemMailType {
         grid-column: 4/5;
         grid-row: 3/4;
       }
 
-      .itemTitle7 {
+      .itemTitleReceiveDate {
         grid-column: 1/2;
         grid-row: 4/5;
       }
 
-      .item7 {
+      .itemTitlePlace {
+        grid-column: 3/4;
+        grid-row: 4/5;
+      }
+
+      .itemPlace {
+        grid-column: 4/5;
+        grid-row: 4/5;
+      }
+
+      .itemTitleStatus {
+        grid-column: 1/2;
+        grid-row: 5/6;
+      }
+
+      .itemStatus {
         grid-column: 2/3;
-        grid-row: 4/5;
+        grid-row: 5/6;
       }
 
-      .itemTitle8 {
+      .itemTitleRemark {
         grid-column: 3/4;
-        grid-row: 4/5;
+        grid-row: 5/6;
       }
 
-      .item8 {
+      .itemRemark {
         grid-column: 4/5;
-        grid-row: 4/5;
+        grid-row: 5/6;
       }
     }
   }
@@ -207,10 +285,10 @@
   .updateForm {
     .updateMailListForm {
       grid-template-columns: 30% 70%;
-      grid-template-rows: repeat(8, 50px);
+      grid-template-rows: repeat(2, 50px) auto repeat(6, 50px);
       font-size: $font-size-xsmall;
 
-      .itemTitle1 {
+      .itemTitleMailNumber {
         grid-column: 1/2;
         grid-row: 1/2;
       }
@@ -220,69 +298,74 @@
         grid-row: 1/2;
       }
 
-      .itemTitle2 {
+      .itemTitleResidentNumber {
         grid-column: 1/2;
         grid-row: 2/3;
       }
 
-      .item2 {
+      .itemResidentNumber {
         grid-column: 2/3;
         grid-row: 2/3;
       }
 
-      .itemTitle3 {
-        grid-column: 1/2;
-        grid-row: 3/4;
-      }
-
-      .item3 {
+      .remindResidentNumbers {
         grid-column: 2/3;
         grid-row: 3/4;
       }
 
-      .itemTitle4 {
+      .itemTitleReceiver {
         grid-column: 1/2;
         grid-row: 4/5;
       }
 
-      .item4 {
+      .itemReceiver {
         grid-column: 2/3;
         grid-row: 4/5;
       }
 
-      .itemTitle5 {
+      .itemTitleMailType {
         grid-column: 1/2;
         grid-row: 5/6;
       }
 
-      .itemTitle6 {
+      .itemMailType {
+        grid-column: 2/3;
+        grid-row: 5/6;
+      }
+
+      .itemTitleReceiveDate {
         grid-column: 1/2;
         grid-row: 6/7;
       }
 
-      .item6 {
-        grid-column: 2/3;
-        grid-row: 6/7;
-      }
-
-      .itemTitle7 {
+      .itemTitlePlace {
         grid-column: 1/2;
         grid-row: 7/8;
       }
 
-      .item7 {
+      .itemPlace {
         grid-column: 2/3;
         grid-row: 7/8;
       }
 
-      .itemTitle8 {
+      .itemTitleStatus {
         grid-column: 1/2;
         grid-row: 8/9;
       }
 
-      .item8 {
+      .itemStatus {
         grid-column: 2/3;
         grid-row: 8/9;
+      }
+
+      .itemTitleRemark {
+        grid-column: 1/2;
+        grid-row: 9/10;
+      }
+
+      .itemRemark {
+        grid-column: 2/3;
+        grid-row: 9/10;
       }
     }
   }

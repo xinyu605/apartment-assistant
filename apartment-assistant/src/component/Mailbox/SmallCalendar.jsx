@@ -8,9 +8,12 @@ import edit from "./../../img/edit.svg";
 *************************/
 export function SmallCalendar(props) {
   const [isCalendarShowing, setCalendarShowing] = useState(false);
-  const [thisYear, setThisYear] = useState(new Date().getFullYear());
-  const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
-  const [receiveDate, setReceiveDate] = useState(new Date().getDate());
+  const [thisYear, setThisYear] = useState(props.year);
+  const [thisMonth, setThisMonth] = useState(props.month);
+  const [receiveDate, setReceiveDate] = useState(props.date);
+  // const [thisYear, setThisYear] = useState(new Date().getFullYear());
+  // const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
+  // const [receiveDate, setReceiveDate] = useState(new Date().getDate());
 
   const containerElement = useRef(null);
   const remindYear = useRef(null);
