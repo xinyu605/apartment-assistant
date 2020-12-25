@@ -10,8 +10,9 @@ import logo from "./../../img/logo_apartment.png";
 import email from "./../../img/email.svg";
 import lock from "./../../img/lock.svg";
 import vintage from "./../../img/vintage.png";
+import { checkPropTypes } from "prop-types";
 
-export default function SignIn() {
+export default function SignIn(props) {
   let history = useHistory();
   const [emailSignIn, setEmailSignIn] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
@@ -33,7 +34,6 @@ export default function SignIn() {
   /*****************************
     check signIn inputs format
   *****************************/
-
   function checkSignInInput(e) {
     const target = e.currentTarget;
     const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";

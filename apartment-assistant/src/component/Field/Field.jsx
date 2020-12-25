@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ApplyTable from "./../Common/ApplyTable";
+import AlertDownward from "./../Common/AlertDownward";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import UserApplyForm from "./UserApplyForm";
 import { getExistedOrders, uploadFieldOrder } from "../../firebase";
 import styles from "./Field.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
 import next from "./../../img/next.svg";
+import { checkEmailFormat, checkUserName } from "../../lib";
 
 export default function Field() {
   const [timeTitle, setTimeTitle] = useState([]);
@@ -16,6 +18,10 @@ export default function Field() {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [orderList, setOrderList] = useState([]);
+
+  // alert dialogs
+  const [showAlertDownward, setAlertDownward] = useState(false);
+  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -137,15 +143,15 @@ export default function Field() {
     e.preventDefault();
     let orderList = [];
     let data = [];
+    let checkResult = false;
     const orderBoxes = document.querySelectorAll("input[type=checkbox]");
     const selectedField = document.querySelector("#selectField");
     const applicantName = document.querySelector("#applicantName").value;
     const applicantEmail = document.querySelector("#applicantEmail").value;
-    setUserName(applicantName);
-    setUserEmail(applicantEmail);
-    setApplying(false);
 
-    // 1. collect checked list
+    // Collect checked list
+    const checkNameResult = checkUserName(applicantName);
+    const checkEmailResult = checkEmailFormat(applicantEmail);
     for (let i = 0; i < orderBoxes.length; i++) {
       if (orderBoxes[i].checked === true) {
         orderList = [
@@ -157,29 +163,62 @@ export default function Field() {
         ];
       }
     }
-    setOrderList(orderList);
 
-    // 2. prepare data to upload firebase
-    for (let i = 0; i < orderList.length; i++) {
-      data[i] = {
-        user: applicantName,
-        userEmail: applicantEmail,
-        field: selectedField.value,
-        date: orderList[i].date,
-        startTime: orderList[i].time,
-      };
+    /***************************** 
+      Check inputs and checkboxes
+    ******************************/
+    if (
+      checkNameResult === "姓名欄位不可留空" ||
+      checkEmailResult === "Email欄位不可留空"
+    ) {
+      setAlertDownward(true);
+      setAlertDownwardMessage("欄位不可留空");
+    } else if (checkEmailResult === "Email格式錯誤") {
+      setAlertDownward(true);
+      setAlertDownwardMessage(checkEmailResult);
+    } else if (orderList.length === 0) {
+      setAlertDownward(true);
+      setAlertDownwardMessage("尚未勾選租借時段");
+    } else {
+      setUserName(applicantName);
+      setUserEmail(applicantEmail);
+      setOrderList(orderList);
+      checkResult = true;
     }
-    console.log(data);
 
-    // 3. pass data to firebase
-    uploadFieldOrder(data);
-    // 4. remind user apply successful
-    setSuccessAlert(true);
-    setSuccessMessage(`${selectedField.value}預約成功！`);
-    // window.alert(`${selectedField.value}預約成功！`);
-    // 5. clear all checkbox
-    for (let i = 0; i < orderBoxes.length; i++) {
-      orderBoxes[i].checked = false;
+    if (checkResult) {
+      // 1. prepare data to upload firebase
+      for (let i = 0; i < orderList.length; i++) {
+        data[i] = {
+          user: applicantName,
+          userEmail: applicantEmail,
+          field: selectedField.value,
+          date: orderList[i].date,
+          startTime: orderList[i].time,
+        };
+      }
+      // console.log(data);
+
+      // 2. pass data to firebase
+      uploadFieldOrder(data);
+
+      // 3. remind user apply successful
+      setSuccessAlert(true);
+      setSuccessMessage(`${selectedField.value}預約成功！`);
+      window.setTimeout(() => {
+        setSuccessAlert(false);
+      }, 2000);
+      window.setTimeout(() => {
+        setApplying(false);
+      }, 2001);
+
+      // 4. clear all checkbox and let values back to default (except for field)
+      for (let i = 0; i < orderBoxes.length; i++) {
+        orderBoxes[i].checked = false;
+      }
+      setUserName("");
+      setUserEmail("");
+      setOrderList([]);
     }
   }
 
@@ -188,7 +227,7 @@ export default function Field() {
   ************/
   function closeAlert(e) {
     e.preventDefault();
-    setSuccessAlert(false);
+    setAlertDownward(false);
   }
 
   return (
@@ -246,6 +285,11 @@ export default function Field() {
         isApplying={isApplying}
         closeApplyForm={closeApplyForm}
         getApplicantInfo={getApplicantInfo}
+      />
+      <AlertDownward
+        showAlertDownward={showAlertDownward}
+        alertDownwardMessage={alertDownwardMessage}
+        closeAlert={closeAlert}
       />
       <AlertSuccessMsg
         showSuccessAlert={showSuccessAlert}

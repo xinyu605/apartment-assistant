@@ -22,6 +22,7 @@ export default function Resident() {
   /************************************* 
     get resident list and pass to state
   **************************************/
+
   useEffect(() => {
     getResidentList(setResidentData);
     function setResidentData(residents) {

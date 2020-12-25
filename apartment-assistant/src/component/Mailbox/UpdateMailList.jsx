@@ -14,6 +14,7 @@ export function UpdateMailList(props) {
   const [mailNumber, setMailNumber] = useState("");
   const [residentNumber, setResidentNumber] = useState("");
   const [receiver, setReceiver] = useState("");
+  const [receiverIndex, setReceiverIndex] = useState(0);
   const [receiverEmail, setReceiverEmail] = useState("");
   const [mailType, setMailType] = useState("普通平信");
   const [receiveDate, setReceiveDate] = useState(0);
@@ -51,6 +52,7 @@ export function UpdateMailList(props) {
   }
 
   const ReceiverOptions = familyMembers.map((member) => {
+    const index = familyMembers.indexOf(member);
     return <option key={nanoid()}>{member}</option>;
   });
 
@@ -131,6 +133,8 @@ export function UpdateMailList(props) {
         break;
       case "receiver":
         setReceiver(e.currentTarget.value);
+        // console.log(e.currentTarget.options.selectedIndex);
+        setReceiverIndex(e.currentTarget.options.selectedIndex - 1);
         break;
       case "mailType":
         setMailType(e.currentTarget.value);
@@ -227,13 +231,16 @@ export function UpdateMailList(props) {
     isEditingMail === true ? setIsEditingMail(false) : setIsEditingMail(true);
   }
 
+  /***************** 
+    Close Email form
+  ******************/
   function closeForm() {
     setIsEditingMail(false);
   }
 
-  /*********** 
-  Close alert
-  ************/
+  /************* 
+    Close alert
+  **************/
   function closeAlert(e) {
     e.preventDefault();
     switch (e.currentTarget.id) {
@@ -245,11 +252,11 @@ export function UpdateMailList(props) {
     }
   }
 
+  /********************************************* 
+    Set receiver Email by selected option index
+  *********************************************/
   useEffect(() => {
-    // console.log(receiver, familyMembers, familyMembersEmail);
-    const index = familyMembers.indexOf(receiver);
-    // console.log(familyMembersEmail[index]);
-    setReceiverEmail(familyMembersEmail[index]);
+    setReceiverEmail(familyMembersEmail[receiverIndex]);
   }, [receiver]);
 
   return (

@@ -37,7 +37,7 @@ export default function ApplyTable(props) {
             user: props.orderRecord[i][j].user,
           };
           newOrderTimeList = [...newOrderTimeList, timeInRecord];
-          console.log(newOrderTimeList);
+          // console.log(newOrderTimeList);
           setOrderTimeList(newOrderTimeList);
         }
       }
@@ -80,7 +80,7 @@ function TimePeriod(props) {
     setVisible(true);
     for (let i = 0; i < props.orderTimeList.length; i++) {
       if (orderId === props.orderTimeList[i].time) {
-        console.log(orderId);
+        // console.log(orderId);
         setUser(props.orderTimeList[i].user);
         setVisible(false);
         break;

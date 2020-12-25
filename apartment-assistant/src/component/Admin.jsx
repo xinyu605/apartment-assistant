@@ -17,6 +17,7 @@ import Mailbox from "./Mailbox/Mailbox";
 import Field from "./Field/Field";
 import styles from "./Admin.module.scss";
 import firebase from "firebase";
+import Loading from "./Common/Loading";
 
 let auth = firebase.auth();
 

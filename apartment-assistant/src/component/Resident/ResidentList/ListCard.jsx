@@ -19,7 +19,6 @@ import {
   checkUserPhone,
   showDate,
 } from "./../../../lib";
-import { element } from "prop-types";
 
 export default function ListCard(props) {
   const lists = props.lists;
@@ -187,7 +186,10 @@ export default function ListCard(props) {
         repeatResidentNumbers = true;
       }
     }
-
+    if (editResidentNumbers.current.value === lists[index].residentNumbers) {
+      //self
+      repeatResidentNumbers = false;
+    }
     // check remark (remark is not neccessary)
     if (editResidentRemark.current.value === "") {
       setResidentRemark("無");
@@ -278,13 +280,7 @@ export default function ListCard(props) {
   ************/
   function closeAlert(e) {
     e.preventDefault();
-    switch (e.currentTarget.id) {
-      case "closeAlertBtn":
-        setAlertDownward(false);
-        break;
-      default:
-        break;
-    }
+    setAlertDownward(false);
   }
 
   if (isEditing === false) {

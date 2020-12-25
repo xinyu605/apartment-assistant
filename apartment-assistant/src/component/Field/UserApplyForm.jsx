@@ -26,6 +26,7 @@ export default function UserApplyForm(props) {
             </div>
             <input
               id="applicantName"
+              className={styles.infoInput}
               type="text"
               name="applicantName"
               placeholder="預約者姓名"
@@ -37,6 +38,7 @@ export default function UserApplyForm(props) {
             </div>
             <input
               id="applicantEmail"
+              className={styles.infoInput}
               type="text"
               name="applicantEmail"
               placeholder="預約者Email"

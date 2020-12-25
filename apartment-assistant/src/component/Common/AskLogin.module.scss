@@ -54,9 +54,9 @@
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background-color: $color-dimYellow;
-        animation: floating 1s alternate infinite ease;
-
+        background-color: $color-opal;
+        @include animation("floating 1s alternate infinite ease");
+        // animation: floating 1s alternate infinite ease;
         &:nth-child(2) {
           animation-delay: 0.2s;
         }
@@ -68,15 +68,15 @@
   }
 }
 
-@keyframes floating {
-  0% {
-    transform: translateY(-2px);
-  }
-  30% {
-    transform: translateY(-10px);
-  }
-  100% {
-    transform: translateY(-2px);
-    background-color: $color-melon;
-  }
-}
+// @keyframes floating {
+//   0% {
+//     transform: translateY(-2px);
+//   }
+//   30% {
+//     transform: translateY(-10px);
+//   }
+//   100% {
+//     transform: translateY(-2px);
+//     background-color: $color-melon;
+//   }
+// }
