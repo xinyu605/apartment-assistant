@@ -118,8 +118,9 @@ export default function SignUp(props) {
             }, 500);
           } else {
             setAlertDownward(true);
-            setAlertDownwardMessage(result.message);
-            console.log(result.message);
+            setAlertDownwardMessage(
+              `註冊失敗！請重新註冊(Error: ${result.message})`
+            );
           }
         })
         .catch((error) => {
@@ -127,7 +128,7 @@ export default function SignUp(props) {
         });
     } else {
       setAlertDownward(true);
-      setAlertDownwardMessage("註冊失敗！請重新註冊");
+      setAlertDownwardMessage("資料填寫不完整，請重新註冊");
     }
   }
 

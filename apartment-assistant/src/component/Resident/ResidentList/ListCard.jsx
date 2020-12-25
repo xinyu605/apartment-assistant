@@ -43,6 +43,9 @@ export default function ListCard(props) {
 
   //ref
   const trashIconImg = useRef(null);
+  const editResidentNumbers = useRef(null);
+  const editResidentAddress = useRef(null);
+  const editResidentRemark = useRef(null);
 
   let index = lists.indexOf(list);
   let updateDate = "";
@@ -177,6 +180,20 @@ export default function ListCard(props) {
       editMemberEmailInput.style.border = "1px solid #96bbbb";
     }
 
+    //check residentNumbers
+    let repeatResidentNumbers = false;
+    for (let i = 0; i < lists.length; i++) {
+      if (editResidentNumbers.current.value === lists[i].residentNumbers) {
+        repeatResidentNumbers = true;
+      }
+    }
+
+    // check remark (remark is not neccessary)
+    if (editResidentRemark.current.value === "") {
+      setResidentRemark("無");
+    }
+
+    //check members info
     let nameInputEmpty = 0;
     let phoneInputError = 0;
     let phoneInputEmpty = 0;
@@ -220,7 +237,17 @@ export default function ListCard(props) {
       }
     }
 
-    if (nameInputEmpty > 0 || phoneInputEmpty > 0 || emailInputEmpty > 0) {
+    // show alert
+    if (repeatResidentNumbers) {
+      setAlertDownward(true);
+      setAlertDownwardMessage("此戶號已存在，請重新填寫");
+    } else if (
+      editResidentNumbers.current.value === "" ||
+      editResidentAddress.current.value === "" ||
+      nameInputEmpty > 0 ||
+      phoneInputEmpty > 0 ||
+      emailInputEmpty > 0
+    ) {
       setAlertDownward(true);
       setAlertDownwardMessage("欄位不可留空");
     } else if (phoneInputError > 0) {
@@ -315,11 +342,7 @@ export default function ListCard(props) {
   } else {
     return (
       <div className={styles.residentInfo} id={`residentInfo${index}`}>
-        <div
-          className={styles.doneImg}
-          id={`done${index}`}
-          onClick={packNewResidentInfo}
-        >
+        <div className={styles.doneImg} onClick={packNewResidentInfo}>
           <img src={check} />
         </div>
         <div className={styles.closeImg} onClick={cancelEditing}>
@@ -334,6 +357,7 @@ export default function ListCard(props) {
         </div>
         <div className={`${styles.items} ${styles.itemResidentNumbers}`}>
           <input
+            ref={editResidentNumbers}
             className={styles.editInput}
             id={`editResidentNumbers${index}`}
             type="text"
@@ -346,6 +370,7 @@ export default function ListCard(props) {
             <img src={address} />
           </div>
           <input
+            ref={editResidentAddress}
             className={styles.editInput}
             id={`editResidentAddress${index}`}
             type="text"
@@ -364,6 +389,7 @@ export default function ListCard(props) {
             <img src={remark} />
           </div>
           <input
+            ref={editResidentRemark}
             className={styles.editInput}
             id={`editResidentRemark${index}`}
             type="text"
@@ -375,8 +401,6 @@ export default function ListCard(props) {
         <div className={`${styles.items} ${styles.itemMembers}`}>
           {/* <MemberList list={list} isEditing={isEditing} /> */}
           {list.familyMembers.map((member) => {
-            const index = list.familyMembers.indexOf(member);
-            console.log(member.memberId);
             return (
               <Member
                 isEditing={isEditing}

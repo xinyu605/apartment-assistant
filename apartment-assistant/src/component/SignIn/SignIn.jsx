@@ -98,11 +98,18 @@ export default function SignIn() {
             }, 700);
           } else {
             setAlertDownward(true);
-            setAlertDownwardMessage("登入失敗！請重新登入");
+            setAlertDownwardMessage(
+              `登入失敗！請重新登入(Error: ${result.message})`
+            );
             setEmailSignIn("");
             setPasswordSignIn("");
             emailSignInInput.current.value = "";
             passwordSignInInput.current.value = "";
+            remindEmailSignIn.current.textContent =
+              "管理員Email：admin@apartment.com";
+            remindEmailSignIn.current.style.color = "#96bbbb";
+            remindPasswordSignIn.current.textContent = "管理員密碼：apartment";
+            remindPasswordSignIn.current.style.color = "#96bbbb";
           }
         })
         .catch((error) => {
@@ -116,14 +123,29 @@ export default function SignIn() {
 
   function googleSignIn(e) {
     e.preventDefault();
-    signInWithGoogle().then((result) => {
-      console.log(result);
-      if (result === "admin") {
-        history.push("/admin");
-      } else {
-        history.push("/entry");
-      }
-    });
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result);
+        if (result === "admin") {
+          setSuccessAlert(true);
+          setSuccessMessage("Welcome!");
+          window.setTimeout(() => {
+            history.push("/admin");
+          }, 700);
+        } else if (result === "general") {
+          setSuccessAlert(true);
+          setSuccessMessage("Welcome!");
+          window.setTimeout(() => {
+            history.push("/entry");
+          }, 700);
+        } else {
+          setAlertDownward(true);
+          setAlertDownwardMessage("登入失敗！請重新登入");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function moveCard(e) {

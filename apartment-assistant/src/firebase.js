@@ -461,5 +461,6 @@ export function signInWithGoogle() {
       // The firebase.auth.AuthCredential type that was used.
       let credential = error.credential;
       console.log(error);
+      return error;
     });
 }
