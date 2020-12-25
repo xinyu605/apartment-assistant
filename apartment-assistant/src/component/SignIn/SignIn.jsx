@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import SignUp from "./SignUp";
+import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import AlertDownward from "./../Common/AlertDownward";
 import { nativeSignIn, signInWithGoogle } from "./../../firebase";
 import { checkEmailFormat, checkPasswordLength } from "./../../lib";
@@ -18,6 +19,8 @@ export default function SignIn() {
   // alert dialogs
   const [showAlertDownward, setAlertDownward] = useState(false);
   const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showSuccessAlert, setSuccessAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   /***************************************** 
     useRef instead of document.querySelector
@@ -82,9 +85,17 @@ export default function SignIn() {
         .then((result) => {
           console.log(result);
           if (result === "admin") {
-            history.push("/admin");
+            setSuccessAlert(true);
+            setSuccessMessage("Welcome!");
+            window.setTimeout(() => {
+              history.push("/admin");
+            }, 700);
           } else if (result === "general") {
-            history.push("/entry");
+            setSuccessAlert(true);
+            setSuccessMessage("Welcome!");
+            window.setTimeout(() => {
+              history.push("/entry");
+            }, 700);
           } else {
             setAlertDownward(true);
             setAlertDownwardMessage("登入失敗！請重新登入");
@@ -259,6 +270,10 @@ export default function SignIn() {
 
         <SignUp moveCard={moveCard} exchangeCards={exchangeCards} />
       </div>
+      <AlertSuccessMsg
+        showSuccessAlert={showSuccessAlert}
+        successMessage={successMessage}
+      />
       <AlertDownward
         showAlertDownward={showAlertDownward}
         alertDownwardMessage={alertDownwardMessage}

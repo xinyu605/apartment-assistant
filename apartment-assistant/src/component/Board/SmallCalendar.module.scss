@@ -10,6 +10,10 @@
   @include button-icon;
   background-color: $color-opal;
 
+  &:hover {
+    background-color: $color-steelTeal;
+  }
+
   img {
     width: 80%;
   }

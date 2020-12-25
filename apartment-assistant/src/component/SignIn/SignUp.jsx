@@ -106,12 +106,16 @@ export default function SignUp(props) {
             setUserName("");
             setEmailSignUp("");
             setPasswordSignUp("");
+            nameSignUpInput.current.value = "";
+            emailSignUpInput.current.value = "";
+            passwordSignUpInput.current.value = "";
 
             //move image card
-
-            const imageCard = document.querySelector("#imageCard");
-            imageCard.style.transform = "translateX(0px)";
-            imageCard.style.transition = "all 0.5s ease";
+            window.setTimeout(() => {
+              const imageCard = document.querySelector("#imageCard");
+              imageCard.style.transform = "translateX(0px)";
+              imageCard.style.transition = "all 0.5s ease";
+            }, 500);
           } else {
             setAlertDownward(true);
             setAlertDownwardMessage(result.message);

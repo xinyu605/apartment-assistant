@@ -8,6 +8,12 @@ import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 
 export default function UpdateBoardList() {
   const [deadline, setDeadline] = useState(0);
+  //
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [date, setDate] = useState(new Date().getDate());
+
+  //alert dialog
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
@@ -53,10 +59,17 @@ export default function UpdateBoardList() {
       window.setTimeout(() => {
         setSuccessAlert(false);
       }, 2000);
+
+      // back to initial condition
       inputs.forEach((input) => {
         input.value = "";
       });
       content.current.value = "";
+      updateDate(
+        new Date().getFullYear(),
+        new Date().getMonth() + 1,
+        new Date().getDate()
+      );
     }
   }
 
@@ -80,7 +93,11 @@ export default function UpdateBoardList() {
   function updateDate(year, month, date) {
     const seconds = getTimeStamp(year, month, date);
     setDeadline(seconds);
+    setYear(year);
+    setMonth(month);
+    setDate(date);
   }
+
   return (
     <div className={styles.updateBoard}>
       <div className={styles.titleContainer}>
@@ -113,7 +130,12 @@ export default function UpdateBoardList() {
         <label className={`${styles.formTitle} ${styles.updateDeadline}`}>
           公告期限
         </label>
-        <SmallCalendar updateDate={updateDate} />
+        <SmallCalendar
+          updateDate={updateDate}
+          year={year}
+          month={month}
+          date={date}
+        />
 
         <label className={`${styles.formTitle} ${styles.updateContent}`}>
           公告內容

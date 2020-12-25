@@ -8,12 +8,22 @@ import edit from "./../../img/edit.svg";
 *************************/
 export function SmallCalendar(props) {
   const [isCalendarShowing, setCalendarShowing] = useState(false);
-  const [thisYear, setThisYear] = useState(new Date().getFullYear());
-  const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
-  const [deadline, setDeadline] = useState(new Date().getDate());
+  // const [thisYear, setThisYear] = useState(new Date().getFullYear());
+  // const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
+  // const [deadline, setDeadline] = useState(new Date().getDate());
+  const [thisYear, setThisYear] = useState(props.year);
+  const [thisMonth, setThisMonth] = useState(props.month);
+  const [deadline, setDeadline] = useState(props.date);
 
   const containerElement = useRef(null);
   const remindYear = useRef(null);
+
+  // back to default date by props
+  useEffect(() => {
+    setThisYear(props.year);
+    setThisMonth(props.month);
+    setDeadline(props.date);
+  }, [props.year, props.month, props.date]);
 
   // send initial date to UpdateMailList at beginning
   useEffect(() => {

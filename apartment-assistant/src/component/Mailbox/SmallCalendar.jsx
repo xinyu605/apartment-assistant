@@ -18,6 +18,13 @@ export function SmallCalendar(props) {
   const containerElement = useRef(null);
   const remindYear = useRef(null);
 
+  // back to default date by props
+  useEffect(() => {
+    setThisYear(props.year);
+    setThisMonth(props.month);
+    setReceiveDate(props.date);
+  }, [props.year, props.month, props.date]);
+
   // send initial date to UpdateMailList at beginning
   useEffect(() => {
     props.updateReceiveDate(thisYear, thisMonth, receiveDate);
