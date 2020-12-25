@@ -126,7 +126,14 @@ export function MailList(props) {
         </button>
       </div>
       {/* list body */}
-      <div className={styles.mailList} id="mailList">
+      <ListBody
+        lists={lists}
+        changeMailStatus={changeMailStatus}
+        stateController={stateController}
+        description={description}
+        deleteMail={props.deleteMail}
+      />
+      {/* <div className={styles.mailList} id="mailList">
         <div className={styles.tableTitle}>
           <div className={styles.mailListTitle}>編號</div>
           <div className={styles.mailListTitle}>戶號</div>
@@ -150,7 +157,7 @@ export function MailList(props) {
             />
           );
         })}
-      </div>
+      </div> */}
       <ConfirmMsg
         showConfirm={showChangeStatusConfirm}
         confirmMessage={confirmMessage}
@@ -159,4 +166,50 @@ export function MailList(props) {
       />
     </div>
   );
+}
+
+function ListBody(props) {
+  if (props.lists.length === 0) {
+    return (
+      <div className={styles.emptyMailList}>
+        <div className={styles.imgWrapper}>
+          <img src={inboxTaken} />
+        </div>
+        <div className={styles.emptyText}>目前沒有信件包裹紀錄</div>
+        <div className={styles.circles}>
+          <span className={styles.circle}></span>
+          <span className={styles.circle}></span>
+          <span className={styles.circle}></span>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.mailList} id="mailList">
+        <div className={styles.tableTitle}>
+          <div className={styles.mailListTitle}>編號</div>
+          <div className={styles.mailListTitle}>戶號</div>
+          <div className={styles.mailListTitle}>收件人</div>
+          <div className={styles.mailListTitle}>類型</div>
+          <div className={styles.mailListTitle}>寄達日期</div>
+          <div className={styles.mailListTitle}>位置</div>
+          <div className={styles.mailListTitle}>備註</div>
+          <div className={styles.mailListTitle}>修改</div>
+        </div>
+
+        {props.lists.map((list) => {
+          return (
+            <MailListCard
+              key={`mailListCard${list.mailId}`}
+              list={list}
+              changeMailStatus={props.changeMailStatus}
+              stateController={props.stateController}
+              description={props.description}
+              deleteMail={props.deleteMail}
+            />
+          );
+        })}
+      </div>
+    );
+  }
 }
