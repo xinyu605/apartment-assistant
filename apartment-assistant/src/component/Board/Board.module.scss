@@ -39,6 +39,60 @@
   }
 }
 
+.emptyAnnouncement {
+  grid-column: 1/3;
+  width: 100%;
+  height: 200px;
+  padding: 40px;
+  border-radius: $list-border-radius;
+  box-shadow: $list-box-shadow;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: repeat(2, 50px) 40px;
+  justify-items: center;
+  align-items: center;
+
+  .imgWrapper {
+    width: 50px;
+    height: auto;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .emptyText {
+    font-size: $font-size-small;
+  }
+
+  .circles {
+    display: flex;
+    align-items: center;
+
+    .circle {
+      width: 5px;
+      height: 5px;
+      margin: 5px;
+      border-radius: 50%;
+      align-self: flex-end;
+      display: inline-block;
+      background-color: $color-opal;
+      @include animation("floating 1s alternate infinite ease");
+
+      &:nth-child(1) {
+        margin-left: 10px;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+}
+
 .anouncement {
   width: 96%;
   max-height: 480px;
@@ -78,7 +132,7 @@
       &:hover {
         border-left: 5px solid $color-melon;
         border-radius: 0 10px 10px 0;
-        background-color: $color-unbleachedSilk;
+        background-color: #eee;
         transition: all 0.3s ease-in-out;
       }
 
@@ -103,6 +157,7 @@
         height: 20px;
         padding: 5px;
         border: none;
+        outline: none;
         border-radius: 50%;
         background-color: $color-steelTeal;
         background-image: url("./../../img/next.svg");
@@ -115,7 +170,8 @@
         cursor: pointer;
 
         &:hover {
-          background-color: $color-fireOpal;
+          background-color: $color-melon;
+          background-image: url("./../../img/next555.svg");
           transition: all 0.3s ease-in-out;
         }
 
@@ -128,7 +184,7 @@
     .currentMatter {
       border-left: 5px solid $color-melon;
       border-radius: 0 10px 10px 0;
-      background-color: $color-unbleachedSilk;
+      background-color: #eee;
     }
   }
 }

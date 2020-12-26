@@ -215,6 +215,10 @@ export default function UpdateResident(props) {
       floor.current.placeholder = "請填寫數字";
       address.current.placeholder = "請填寫地址";
       remark.current.placeholder = "請填寫備註 (非必填)";
+      window.setTimeout(() => {
+        setFamilyMemberForm([{ id: "member0" }]);
+      }, 1000);
+
       for (let i = 0; i < familyMembersForm.length; i++) {
         document.querySelector(`#inputName${i}`).placeholder = "請填寫姓名";
         document.querySelector(`#inputPhone${i}`).placeholder =

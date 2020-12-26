@@ -1,5 +1,54 @@
 @import "./../../../common";
 
+.emptyResidentList {
+  width: 100%;
+  height: 200px;
+  margin: 20px auto;
+  padding: 40px;
+  border-radius: $list-border-radius;
+  box-shadow: $list-box-shadow;
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: repeat(2, 50px) 40px;
+  justify-items: center;
+  align-items: center;
+
+  .imgWrapper {
+    width: 50px;
+    height: auto;
+  }
+
+  .emptyText {
+    font-size: $font-size-small;
+  }
+
+  .circles {
+    display: flex;
+    align-items: center;
+    .circle {
+      width: 5px;
+      height: 5px;
+      margin: 5px;
+      border-radius: 50%;
+      align-self: flex-end;
+      display: inline-block;
+      background-color: $color-opal;
+      @include animation("floating 1s alternate infinite ease");
+
+      &:nth-child(1) {
+        margin-left: 10px;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+}
+
 .residentList {
   width: 100%;
   height: 420px;
