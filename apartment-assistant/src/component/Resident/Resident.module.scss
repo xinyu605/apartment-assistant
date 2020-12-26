@@ -39,6 +39,10 @@
       height: 25px;
       margin-right: 10px;
       background-color: $color-opal;
+
+      &:hover {
+        background-color: $color-opal;
+      }
     }
 
     .addBtn {

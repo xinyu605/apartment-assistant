@@ -379,6 +379,23 @@ export function uploadFieldOrder(data) {
   }
 }
 
+/********************* 
+  Delete Field order
+**********************/
+export function deleteFieldOrder(id) {
+  return refField
+    .doc(id)
+    .delete()
+    .then(() => {
+      console.log("delete order successful");
+      return true;
+    })
+    .catch((error) => {
+      console.log(error);
+      return error;
+    });
+}
+
 /******************************** 
   handle SignUp and SignIn
 *********************************/

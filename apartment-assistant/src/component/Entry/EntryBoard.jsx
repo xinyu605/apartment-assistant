@@ -26,11 +26,9 @@ export default function EntryBoard() {
       if (detail.style.display === "none") {
         detail.style.display = "grid";
         e.currentTarget.textContent = "關閉";
-        e.currentTarget.style.backgroundColor = "#618985";
       } else {
         detail.style.display = "none";
         e.currentTarget.textContent = "閱讀";
-        e.currentTarget.style.backgroundColor = "#96bbbb";
       }
     }
 

@@ -1,8 +1,8 @@
 @import "./../../common";
 .scrollBtn {
   @include button-icon;
-  width: 40px;
-  height: 40px;
+  background-color: $color-opal;
+  opacity: 0.7;
   position: fixed;
   bottom: -50px;
   right: 30px;
@@ -10,7 +10,8 @@
   outline: none;
 
   &:hover {
-    background-color: $color-melon;
+    background-color: $color-steelTeal;
+    opacity: 1;
   }
 
   img {

@@ -4,7 +4,7 @@
   margin-top: 10px;
   display: grid;
   grid-template-columns: 1.5fr repeat(7, 1fr);
-  grid-template-rows: repeat(13, 40px);
+  grid-template-rows: repeat(13, 65px);
   grid-auto-flow: column;
   align-items: center;
 
@@ -49,10 +49,38 @@
   }
 
   .daysInTableDisable {
-    background-color: $color-steelTeal;
+    background-color: $color-opal;
     color: $light-text-color;
-    font-size: 12px;
-    line-height: 1.5;
-    text-align: center;
+    border-bottom: 1px solid #fff;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 25px 40px;
+    // align-items: center;
+    justify-items: center;
+
+    .cancelBtn {
+      @include button-icon;
+      width: 18px;
+      height: 18px;
+      margin: 4px;
+      border: 1px solid #fff;
+      background-color: transparent;
+      grid-row: 1/2;
+      align-self: flex-end;
+      // justify-self: flex-end;
+
+      &:hover {
+        background-color: $color-fireOpal;
+      }
+    }
+
+    .text {
+      width: 100%;
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+      grid-row: 2/3;
+      align-self: flex-start;
+    }
   }
 }

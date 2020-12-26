@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
-import ConfirmMsg from "../Common/ConfirmMsg";
+import ConfirmMsg from "./../Common/ConfirmMsg";
+import ScrollToTopBtn from "./../Common/ScrollToTopBtn";
 import UpdateBoardList from "./UpdateBoardList";
 import { getBoardList, deleteIssueData } from "./../../firebase";
 import { showDate } from "./../../lib";
@@ -81,6 +82,7 @@ export default function Board() {
         confirmAction={confirmDelete}
         cancelConfirm={cancelConfirm}
       />
+      <ScrollToTopBtn />
     </div>
   );
 }

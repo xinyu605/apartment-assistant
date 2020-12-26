@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
+import ScrollToTopBtn from "./../Common/ScrollToTopBtn";
 import ConfirmMsg from "./../Common/ConfirmMsg";
 import { getMailList, getResidentList, deleteMailData } from "./../../firebase";
 import styles from "./MailList.module.scss";
@@ -113,6 +114,7 @@ export default function Mailbox() {
         confirmAction={confirmDelete}
         cancelConfirm={cancelConfirm}
       />
+      <ScrollToTopBtn />
     </div>
   );
 }

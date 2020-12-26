@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styles from "./ApplyTable.module.scss";
+import cancelBtn from "./../../img/close.svg";
 
 export default function ApplyTable(props) {
   // console.log(props.orderRecord);
@@ -35,6 +36,7 @@ export default function ApplyTable(props) {
           let timeInRecord = {
             time: `${props.orderRecord[i][j].date}${props.orderRecord[i][j].startTime}`,
             user: props.orderRecord[i][j].user,
+            userEmail: props.orderRecord[i][j].userEmail,
           };
           newOrderTimeList = [...newOrderTimeList, timeInRecord];
           // console.log(newOrderTimeList);
@@ -55,10 +57,12 @@ export default function ApplyTable(props) {
           const orderId = time.slice(4);
           return (
             <TimePeriod
+              userEmail={props.userEmail}
               time={time}
               orderId={orderId}
               orderTimeList={orderTimeList}
               key={time}
+              cancelOrder={props.cancelOrder}
             />
           );
         });
@@ -73,8 +77,11 @@ export default function ApplyTable(props) {
 function TimePeriod(props) {
   const [visible, setVisible] = useState(true);
   const [user, setUser] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const time = props.time; //ex. time2020121409
   const orderId = props.orderId; //ex. 2020121409
+  const button = useRef(null);
+  const orderPeriod = useRef(null);
   // console.log(props.orderTimeList);
   useEffect(() => {
     setVisible(true);
@@ -82,6 +89,7 @@ function TimePeriod(props) {
       if (orderId === props.orderTimeList[i].time) {
         // console.log(orderId);
         setUser(props.orderTimeList[i].user);
+        setUserEmail(props.orderTimeList[i].userEmail);
         setVisible(false);
         break;
       } else {
@@ -90,9 +98,28 @@ function TimePeriod(props) {
     }
   }, [props.orderTimeList]);
 
+  useEffect(() => {
+    // console.log(userEmail);
+    if (visible === false) {
+      // orderPeriod.current.style.backgroundColor = "transparent";
+      if (
+        props.userEmail === "admin@apartment.com" ||
+        props.userEmail === userEmail
+      ) {
+        button.current.style.display = "flex";
+        orderPeriod.current.style.backgroundColor = "#96bbbb";
+      } else {
+        button.current.style.display = "none";
+        orderPeriod.current.style.backgroundColor = "#bbb";
+      }
+    } else {
+      orderPeriod.current.style.backgroundColor = "transparent";
+    }
+  }, [visible]);
+
   if (visible) {
     return (
-      <div className={styles.daysInTable} id={`${time}`}>
+      <div ref={orderPeriod} className={styles.daysInTable} id={`${time}`}>
         <label className={styles.orderLabel} id={`label${orderId}`}>
           <input
             type="checkbox"
@@ -107,12 +134,23 @@ function TimePeriod(props) {
   } else {
     return (
       <div
+        ref={orderPeriod}
         className={`${styles.daysInTable} ${styles.daysInTableDisable}`}
         id={`${time}`}
       >
-        {user}
-        <br />
-        已借用
+        <button
+          ref={button}
+          id={`cancelBtn${time}`}
+          className={styles.cancelBtn}
+          onClick={props.cancelOrder}
+        >
+          <img src={cancelBtn} />
+        </button>
+        <div className={styles.text}>
+          {user}
+          <br />
+          已借用
+        </div>
       </div>
     );
   }

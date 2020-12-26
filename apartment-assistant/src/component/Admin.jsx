@@ -26,10 +26,12 @@ export function Admin(props) {
   const match = useRouteMatch();
   const [isLogin, setLogin] = useState(undefined);
   const [isShowing, setShowing] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
     auth.onAuthStateChanged(function (user) {
       if (user) {
+        setUserEmail(user.email);
         setLogin(true);
       } else {
         setLogin(false);
@@ -80,7 +82,7 @@ export function Admin(props) {
           <Mailbox />
         </Route>
         <Route path="/admin/field">
-          <Field />
+          <Field userEmail={userEmail} />
         </Route>
         <Route path="/admin">
           <Board />
@@ -92,7 +94,7 @@ export function Admin(props) {
 
 function Sidebar(props) {
   let location = useLocation();
-  console.log(location);
+  // console.log(location);
   const linkBoard = useRef(null);
   const linkResident = useRef(null);
   const linkMailbox = useRef(null);

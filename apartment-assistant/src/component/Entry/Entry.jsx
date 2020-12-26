@@ -7,6 +7,7 @@ import EntryBoard from "./EntryBoard";
 import EntryField from "./EntryField";
 import styles from "./Entry.module.scss";
 import logo from "./../../img/logo_apartment.png";
+import logoutIcon from "./../../img/logout.svg";
 import announceIcon from "./../../img/promotion.svg";
 import mailbox from "./../../img/inboxUntaken.svg";
 import list from "./../../img/list.svg";
@@ -56,6 +57,9 @@ export default function Entry(props) {
         <div className={styles.topBar}>
           <p>Hi! {userName}</p>
           <button className={styles.logout} onClick={props.logout}>
+            <div className={styles.imgWrapper}>
+              <img src={logoutIcon} />
+            </div>
             登出
           </button>
         </div>
@@ -117,7 +121,7 @@ export default function Entry(props) {
             <h2 className={styles.cardTitle}>場地租借</h2>
           </div>
         </div>
-        <EntryBoard />
+        <EntryBoard userEmail={userEmail} />
         <EntryMailList userMailList={userMailList} mailCount={mailCount} />
         <EntryMailRecord userMailHistory={userMailHistory} />
         <EntryField userName={userName} userEmail={userEmail} />

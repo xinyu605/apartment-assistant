@@ -2,14 +2,20 @@ import React, { useEffect, useState } from "react";
 import ApplyTable from "./../Common/ApplyTable";
 import AlertDownward from "./../Common/AlertDownward";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
+import ConfirmMsg from "./../Common/ConfirmMsg";
+import ScrollToTopBtn from "./../Common/ScrollToTopBtn";
 import UserApplyForm from "./UserApplyForm";
-import { getExistedOrders, uploadFieldOrder } from "../../firebase";
+import {
+  getExistedOrders,
+  uploadFieldOrder,
+  deleteFieldOrder,
+} from "../../firebase";
 import styles from "./Field.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
 import next from "./../../img/next.svg";
 import { checkEmailFormat, checkUserName } from "../../lib";
 
-export default function Field() {
+export default function Field(props) {
   const [timeTitle, setTimeTitle] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
@@ -18,12 +24,15 @@ export default function Field() {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [orderList, setOrderList] = useState([]);
+  const [cancelOrderId, setCancelOrderId] = useState("");
 
   // alert dialogs
   const [showAlertDownward, setAlertDownward] = useState(false);
   const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [showDeleteOrderConfirm, setShowDeleteOrderConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
 
   /************************* 
     show weekly date choice
@@ -45,6 +54,9 @@ export default function Field() {
       let month = days.getMonth() + 1;
       let date = days.getDate(); //type: number
       let day = days.getDay();
+      if (month.toString().length < 2) {
+        month = `0${month.toString()}`;
+      }
       if (date.toString().length < 2) {
         date = `0${date.toString()}`;
       }
@@ -87,7 +99,7 @@ export default function Field() {
         setOrderRecord((prevState) => [...prevState, data]);
       }
     }
-  }, [field]);
+  }, [field, cancelOrderId]);
 
   /***************************************** 
     create table elements with specific id
@@ -222,12 +234,61 @@ export default function Field() {
     }
   }
 
+  /*******************************************
+    Cancel order and update Order record
+  ********************************************/
+
+  function cancelOrder(e) {
+    const cancelDate = e.currentTarget.id.slice(13, 21);
+    const cancelTime = e.currentTarget.id.slice(21);
+    let selectedOrderId = "";
+    // console.log(cancelDate, cancelTime);
+    for (let i = 0; i < orderRecord.length; i++) {
+      for (let j = 0; j < orderRecord[i].length; j++) {
+        if (
+          orderRecord[i][j].date === cancelDate &&
+          orderRecord[i][j].startTime === cancelTime
+        ) {
+          selectedOrderId = orderRecord[i][j].orderId;
+        }
+      }
+    }
+    console.log(selectedOrderId);
+    setCancelOrderId(selectedOrderId);
+    setShowDeleteOrderConfirm(true);
+    setConfirmMessage("是否確定取消預借？");
+  }
+
+  function confirmCancelOrder() {
+    deleteFieldOrder(cancelOrderId).then((result) => {
+      if (result) {
+        setSuccessAlert(true);
+        setSuccessMessage("已取消預借");
+        window.setTimeout(() => {
+          setCancelOrderId("");
+          setShowDeleteOrderConfirm(false);
+        }, 2000);
+        window.setTimeout(() => {
+          setSuccessAlert(false);
+        }, 2001);
+      } else {
+        setAlertDownward(true);
+        setAlertDownwardMessage("取消預借失敗，請重新操作");
+      }
+    });
+  }
+
   /*********** 
   Close alert
   ************/
   function closeAlert(e) {
     e.preventDefault();
     setAlertDownward(false);
+  }
+
+  function cancelConfirm(e) {
+    e.preventDefault();
+    setShowDeleteOrderConfirm(false);
   }
 
   return (
@@ -273,12 +334,13 @@ export default function Field() {
           <div id="tday5" className={styles.tableTitle}></div>
           <div id="tday6" className={styles.tableTitle}></div>
         </div>
-
         <ApplyTable
+          userEmail={props.userEmail}
           timeTable={timeTable}
           timeTitle={timeTitle}
           orderRecord={orderRecord}
           field={field}
+          cancelOrder={cancelOrder}
         />
       </div>
       <UserApplyForm
@@ -296,6 +358,13 @@ export default function Field() {
         successMessage={successMessage}
         closeAlert={closeAlert}
       />
+      <ConfirmMsg
+        showConfirm={showDeleteOrderConfirm}
+        confirmMessage={confirmMessage}
+        confirmAction={confirmCancelOrder}
+        cancelConfirm={cancelConfirm}
+      />
+      <ScrollToTopBtn />
     </div>
   );
 }

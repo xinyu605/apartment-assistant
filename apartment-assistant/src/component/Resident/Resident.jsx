@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import ResidentList from "./ResidentList/ResidentList";
 import UpdateResident from "./UpdateResident";
 import ConfirmMsg from "./../Common/ConfirmMsg";
+import ScrollToTopBtn from "./../Common/ScrollToTopBtn";
 import { getResidentList, deleteResidentData } from "./../../firebase";
 import { scrollToTarget } from "./../../lib";
 import styles from "./Resident.module.scss";
@@ -122,6 +123,7 @@ export default function Resident() {
         confirmAction={confirmDelete}
         cancelConfirm={cancelConfirm}
       />
+      <ScrollToTopBtn />
     </div>
   );
 }
