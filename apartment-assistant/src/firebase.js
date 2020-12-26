@@ -135,7 +135,7 @@ export function deleteIssueData(id) {
   get resident list
  *******************/
 export function getResidentList(callback) {
-  refResident.onSnapshot((querySnapshot) => {
+  refResident.orderBy("residentNumbers").onSnapshot((querySnapshot) => {
     let data = [];
     querySnapshot.forEach((doc) => {
       data = [...data, doc.data()];
