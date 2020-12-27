@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
+import DetailArea from "./DetailArea";
 import ConfirmMsg from "./../Common/ConfirmMsg";
 import ScrollToTopBtn from "./../Common/ScrollToTopBtn";
 import UpdateBoardList from "./UpdateBoardList";
@@ -7,7 +8,6 @@ import { getBoardList, deleteIssueData } from "./../../firebase";
 import { showDate } from "./../../lib";
 import styles from "./Board.module.scss";
 import announcement from "./../../img/promotion.svg";
-import trashIcon from "./../../img/trash555.svg";
 import boardIcon from "./../../img/blackboard.svg";
 
 export default function Board() {
@@ -40,7 +40,8 @@ export default function Board() {
     matter.classList.add(styles.currentMatter);
   }
 
-  function deleteIssue() {
+  function deleteIssue(e) {
+    e.preventDefault();
     setShowDeleteConfirm(true);
     setConfirmMessage("刪除後無法復原，確定嗎？");
   }
@@ -139,33 +140,4 @@ function List(props) {
       ></button>
     </li>
   );
-}
-
-function DetailArea(props) {
-  const details = props.details;
-  console.log(details);
-
-  if (details?.topic) {
-    // 避免detail是undefined時網頁報錯
-    return (
-      <div className={styles.matterDetails}>
-        <div className={styles.detailHeader}>
-          <h4>{details.topic}</h4>
-          <div className={styles.trashImg} onClick={props.deleteIssue}>
-            <img src={trashIcon} />
-          </div>
-        </div>
-        <p className={styles.detailAuthor}>發布者：{details.author}</p>
-        <p className={styles.detailDate}>
-          公告日期：{showDate(details.updateTime.seconds)}
-        </p>
-        <p className={styles.detailDeadline}>
-          公告期限：{showDate(details.deadline.seconds)}
-        </p>
-        <p className={styles.content}>{details.content}</p>
-      </div>
-    );
-  } else {
-    return <div></div>;
-  }
 }

@@ -119,6 +119,30 @@ export function uploadAnnouncement(data) {
 }
 
 /***********************
+  Update issue on board
+ ***********************/
+export function updateIssue(data) {
+  return refBoard
+    .doc(data.issueId)
+    .update({
+      author: data.author,
+      content: data.content,
+      deadline: data.deadline,
+      issueId: data.issueId,
+      topic: data.topic,
+      updateTime: data.updateTime,
+    })
+    .then(() => {
+      console.log("Update issue success");
+      return true;
+    })
+    .catch((error) => {
+      console.log(error);
+      return error;
+    });
+}
+
+/***********************
   delete issue on board
  ***********************/
 export function deleteIssueData(id) {
