@@ -293,11 +293,11 @@ export default function Field(props) {
 
   return (
     <div className={styles.fieldPage}>
-      <div className={styles.title}>
+      <div className={styles.titleContainer}>
         <div className={styles.imgWrapper}>
           <img src={calendarIcon} />
         </div>
-        <h2>場地租借紀錄</h2>
+        <h2 className={styles.title}>場地租借紀錄</h2>
       </div>
       <form className={styles.fieldApply}>
         <label className={styles.applyTitle}>場地</label>

@@ -277,5 +277,21 @@
   .boardPage {
     width: 96%;
     margin: 20px auto;
+    padding: 20px;
+  }
+}
+
+/**********
+  < 500px
+***********/
+@media (max-width: 500px) {
+  .boardPage {
+    .titleContainer {
+      margin-bottom: 20px;
+
+      .title {
+        font-size: 1.2em;
+      }
+    }
   }
 }

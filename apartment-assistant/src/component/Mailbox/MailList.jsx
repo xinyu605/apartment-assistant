@@ -56,6 +56,7 @@ export function MailList(props) {
     props.state ? (status = false) : (status = true);
     console.log(status);
     updateMailStatus(mailId, status);
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setShowChangeStatusConfirm(false);
   }
 
@@ -133,31 +134,6 @@ export function MailList(props) {
         description={description}
         deleteMail={props.deleteMail}
       />
-      {/* <div className={styles.mailList} id="mailList">
-        <div className={styles.tableTitle}>
-          <div className={styles.mailListTitle}>編號</div>
-          <div className={styles.mailListTitle}>戶號</div>
-          <div className={styles.mailListTitle}>收件人</div>
-          <div className={styles.mailListTitle}>類型</div>
-          <div className={styles.mailListTitle}>寄達日期</div>
-          <div className={styles.mailListTitle}>位置</div>
-          <div className={styles.mailListTitle}>備註</div>
-          <div className={styles.mailListTitle}>修改</div>
-        </div>
-
-        {lists.map((list) => {
-          return (
-            <MailListCard
-              key={`mailListCard${list.mailId}`}
-              list={list}
-              changeMailStatus={changeMailStatus}
-              stateController={stateController}
-              description={description}
-              deleteMail={props.deleteMail}
-            />
-          );
-        })}
-      </div> */}
       <ConfirmMsg
         showConfirm={showChangeStatusConfirm}
         confirmMessage={confirmMessage}

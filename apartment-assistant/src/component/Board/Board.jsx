@@ -155,7 +155,6 @@ function DetailArea(props) {
             <img src={trashIcon} />
           </div>
         </div>
-
         <p className={styles.detailAuthor}>發布者：{details.author}</p>
         <p className={styles.detailDate}>
           公告日期：{showDate(details.updateTime.seconds)}

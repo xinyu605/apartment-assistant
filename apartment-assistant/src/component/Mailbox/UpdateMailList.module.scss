@@ -267,6 +267,18 @@
   < 600px
 ***********/
 @media (max-width: 600px) {
+  .updateMailList {
+    .titleContainer {
+      .title {
+        font-size: 1.2em;
+      }
+    }
+
+    .buttonWrapper {
+      margin: 0px auto 20px;
+    }
+  }
+
   .updateForm {
     .updateMailListForm {
       grid-template-columns: 30% 70%;

@@ -8,7 +8,7 @@
   margin-left: $admin-margin-left;
   margin-top: $admin-margin-top;
 
-  .title {
+  .titleContainer {
     display: flex;
     align-items: center;
     padding-left: 10px;
@@ -21,6 +21,10 @@
       img {
         width: 100%;
       }
+    }
+
+    .title {
+      font-size: 1.4em;
     }
   }
 }
@@ -80,5 +84,12 @@
   .fieldPage {
     width: 96%;
     margin: 50px auto;
+    padding: 20px;
+
+    .titleContainer {
+      .title {
+        font-size: 1.2em;
+      }
+    }
   }
 }

@@ -211,6 +211,16 @@
   < 750px
 ************/
 @media (max-width: 750px) {
+  .titleContainer {
+    .title {
+      font-size: 1.2em;
+    }
+  }
+
+  .basicInfo {
+    padding: 20px 10px 0 10px;
+  }
+
   .familyMemberList {
     .familyMember {
       grid-template-columns: 90px auto;

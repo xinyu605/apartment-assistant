@@ -181,3 +181,14 @@
     }
   }
 }
+
+/*********
+  < 500px
+**********/
+@media (max-width: 500px) {
+  .issues,
+  .mails,
+  .field {
+    padding: 20px;
+  }
+}

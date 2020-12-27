@@ -107,7 +107,19 @@
 
 @media (max-width: 768px) {
   .residentPage {
-    width: 96%;
+    width: 98%;
     margin: 60px auto;
+
+    .header {
+      .titleContainer {
+        .title {
+          font-size: 1.2em;
+        }
+      }
+    }
+
+    .residentInfo {
+      padding: 10px;
+    }
   }
 }

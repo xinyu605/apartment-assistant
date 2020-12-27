@@ -163,9 +163,15 @@
 }
 
 /**********
-  < 425px
+  < 500px
 ***********/
-@media (max-width: 425px) {
+@media (max-width: 500px) {
+  .titleContainer {
+    .title {
+      font-size: 1.2em;
+    }
+  }
+
   .updateForm {
     grid-template-columns: 100%;
     grid-template-rows: repeat(7, 40px) auto 50px;

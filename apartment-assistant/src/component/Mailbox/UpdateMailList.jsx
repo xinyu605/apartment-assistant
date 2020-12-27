@@ -202,6 +202,7 @@ export function UpdateMailList(props) {
       uploadMailList(data, data.mailId);
       setSuccessAlert(true);
       setSuccessMessage("資料已成功上傳");
+      window.scrollTo({ top: 0, behavior: "smooth" });
       window.setTimeout(() => {
         setSuccessAlert(false);
       }, 2000);
