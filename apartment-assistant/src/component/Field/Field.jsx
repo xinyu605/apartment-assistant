@@ -123,6 +123,12 @@ export default function Field(props) {
       let year = day.getFullYear();
       let month = day.getMonth() + 1;
       let date = day.getDate();
+      if (month.toString().length < 2) {
+        month = `0${month}`;
+      }
+      if (date.toString().length < 2) {
+        date = `0${date}`;
+      }
       timeTable[i] = [];
       for (let j = 0; j < 13; j++) {
         let time = j + 9;
