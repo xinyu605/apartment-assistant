@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import AlertDownward from "./../Common/AlertDownward";
 import styles from "./SignIn.module.scss";
 import user from "./../../img/user.svg";
@@ -8,7 +8,7 @@ import {
   checkUserName,
   checkEmailFormat,
   checkPasswordLength,
-} from "../../lib";
+} from "./../../utils/lib";
 import { nativeSignUp } from "./../../firebase";
 import AlertSuccessMsg from "../Common/AlertSuccessMsg";
 
@@ -17,7 +17,6 @@ export default function SignUp(props) {
   const [emailSignUp, setEmailSignUp] = useState("");
   const [passwordSignUp, setPasswordSignUp] = useState("");
 
-  // alert dialogs
   const [showAlertDownward, setAlertDownward] = useState(false);
   const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
@@ -30,9 +29,6 @@ export default function SignUp(props) {
   const remindEmailSignUp = useRef(null);
   const remindPasswordSignUp = useRef(null);
 
-  /****************************************
-    check signUp inputs format
-  *****************************************/
   function checkSignUpInput(e) {
     const target = e.currentTarget;
     const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";

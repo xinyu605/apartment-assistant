@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Member from "./Member";
 import NewMember from "./NewMember";
 import AlertDownward from "./../../Common/AlertDownward";
@@ -11,20 +11,22 @@ import check from "./../../../img/check.svg";
 import close from "./../../../img/close.svg";
 import plus from "./../../../img/plus555.svg";
 import remark from "./../../../img/remark.svg";
-import { getTimeStamp, editUpdateResident } from "./../../../firebase";
+import { getTimeStamp, updateDocById } from "./../../../firebase";
 import { nanoid } from "nanoid";
 import {
   checkEmailFormat,
   checkUserName,
   checkUserPhone,
   showDate,
-} from "./../../../lib";
+} from "./../../../utils/lib";
 
 export default function ListCard(props) {
   const lists = props.lists;
   const list = props.list;
   const [isEditing, setEditing] = useState(false);
-  const [residentId, setResidentId] = useState(list.residentId);
+  const [fillInMemberName, setFillInMemberName] = useState([]);
+  const [fillInMemberPhone, setFillInMemberPhone] = useState([]);
+  const [fillInMemberEmail, setFillInMemberEmail] = useState([]);
   const [floor, setFloor] = useState(props.list.floor);
   const [residentNumbers, setResidentNumbers] = useState(list.residentNumbers);
   const [residentAddress, setResidentAddress] = useState(list.address);
@@ -49,11 +51,23 @@ export default function ListCard(props) {
   let index = lists.indexOf(list);
   let updateDate = "";
 
-  // console.log(list);
-
   if (list.updateDate) {
     updateDate = showDate(list.updateDate.seconds);
   }
+
+  useEffect(() => {
+    const newFillInMemberName = [];
+    const newFillInMemberPhone = [];
+    const newFillInMemberEmail = [];
+    for (let i = 0; i < familyMembers.length; i++) {
+      newFillInMemberName.push(true);
+      newFillInMemberPhone.push(true);
+      newFillInMemberEmail.push(true);
+    }
+    setFillInMemberName(newFillInMemberName);
+    setFillInMemberPhone(newFillInMemberPhone);
+    setFillInMemberEmail(newFillInMemberEmail);
+  }, [familyMembers]);
 
   function editResident(e) {
     setEditing(true);
@@ -97,13 +111,11 @@ export default function ListCard(props) {
 
   function createMemberInput(e) {
     e.preventDefault();
-    // console.log(familyMembers.length);
     const newMemberId = nanoid(20);
     let currentFamilyMembersForm = familyMembersForm.map((memberForm) => ({
       ...memberForm,
     }));
     currentFamilyMembersForm.push({ id: `memberForm${newMemberId}` });
-    // currentFamilyMembersForm.push({ id: `member${familyMembers.length}` });
 
     setFamilyMembersForm(currentFamilyMembersForm);
     let newFamilyMembers = familyMembers.map((member) => ({ ...member }));
@@ -118,7 +130,6 @@ export default function ListCard(props) {
 
   function changeMemberInfo(e, newMemberId, index) {
     const target = e.currentTarget;
-    // console.log(familyMembers);
     // let newFamilyMembers = [...familyMembers];  //只複製第一層，沒有複製內部的物件，後續處理內部物件會指向原來的陣列
     let newFamilyMembers = familyMembers.map((member) => ({ ...member })); //完全複製，後續處理內部物件會指向新的陣列
 
@@ -133,7 +144,6 @@ export default function ListCard(props) {
   }
 
   function deleteMember(removeMemberId) {
-    // update familyMembers input
     let newFamilyMembersForm = familyMembersForm
       .map((memberForm) => ({
         ...memberForm,
@@ -148,38 +158,7 @@ export default function ListCard(props) {
     setFamilyMembers(newFamilyMembers);
   }
 
-  function packNewResidentInfo() {
-    const infoPackage = {
-      residentId: residentId,
-      residentNumbers: residentNumbers,
-      floor: floor,
-      address: residentAddress,
-      remark: residentRemark,
-      familyMembers: familyMembers,
-      updateDate: updateDateWhenEdit,
-    };
-
-    /*******************
-      check input value
-    ********************/
-    //init input border
-    for (let i = 0; i < familyMembers.length; i++) {
-      const memberId = familyMembers[i].memberId;
-      const editMemberNameInput = document.querySelector(
-        `#editMemberName${memberId}`
-      );
-      const editMemberPhoneInput = document.querySelector(
-        `#editMemberPhone${memberId}`
-      );
-      const editMemberEmailInput = document.querySelector(
-        `#editMemberEmail${memberId}`
-      );
-      editMemberNameInput.style.border = "1px solid #96bbbb";
-      editMemberPhoneInput.style.border = "1px solid #96bbbb";
-      editMemberEmailInput.style.border = "1px solid #96bbbb";
-    }
-
-    //check residentNumbers
+  function checkResidentNumbersInput() {
     let repeatResidentNumbers = false;
     for (let i = 0; i < lists.length; i++) {
       if (editResidentNumbers.current.value === lists[i].residentNumbers) {
@@ -190,79 +169,98 @@ export default function ListCard(props) {
       //self
       repeatResidentNumbers = false;
     }
-    // check remark (remark is not neccessary)
-    if (editResidentRemark.current.value === "") {
-      setResidentRemark("無");
-    }
+    return repeatResidentNumbers;
+  }
 
-    //check members info
-    let nameInputEmpty = 0;
+  function checkMemberInfoInput() {
+    let emptyInputCount = 0;
     let phoneInputError = 0;
-    let phoneInputEmpty = 0;
     let emailInputError = 0;
-    let emailInputEmpty = 0;
-    const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";
+    const newFillInMemberName = [];
+    const newFillInMemberPhone = [];
+    const newFillInMemberEmail = [];
 
     for (let i = 0; i < familyMembers.length; i++) {
       const checkNameResult = checkUserName(familyMembers[i].name);
       const checkPhoneResult = checkUserPhone(familyMembers[i].phone);
       const checkEmailResult = checkEmailFormat(familyMembers[i].email);
-      const memberId = familyMembers[i].memberId;
-      const editMemberNameInput = document.querySelector(
-        `#editMemberName${memberId}`
-      );
-      const editMemberPhoneInput = document.querySelector(
-        `#editMemberPhone${memberId}`
-      );
-      const editMemberEmailInput = document.querySelector(
-        `#editMemberEmail${memberId}`
-      );
 
-      if (checkNameResult === "姓名欄位不可留空") {
-        editMemberNameInput.style.boxShadow = focusBoxShadow;
-        nameInputEmpty += 1;
+      if (checkNameResult === true) {
+        newFillInMemberName.push(true);
+      } else if (checkNameResult === "姓名欄位不可留空") {
+        newFillInMemberName.push(false);
+        emptyInputCount += 1;
       }
-      if (checkPhoneResult === "手機號碼不可留空") {
-        editMemberPhoneInput.style.boxShadow = focusBoxShadow;
-        phoneInputEmpty += 1;
+
+      if (checkPhoneResult === true) {
+        newFillInMemberPhone.push(true);
+      } else if (checkPhoneResult === "手機號碼不可留空") {
+        newFillInMemberPhone.push(false);
+        emptyInputCount += 1;
       } else if (checkPhoneResult === "請填寫正確格式，如0912345678") {
-        editMemberPhoneInput.style.boxShadow = focusBoxShadow;
+        newFillInMemberPhone.push(false);
         phoneInputError += 1;
       }
 
-      if (checkEmailResult === "Email欄位不可留空") {
-        editMemberEmailInput.style.boxShadow = focusBoxShadow;
-        emailInputEmpty += 1;
+      if (checkEmailResult === true) {
+        newFillInMemberEmail.push(true);
+      } else if (checkEmailResult === "Email欄位不可留空") {
+        newFillInMemberEmail.push(false);
+        emptyInputCount += 1;
       } else if (checkEmailResult === "Email格式錯誤") {
-        editMemberEmailInput.style.boxShadow = focusBoxShadow;
+        newFillInMemberEmail.push(false);
         emailInputError += 1;
       }
+
+      setFillInMemberName(newFillInMemberName);
+      setFillInMemberPhone(newFillInMemberPhone);
+      setFillInMemberEmail(newFillInMemberEmail);
+    }
+    return {
+      emptyInputCount: emptyInputCount,
+      phoneInputError: phoneInputError,
+      emailInputError: emailInputError,
+    };
+  }
+
+  function packNewResidentInfo() {
+    const infoPackage = {
+      residentNumbers: residentNumbers,
+      floor: floor,
+      address: residentAddress,
+      remark: residentRemark,
+      familyMembers: familyMembers,
+      updateDate: updateDateWhenEdit,
+    };
+
+    const repeatResidentNumbers = checkResidentNumbersInput();
+    const errorRecord = checkMemberInfoInput();
+
+    if (editResidentRemark.current.value === "") {
+      setResidentRemark("無");
     }
 
-    // show alert
     if (repeatResidentNumbers) {
       setAlertDownward(true);
       setAlertDownwardMessage("此戶號已存在，請重新填寫");
     } else if (
       editResidentNumbers.current.value === "" ||
       editResidentAddress.current.value === "" ||
-      nameInputEmpty > 0 ||
-      phoneInputEmpty > 0 ||
-      emailInputEmpty > 0
+      errorRecord.emptyInputCount > 0
     ) {
       setAlertDownward(true);
       setAlertDownwardMessage("欄位不可留空");
-    } else if (phoneInputError > 0) {
+    } else if (errorRecord.phoneInputError > 0) {
       setAlertDownward(true);
       setAlertDownwardMessage("請填寫正確的手機號碼格式，如0912345678");
-    } else if (emailInputError > 0) {
+    } else if (errorRecord.emailInputError > 0) {
       setAlertDownward(true);
       setAlertDownwardMessage("請填寫正確的Email格式");
     } else if (familyMembers.length < 1) {
       setAlertDownward(true);
       setAlertDownwardMessage("住戶成員不能少於一位");
     } else {
-      editUpdateResident(infoPackage);
+      updateDocById("residents", list.residentId, infoPackage);
       setSuccessAlert(true);
       setSuccessMessage("住戶資訊更新成功");
       setFamilyMembersForm([]);
@@ -275,9 +273,6 @@ export default function ListCard(props) {
     }
   }
 
-  /*********** 
-  Close alert
-  ************/
   function closeAlert(e) {
     e.preventDefault();
     setAlertDownward(false);
@@ -285,12 +280,14 @@ export default function ListCard(props) {
 
   if (isEditing === false) {
     return (
-      <div className={styles.residentInfo} id={`residentInfo${residentId}`}>
+      <div
+        className={styles.residentInfo}
+        id={`residentInfo${list.residentId}`}
+      >
         <div
           className={styles.trashImg}
-          // id={`trash${index}`}
           onClick={() => {
-            props.deleteResident(residentId);
+            props.deleteResident(list.residentId);
           }}
         >
           <img ref={trashIconImg} src={trashIcon} />
@@ -395,11 +392,13 @@ export default function ListCard(props) {
         </div>
 
         <div className={`${styles.items} ${styles.itemMembers}`}>
-          {/* <MemberList list={list} isEditing={isEditing} /> */}
           {list.familyMembers.map((member) => {
             return (
               <Member
                 isEditing={isEditing}
+                fillInMemberName={fillInMemberName}
+                fillInMemberPhone={fillInMemberPhone}
+                fillInMemberEmail={fillInMemberEmail}
                 list={list}
                 member={member}
                 familyMembers={familyMembers}

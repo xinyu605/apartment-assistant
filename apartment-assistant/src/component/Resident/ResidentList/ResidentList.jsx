@@ -6,14 +6,13 @@ import doorway from "./../../../img/doorway.svg";
 export default function ResidentList(props) {
   let lists = [];
   let resultList = props.searchResult;
-  // console.log(resultList);
 
   if (resultList.length !== 0) {
     lists = resultList;
   } else {
     lists = props.residentList;
   }
-  console.log(lists);
+
   if (lists.length === 0) {
     return (
       <div className={styles.emptyResidentList}>

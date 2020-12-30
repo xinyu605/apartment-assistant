@@ -3,8 +3,8 @@ import { sendMail } from "./../../firebase";
 import styles from "./EmailForm.module.scss";
 import close from "./../../img/close.svg";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
-import { checkEmailFormat } from "../../lib";
-import AlertDownward from "../Common/AlertDownward";
+import { checkEmailFormat } from "./../../utils/lib";
+import AlertDownward from "./../Common/AlertDownward";
 
 export function EmailForm(props) {
   const [recipientEmail, setRecipientEmail] = useState("");

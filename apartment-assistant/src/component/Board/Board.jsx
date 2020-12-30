@@ -4,8 +4,8 @@ import DetailArea from "./DetailArea";
 import ConfirmMsg from "./../Common/ConfirmMsg";
 import ScrollToTopBtn from "./../Common/ScrollToTopBtn";
 import UpdateBoardList from "./UpdateBoardList";
-import { getBoardList, deleteIssueData } from "./../../firebase";
-import { showDate } from "./../../lib";
+import { getBoardList, deleteDocById } from "./../../firebase";
+import { showDate } from "./../../utils/lib";
 import styles from "./Board.module.scss";
 import announcement from "./../../img/promotion.svg";
 import boardIcon from "./../../img/blackboard.svg";
@@ -26,12 +26,10 @@ export default function Board() {
   }, []);
 
   function selectMatterDetail(e) {
-    // console.log(e.currentTarget.id.slice(13));
     const index = parseInt(e.currentTarget.id.slice(13));
     setIssueIndex(index);
     setDetails(matters[index]);
 
-    //change styles
     const allMatters = document.querySelectorAll(`.${styles.matter}`);
     const matter = allMatters[index];
     allMatters.forEach((item) => {
@@ -52,7 +50,7 @@ export default function Board() {
     let removeIssue = issueList.splice(issueIndex, 1);
     setMatters(issueList);
     setDetails(issueList[0]);
-    deleteIssueData(removeIssue[0].issueId);
+    deleteDocById("board", removeIssue[0].issueId);
     setShowDeleteConfirm(false);
   }
 

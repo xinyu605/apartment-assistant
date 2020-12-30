@@ -3,14 +3,8 @@ import { MailList } from "./MailList";
 import { UpdateMailList } from "./UpdateMailList";
 import ScrollToTopBtn from "./../Common/ScrollToTopBtn";
 import ConfirmMsg from "./../Common/ConfirmMsg";
-import { getMailList, getResidentList, deleteMailData } from "./../../firebase";
+import { getMailList, getResidentList, deleteDocById } from "./../../firebase";
 import styles from "./MailList.module.scss";
-
-/*****************************
-  Mailbox component:
-  1.Get data from Firestore
-  2.Render 
-******************************/
 
 export default function Mailbox() {
   const [state, setState] = useState(false);
@@ -18,12 +12,10 @@ export default function Mailbox() {
   const [takenData, setTakenData] = useState([]);
   const [residentList, setResidentList] = useState([]);
   const [removeMailId, setRemoveMailId] = useState("");
-  const [newMail, setNewMail] = useState(false);
 
   //confirm dialog
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
-  const [deletedMailId, setDeletedMailId] = useState("");
 
   useEffect(() => {
     getMailList(false, getUntakenData);
@@ -56,14 +48,10 @@ export default function Mailbox() {
     }
   }
 
-  /************************************************* 
-    Delete individual mail (pop up confirm dialog)
-  **************************************************/
   function deleteMail(rmMailId) {
     setRemoveMailId(rmMailId);
     setShowDeleteConfirm(true);
     setConfirmMessage("刪除後無法復原，確定嗎？");
-    // setDeletedMailId(e.currentTarget.id.slice(6));
   }
 
   function confirmDelete(e) {
@@ -79,17 +67,13 @@ export default function Mailbox() {
       setUntakenData(mailList);
     }
 
-    deleteMailData(removeMailId);
+    deleteDocById("mailbox", removeMailId);
     setShowDeleteConfirm(false);
   }
 
   function cancelConfirm(e) {
     e.preventDefault();
     setShowDeleteConfirm(false);
-  }
-
-  function updateNewMail() {
-    newMail ? setNewMail(false) : setNewMail(true);
   }
 
   return (
@@ -100,14 +84,8 @@ export default function Mailbox() {
         takenMails={takenData}
         toggleState={toggleState}
         deleteMail={deleteMail}
-        newMail={newMail}
       />
-      {/* <Route exact path="/admin/mailbox" component={UpdateMailList} /> */}
-      <UpdateMailList
-        untakenMails={untakenData}
-        updateNewMail={updateNewMail}
-        residentList={residentList}
-      />
+      <UpdateMailList untakenMails={untakenData} residentList={residentList} />
       <ConfirmMsg
         showConfirm={showDeleteConfirm}
         confirmMessage={confirmMessage}

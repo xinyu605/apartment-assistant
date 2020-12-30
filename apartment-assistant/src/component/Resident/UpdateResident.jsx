@@ -12,7 +12,7 @@ import {
   checkNumbers,
   checkUserName,
   checkUserPhone,
-} from "../../lib";
+} from "./../../utils/lib";
 
 export default function UpdateResident(props) {
   const [familyMembersForm, setFamilyMemberForm] = useState([

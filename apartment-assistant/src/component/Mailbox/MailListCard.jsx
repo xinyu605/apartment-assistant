@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./MailList.module.scss";
-import { showDate } from "./../../lib";
+import { showDate } from "./../../utils/lib";
 import trashIcon from "./../../img/trash555.svg";
 
 export default function MailListCard(props) {

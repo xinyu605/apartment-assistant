@@ -1,46 +1,31 @@
 export function showDate(seconds) {
-  // console.log(seconds);
-  let num = seconds * 1000; //得到毫秒數
-  let dd = new Date(num);
-  let year = dd.getFullYear();
-  let month = dd.getMonth() + 1;
-  let date = dd.getDate();
-  // console.log(`${year}年${month}月${date}日`);
+  const MILLISECONDS = seconds * 1000;
+  const dd = new Date(MILLISECONDS);
+  const year = dd.getFullYear();
+  const month = dd.getMonth() + 1;
+  const date = dd.getDate();
   return `${year}年${month}月${date}日`;
 }
 
 export function showCalendar(element, getYear, getMonth, blockPast = false) {
-  // const todayTime = new Date().getTime();
   const todayYear = new Date().getFullYear();
   const todayMonth = new Date().getMonth();
   const todayDate = new Date().getDate();
   const todayTime = new Date(todayYear, todayMonth, todayDate).getTime();
-
-  //1.create months in normal year and olympic year
   const monthNormal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const monthOlympic = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-  //2.create variables for DOM elements
-  // console.log(element);
-  const dateContainer = document.querySelector("#date");
-  dateContainer.innerHTML = "";
-
-  //4.get what day is the first day in the selected month
-  const firstDay = dayStart(getYear, getMonth);
-  // console.log(firstDay); //return 0 means Sunday
-
-  //5.get the total days in this month
-  const totalDaysThisMonth = daysMonth(
+  const dateContainer = createDateElements("#date");
+  const firstDayInSelectedMonth = dayStartInSelectedMonth(getYear, getMonth); //return 0 means Sunday
+  const totalDaysThisMonth = daysInThisMonth(
     getYear,
     getMonth,
     monthOlympic,
     monthNormal
   );
-  // console.log(totalDaysThisMonth);
 
   //6.render
   //在當月第一天前面建立空白的<li>
-  for (let i = 0; i < firstDay; i++) {
+  for (let i = 0; i < firstDayInSelectedMonth; i++) {
     let blankDays = document.createElement("li");
     dateContainer.appendChild(blankDays);
   }
@@ -64,18 +49,26 @@ export function showCalendar(element, getYear, getMonth, blockPast = false) {
   }
 }
 
-function dayStart(year, month) {
+export function createDateElements(elementId) {
+  const dateElement = document.querySelector(elementId);
+  dateElement.innerHTML = "";
+  return dateElement;
+}
+
+export function dayStartInSelectedMonth(year, month) {
   const tmpDate = new Date(year, month - 1, 1); //當年當月1日
   return tmpDate.getDay();
 }
 
-function daysMonth(year, month, monthOlympic, monthNormal) {
+export function daysInThisMonth(year, month, monthOlympic, monthNormal) {
   const tmpYear = year % 4;
+  let daysInTheMonth = 0;
   if (tmpYear === 0) {
-    return monthOlympic[month - 1]; //回傳閏年的當月天數
+    daysInTheMonth = monthOlympic[month - 1];
   } else {
-    return monthNormal[month - 1]; //回傳正常年的當月天數
+    daysInTheMonth = monthNormal[month - 1];
   }
+  return daysInTheMonth;
 }
 
 export function scrollToTarget(targetId) {

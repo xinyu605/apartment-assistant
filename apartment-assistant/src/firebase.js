@@ -47,39 +47,14 @@ export function sendMail(data) {
     });
 }
 
-/*******************
-  get user profile
- *******************/
 export function getUserProfile(uid) {
   return users
     .doc(uid)
     .get()
     .then((doc) => {
-      // console.log(doc.data());
       return doc.data();
     });
 }
-
-/*******************
-  get Board list
- *******************/
-// export function getBoardList() {
-//   let data = [];
-//   return refBoard
-//     .get()
-//     .then((docRef) => {
-//       docRef.forEach((doc) => {
-//         if (doc.id) {
-//           data = [...data, doc.data()];
-//           return data;
-//         }
-//       });
-//       return data;
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
 
 export function getBoardList(callback) {
   refBoard.onSnapshot((querySnapshot) => {
@@ -89,6 +64,119 @@ export function getBoardList(callback) {
     });
     callback(data);
   });
+}
+
+export function getResidentList(callback) {
+  refResident.orderBy("residentNumbers").onSnapshot((querySnapshot) => {
+    let data = [];
+    querySnapshot.forEach((doc) => {
+      data = [...data, doc.data()];
+    });
+    callback(data);
+  });
+}
+
+export function getMailList(status = false, callback) {
+  refMailbox
+    .where("status", "==", status) //status= true (taken) | false (untaken)
+    .orderBy("mailNumbers", "asc")
+    .onSnapshot(function (querySnapshot) {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data = [...data, doc.data()];
+      });
+      callback(data);
+    });
+}
+
+export function getUserMailList(email, status = false, callback) {
+  return refMailbox
+    .where("receiverEmail", "==", email)
+    .where("status", "==", status)
+    .onSnapshot((querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data = [...data, doc.data()];
+      });
+      callback(data);
+    });
+}
+
+export function getExistedOrders(year, month, date, field, callback) {
+  refField
+    .where("date", "==", `${year}${month}${date}`)
+    .where("field", "==", field)
+    .onSnapshot((querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+        data = [...data, doc.data()];
+      });
+      callback(data);
+    });
+}
+
+export function deleteDocById(collection, id) {
+  let ref;
+  switch (collection) {
+    case "board":
+      ref = refBoard;
+      break;
+    case "residents":
+      ref = refResident;
+      break;
+    case "mailbox":
+      ref = refMailbox;
+      break;
+    case "field":
+      ref = refField;
+      break;
+    default:
+      break;
+  }
+  return ref
+    .doc(id)
+    .delete()
+    .then(() => {
+      return true;
+    })
+    .catch((error) => {
+      return error;
+    });
+}
+
+export function updateDocById(collection, id, data) {
+  let ref;
+  switch (collection) {
+    case "board":
+      ref = refBoard;
+      break;
+    case "residents":
+      ref = refResident;
+      break;
+    default:
+      break;
+  }
+  return ref
+    .doc(id)
+    .update(data)
+    .then(() => {
+      return true;
+    })
+    .catch((error) => {
+      return error;
+    });
+}
+
+export function updateMailStatus(mailId, status) {
+  return refMailbox
+    .doc(mailId)
+    .update({ status: status })
+    .then(() => {
+      console.log("update successful");
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 /*********************************** 
@@ -104,7 +192,6 @@ export function uploadAnnouncement(data) {
       content: data.content,
     })
     .then((docRef) => {
-      console.log(docRef.id);
       refBoard.doc(docRef.id).set(
         {
           issueId: docRef.id,
@@ -116,57 +203,6 @@ export function uploadAnnouncement(data) {
     .catch((error) => {
       console.log(error);
     });
-}
-
-/***********************
-  Update issue on board
- ***********************/
-export function updateIssue(data) {
-  return refBoard
-    .doc(data.issueId)
-    .update({
-      author: data.author,
-      content: data.content,
-      deadline: data.deadline,
-      issueId: data.issueId,
-      topic: data.topic,
-      updateTime: data.updateTime,
-    })
-    .then(() => {
-      console.log("Update issue success");
-      return true;
-    })
-    .catch((error) => {
-      console.log(error);
-      return error;
-    });
-}
-
-/***********************
-  delete issue on board
- ***********************/
-export function deleteIssueData(id) {
-  refBoard
-    .doc(id)
-    .delete()
-    .then(() => {
-      console.log("delete issue successful");
-    })
-    .catch((error) => console.log(error));
-}
-
-/*******************
-  get resident list
- *******************/
-export function getResidentList(callback) {
-  refResident.orderBy("residentNumbers").onSnapshot((querySnapshot) => {
-    let data = [];
-    querySnapshot.forEach((doc) => {
-      data = [...data, doc.data()];
-    });
-    // console.log(data);
-    callback(data);
-  });
 }
 
 /*********************
@@ -183,8 +219,6 @@ export function uploadResident(data) {
       updateDate: data.updateDate,
     })
     .then((docRef) => {
-      // console.log(docRef.id);
-
       refResident
         .doc(docRef.id)
         .set({ residentId: docRef.id }, { merge: true })
@@ -210,111 +244,6 @@ export function uploadResident(data) {
             { merge: true }
           );
       }
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-/****************************************
-  Delete resident and update residentList
-*****************************************/
-export function deleteResidentData(id) {
-  refResident
-    .doc(id)
-    .delete()
-    .then(() => {
-      console.log("delete resident successful");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-/****************************************
-  Edit resident and update residentList
-*****************************************/
-export function editUpdateResident(data) {
-  console.log(data);
-  refResident
-    .doc(data.residentId)
-    .update({
-      residentNumbers: data.residentNumbers,
-      floor: data.floor,
-      address: data.address,
-      remark: data.remark,
-      familyMembers: data.familyMembers,
-      updateDate: data.updateDate,
-    })
-    .then(() => {
-      console.log("Update resident Info successful");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-/****************************************
-  get untaken mailList and taken mailList
- ****************************************/
-export function getMailList(status = false, callback) {
-  refMailbox
-    .where("status", "==", status) //status= true (taken) | false (untaken)
-    .orderBy("mailNumbers", "asc")
-    .onSnapshot(function (querySnapshot) {
-      let data = [];
-      querySnapshot.forEach((doc) => {
-        data = [...data, doc.data()];
-      });
-      callback(data);
-    });
-}
-
-/****************************************
-  get user's mailList
- ****************************************/
-// export function getUserMailList(email, status = false) {
-//   let data = [];
-//   return refMailbox
-//     .where("receiverEmail", "==", email)
-//     .where("status", "==", status)
-//     .get()
-//     .then((docRef) => {
-//       docRef.forEach((doc) => {
-//         if (doc.id) {
-//           data = [...data, doc.data()];
-//           return data;
-//         }
-//       });
-//       return data;
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
-
-export function getUserMailList(email, status = false, callback) {
-  return refMailbox
-    .where("receiverEmail", "==", email)
-    .where("status", "==", status)
-    .onSnapshot((querySnapshot) => {
-      let data = [];
-      querySnapshot.forEach((doc) => {
-        data = [...data, doc.data()];
-      });
-      callback(data);
-    });
-}
-
-/****************************************
-  Delete resident and update residentList
-*****************************************/
-export function deleteMailData(id) {
-  refMailbox
-    .doc(id)
-    .delete()
-    .then(() => {
-      console.log("delete mail successful");
     })
     .catch((error) => {
       console.log(error);
@@ -348,41 +277,6 @@ export function getTimeStamp(year, month, date) {
   return timeStamp;
 }
 
-/****************************************
-  update mail status (true ←→ false )
- ****************************************/
-
-export function updateMailStatus(mailId, status) {
-  return refMailbox
-    .doc(mailId)
-    .update({ status: status })
-    .then(() => {
-      console.log("update successful");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-/******************************** 
-  get Field order lists
-*********************************/
-export function getExistedOrders(year, month, date, field, callback) {
-  // console.log(year, month, date, field);
-
-  refField
-    .where("date", "==", `${year}${month}${date}`)
-    .where("field", "==", field)
-    .onSnapshot((querySnapshot) => {
-      let data = [];
-      querySnapshot.forEach((doc) => {
-        data = [...data, doc.data()];
-      });
-      // console.log(data);
-      callback(data);
-    });
-}
-
 /******************************** 
   upload Field order lists
 *********************************/
@@ -403,28 +297,6 @@ export function uploadFieldOrder(data) {
   }
 }
 
-/********************* 
-  Delete Field order
-**********************/
-export function deleteFieldOrder(id) {
-  return refField
-    .doc(id)
-    .delete()
-    .then(() => {
-      console.log("delete order successful");
-      return true;
-    })
-    .catch((error) => {
-      console.log(error);
-      return error;
-    });
-}
-
-/******************************** 
-  handle SignUp and SignIn
-*********************************/
-
-//native sign up and create user information in firestore
 export function nativeSignUp(email, password, name) {
   return auth
     .createUserWithEmailAndPassword(email, password)
@@ -437,15 +309,10 @@ export function nativeSignUp(email, password, name) {
         email: auth.currentUser.email,
         userId: auth.currentUser.uid,
       });
-      // alert("註冊完成！請按確定繼續");
       return "success";
     })
     .catch((error) => {
-      let errorCode = error.code;
-      let errorMessage = error.message;
       return error;
-      // window.alert(`註冊失敗！請重新註冊 (Error: ${errorMessage})`);
-      // console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
     });
 }
 
@@ -455,18 +322,13 @@ export function nativeSignIn(email, password) {
     .then(() => {
       console.log("sign in successful!");
       if (email === "admin@apartment.com") {
-        //管理員 密碼：apartment
         return "admin";
       } else {
         return "general";
       }
     })
     .catch((error) => {
-      let errorCode = error.code;
-      let errorMessage = error.message;
       return error;
-      // window.alert(`登入失敗！請重新登入 (Error: ${errorMessage})`);
-      // console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
     });
 }
 
@@ -477,10 +339,8 @@ export function signInWithGoogle() {
     .then(function (result) {
       // This gives you a Google Access Token. You can use it to access the Google API.
       let token = result.credential.accessToken;
-      // The signed-in user info.
       let user = result.user;
       if (user.email === "admin@apartment.com") {
-        //管理員 密碼：apartment
         return "admin";
       } else {
         const signUpTime = new Date();
@@ -494,14 +354,6 @@ export function signInWithGoogle() {
       }
     })
     .catch(function (error) {
-      // Handle Errors here.
-      let errorCode = error.code;
-      let errorMessage = error.message;
-      // The email of the user's account used.
-      let email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      let credential = error.credential;
-      console.log(error);
       return error;
     });
 }

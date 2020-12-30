@@ -8,7 +8,7 @@ import { uploadMailList, getTimeStamp } from "./../../firebase";
 import { nanoid } from "nanoid";
 import envelope from "./../../img/envelope.svg";
 import send from "./../../img/send.svg";
-import { checkNumbers } from "../../lib";
+import { checkNumbers } from "./../../utils/lib";
 
 export function UpdateMailList(props) {
   const [mailNumber, setMailNumber] = useState("");

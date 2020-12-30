@@ -14,7 +14,7 @@ import list from "./../../img/list.svg";
 import calendarIcon from "./../../img/calendar.svg";
 import firebase from "firebase";
 import { getUserMailList, getUserProfile } from "./../../firebase";
-import { scrollToTarget } from "../../lib";
+import { scrollToTarget } from "./../../utils/lib";
 
 let auth = firebase.auth();
 export default function Entry(props) {

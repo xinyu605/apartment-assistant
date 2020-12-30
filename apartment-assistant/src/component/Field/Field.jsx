@@ -8,12 +8,11 @@ import UserApplyForm from "./UserApplyForm";
 import {
   getExistedOrders,
   uploadFieldOrder,
-  deleteFieldOrder,
-} from "../../firebase";
+  deleteDocById,
+} from "./../../firebase";
 import styles from "./Field.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
-import next from "./../../img/next.svg";
-import { checkEmailFormat, checkUserName } from "../../lib";
+import { checkEmailFormat, checkUserName } from "./../../utils/lib";
 
 export default function Field(props) {
   const [timeTitle, setTimeTitle] = useState([]);
@@ -266,7 +265,7 @@ export default function Field(props) {
   }
 
   function confirmCancelOrder() {
-    deleteFieldOrder(cancelOrderId).then((result) => {
+    deleteDocById("field", cancelOrderId).then((result) => {
       if (result) {
         setSuccessAlert(true);
         setSuccessMessage("已取消預借");

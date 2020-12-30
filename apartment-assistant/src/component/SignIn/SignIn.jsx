@@ -4,13 +4,12 @@ import SignUp from "./SignUp";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import AlertDownward from "./../Common/AlertDownward";
 import { nativeSignIn, signInWithGoogle } from "./../../firebase";
-import { checkEmailFormat, checkPasswordLength } from "./../../lib";
+import { checkEmailFormat, checkPasswordLength } from "./../../utils/lib";
 import styles from "./SignIn.module.scss";
 import logo from "./../../img/logo_apartment.png";
 import email from "./../../img/email.svg";
 import lock from "./../../img/lock.svg";
 import vintage from "./../../img/vintage.png";
-import { checkPropTypes } from "prop-types";
 
 export default function SignIn(props) {
   let history = useHistory();
@@ -23,17 +22,11 @@ export default function SignIn(props) {
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  /***************************************** 
-    useRef instead of document.querySelector
-  ******************************************/
-  const emailSignInInput = useRef(null); //#emailSignIn
-  const passwordSignInInput = useRef(null); //#pwdSignIn
-  const remindEmailSignIn = useRef(null); //#remindEmailSignIn
-  const remindPasswordSignIn = useRef(null); //#remindPasswordSignIn
+  const emailSignInInput = useRef(null);
+  const passwordSignInInput = useRef(null);
+  const remindEmailSignIn = useRef(null);
+  const remindPasswordSignIn = useRef(null);
 
-  /*****************************
-    check signIn inputs format
-  *****************************/
   function checkSignInInput(e) {
     const target = e.currentTarget;
     const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";
@@ -83,7 +76,6 @@ export default function SignIn(props) {
     if (emailInput === true && passwordInput === true) {
       nativeSignIn(emailSignIn, passwordSignIn)
         .then((result) => {
-          console.log(result);
           if (result === "admin") {
             setSuccessAlert(true);
             setSuccessMessage("Welcome!");

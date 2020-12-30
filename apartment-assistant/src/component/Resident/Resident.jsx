@@ -3,8 +3,8 @@ import ResidentList from "./ResidentList/ResidentList";
 import UpdateResident from "./UpdateResident";
 import ConfirmMsg from "./../Common/ConfirmMsg";
 import ScrollToTopBtn from "./../Common/ScrollToTopBtn";
-import { getResidentList, deleteResidentData } from "./../../firebase";
-import { scrollToTarget } from "./../../lib";
+import { getResidentList, deleteDocById } from "./../../firebase";
+import { scrollToTarget } from "./../../utils/lib";
 import styles from "./Resident.module.scss";
 import headerImg from "./../../img/apartment.svg";
 import searchImg from "./../../img/search.svg";
@@ -20,10 +20,6 @@ export default function Resident() {
 
   const searchInput = useRef(null);
 
-  /************************************* 
-    get resident list and pass to state
-  **************************************/
-
   useEffect(() => {
     getResidentList(setResidentData);
     function setResidentData(residents) {
@@ -36,7 +32,6 @@ export default function Resident() {
     const resultResident = residentList.filter(
       (list) => list.residentNumbers === searchNumber
     );
-    // console.log(resultResident);
     setSearchResult(resultResident);
     setSearchNumber("");
     searchInput.current.value = "";
@@ -48,9 +43,6 @@ export default function Resident() {
     setSearchResult([]);
   }
 
-  /*********************************************** 
-    click delete button and pop up confirm dialog
-  ************************************************/
   function deleteResident(residentId) {
     setRemoveResidentId(residentId);
     setShowDeleteConfirm(true);
@@ -64,7 +56,7 @@ export default function Resident() {
       (resident) => resident.residentId !== removeResidentId
     );
     setResidentList(newResidentList);
-    deleteResidentData(removeResidentId);
+    deleteDocById("residents", removeResidentId);
     setShowDeleteConfirm(false);
   }
 

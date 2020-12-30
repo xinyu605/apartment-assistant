@@ -7,6 +7,7 @@ import {
   getExistedOrders,
   uploadFieldOrder,
   deleteFieldOrder,
+  deleteDocById,
 } from "../../firebase";
 import styles from "./EntryField.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
@@ -201,7 +202,6 @@ export default function EntryField(props) {
     const cancelDate = e.currentTarget.id.slice(13, 21);
     const cancelTime = e.currentTarget.id.slice(21);
     let selectedOrderId = "";
-    // console.log(cancelDate, cancelTime);
     for (let i = 0; i < orderRecord.length; i++) {
       for (let j = 0; j < orderRecord[i].length; j++) {
         if (
@@ -212,14 +212,13 @@ export default function EntryField(props) {
         }
       }
     }
-    console.log(selectedOrderId);
     setCancelOrderId(selectedOrderId);
     setShowDeleteOrderConfirm(true);
     setConfirmMessage("是否確定取消預借？");
   }
 
   function confirmCancelOrder() {
-    deleteFieldOrder(cancelOrderId).then((result) => {
+    deleteDocById("field", cancelOrderId).then((result) => {
       if (result) {
         setSuccessAlert(true);
         setSuccessMessage("已取消預借");

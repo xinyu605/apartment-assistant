@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./SmallCalendar.module.scss";
-import { showCalendar, checkYearInput } from "./../../lib";
+import { showCalendar, checkYearInput } from "./../../utils/lib";
 import edit from "./../../img/edit.svg";
 
 /************************

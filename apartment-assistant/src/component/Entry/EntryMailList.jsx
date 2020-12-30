@@ -1,5 +1,5 @@
 import React from "react";
-import { showDate } from "./../../lib";
+import { showDate } from "./../../utils/lib";
 import { nanoid } from "nanoid";
 import styles from "./EntryMailList.module.scss";
 import mailbox from "./../../img/inboxUntaken.svg";

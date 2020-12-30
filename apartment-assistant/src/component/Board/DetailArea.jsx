@@ -3,8 +3,8 @@ import { SmallCalendar } from "./SmallCalendar";
 import AlertDownward from "./../Common/AlertDownward";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import styles from "./DetailArea.module.scss";
-import { showDate } from "./../../lib";
-import { getTimeStamp, updateIssue } from "./../../firebase";
+import { showDate } from "./../../utils/lib";
+import { getTimeStamp, updateDocById, updateIssue } from "./../../firebase";
 import editIcon from "./../../img/edit555.svg";
 import trashIcon from "./../../img/trash555.svg";
 import doneIcon from "./../../img/check.svg";
@@ -104,15 +104,11 @@ export default function DetailArea(props) {
     setDateDeadline(date);
   }
 
-  /**************************************
-  prepare pass updated data to firebase
-  ***************************************/
   function saveEditing() {
     const data = {
       author: author,
       content: content,
       deadline: deadlineTimeStamp,
-      issueId: details.issueId,
       topic: topic,
       updateTime: publishTimeStamp,
     };
@@ -124,41 +120,32 @@ export default function DetailArea(props) {
       setAlertDownward(true);
       setAlertDownwardMessage("欄位不可留空");
     } else {
-      updateIssue(data)
-        .then((result) => {
-          if (result === true) {
-            setSuccessAlert(true);
-            setSuccessMessage("公告更新成功");
+      updateDocById("board", details.issueId, data).then((result) => {
+        if (result === true) {
+          setSuccessAlert(true);
+          setSuccessMessage("公告更新成功");
 
-            window.setTimeout(() => {
-              console.log("1");
-              setSuccessAlert(false);
-            }, 1000);
-            window.setTimeout(() => {
-              console.log("2");
-              setEditing(false);
-            }, 700);
+          window.setTimeout(() => {
+            setSuccessAlert(false);
+          }, 1000);
+          window.setTimeout(() => {
+            setEditing(false);
+          }, 1200);
 
-            //back to default
-            setAuthor("");
-            setTopic("");
-            setContent("");
-            setPublishTimeStamp(0);
-            setDeadlineTimeStamp(0);
-          } else {
-            setAlertDownward(true);
-            setAlertDownwardMessage("公告更新失敗，請重新操作");
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          //back to default
+          setAuthor("");
+          setTopic("");
+          setContent("");
+          setPublishTimeStamp(0);
+          setDeadlineTimeStamp(0);
+        } else {
+          setAlertDownward(true);
+          setAlertDownwardMessage("公告更新失敗，請重新操作");
+        }
+      });
     }
   }
 
-  /*********** 
-  Close alert
-  ************/
   function closeAlert(e) {
     e.preventDefault();
     setAlertDownward(false);
@@ -169,7 +156,6 @@ export default function DetailArea(props) {
   }, [props.details]);
 
   if (details?.topic) {
-    // 避免detail是undefined時網頁報錯
     if (isEditing === false) {
       return (
         <div className={styles.matterDetails}>

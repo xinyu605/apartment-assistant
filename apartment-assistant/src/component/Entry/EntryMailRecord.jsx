@@ -1,6 +1,6 @@
 import React from "react";
 import { nanoid } from "nanoid";
-import { showDate } from "./../../lib";
+import { showDate } from "./../../utils/lib";
 import styles from "./EntryMailRecord.module.scss";
 import list from "./../../img/list.svg";
 

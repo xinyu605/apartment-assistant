@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import styles from "./ResidentList.module.scss";
 import phone from "./../../../img/phone.svg";
 import email from "./../../../img/email555.svg";
@@ -12,8 +12,6 @@ export default function NewMember(props) {
   const index = props.familyMembers.findIndex(
     (element) => element.memberId === memberId
   );
-  // console.log(index, props.familyMembers[index]);
-  console.log(props.thisMember);
 
   return (
     <div className={`${styles.memberInfoEdit}`} id={`${props.thisMember.id}`}>
@@ -21,11 +19,9 @@ export default function NewMember(props) {
         <input
           ref={nameInput}
           className={`${styles.editInput}`}
-          // id={`editMemberName${index}`}
           id={`editMemberName${memberId}`}
           type="text"
           value={props.familyMembers[index].name}
-          // onChange={props.changeMemberInfo}
           onChange={(e) => {
             props.changeMemberInfo(e, memberId, index);
           }}
@@ -39,11 +35,9 @@ export default function NewMember(props) {
         <input
           ref={phoneInput}
           className={`${styles.editInput}`}
-          // id={`editMemberPhone${index}`}
           id={`editMemberPhone${memberId}`}
           type="text"
           value={props.familyMembers[index].phone}
-          // onChange={props.changeMemberInfo}
           onChange={(e) => {
             props.changeMemberInfo(e, memberId, index);
           }}
@@ -57,11 +51,9 @@ export default function NewMember(props) {
         <input
           ref={emailInput}
           className={`${styles.editInput}`}
-          // id={`editMemberEmail${index}`}
           id={`editMemberEmail${memberId}`}
           type="text"
           value={props.familyMembers[index].email}
-          // onChange={props.changeMemberInfo}
           onChange={(e) => {
             props.changeMemberInfo(e, memberId, index);
           }}
@@ -69,8 +61,6 @@ export default function NewMember(props) {
       </div>
       <div
         className={styles.trashWrapper}
-        // id={`deleteMemberBtn${index}`}
-        // onClick={props.deleteMember}
         onClick={() => {
           props.deleteMember(memberId);
         }}

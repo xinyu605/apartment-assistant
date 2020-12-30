@@ -4,8 +4,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  Redirect,
   useHistory,
 } from "react-router-dom";
 import ScrollToTop from "./component/Common/ScrollToTop";
@@ -14,8 +12,6 @@ import Entry from "./component/Entry/Entry";
 import SignIn from "./component/SignIn/SignIn";
 import AlertLogout from "./component/Common/AlertLogout";
 import firebase from "firebase";
-import Loading from "./component/Common/Loading";
-import { func } from "prop-types";
 
 let auth = firebase.auth();
 
@@ -31,9 +27,6 @@ function App() {
   function closeAlert(e) {
     e.preventDefault();
     auth.signOut().then(() => {
-      // alert("See you later!");
-      let user = auth.currentUser;
-      console.log(user);
       window.location.href = "/signin";
     });
     setShowAlertDownward(false);
@@ -55,12 +48,6 @@ function App() {
               render={(props) => <Admin {...props} logout={logout} />}
             />
             <Route path="/signin" component={SignIn} />
-            {/* <Route
-              path="/signin"
-              render={(props) => (
-                <SignIn {...props} turnOffLoading={turnOffLoading} />
-              )}
-            /> */}
           </Switch>
           <AlertLogout
             showAlertDownward={showAlertDownward}
