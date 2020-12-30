@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ApplyTable from "./../Common/ApplyTable";
 import AlertDownward from "./../Common/AlertDownward";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
@@ -12,11 +12,18 @@ import {
 } from "./../../firebase";
 import styles from "./Field.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
-import { checkEmailFormat, checkUserName } from "./../../utils/lib";
+import {
+  checkEmailFormat,
+  checkUserName,
+  createTimeTableForField,
+  createTimeTitleForField,
+  createWeeklyTitle,
+} from "./../../utils/lib";
 
 export default function Field(props) {
   const [timeTitle, setTimeTitle] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
+  const [weeklyTableTitle, setWeeklyTableTitle] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
   const [field, setField] = useState("交誼廳");
   const [isApplying, setApplying] = useState(false);
@@ -24,6 +31,8 @@ export default function Field(props) {
   const [userEmail, setUserEmail] = useState("");
   const [orderList, setOrderList] = useState([]);
   const [cancelOrderId, setCancelOrderId] = useState("");
+
+  const selectField = useRef(null);
 
   // alert dialogs
   const [showAlertDownward, setAlertDownward] = useState(false);
@@ -33,111 +42,33 @@ export default function Field(props) {
   const [showDeleteOrderConfirm, setShowDeleteOrderConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
 
-  /************************* 
-    show weekly date choice
-  **************************/
   useEffect(() => {
-    const thisField = document.querySelector("#selectField").value;
+    const thisField = selectField.current.value;
     setOrderRecord([]);
 
-    /********************** 
-      Render weekly title 
-    ***********************/
+    const newWeeklyTableTitle = [];
     for (let i = 0; i < 7; i++) {
-      // const optionDay = document.querySelector(`#day${i}`);
-      const tableDay = document.querySelector(`#tday${i}`);
-      let days = new Date();
-      let milliseconds = days.getTime() + 86400000 * i; //get milliseconds of the day
-      days.setTime(milliseconds);
-      let year = days.getFullYear();
-      let month = days.getMonth() + 1;
-      let date = days.getDate(); //type: number
-      let day = days.getDay();
-      if (month.toString().length < 2) {
-        month = `0${month.toString()}`;
-      }
-      if (date.toString().length < 2) {
-        date = `0${date.toString()}`;
-      }
-      // console.log(date, day);
-      switch (day) {
-        case 0:
-          day = "SUN";
-          break;
-        case 1:
-          day = "MON";
-          break;
-        case 2:
-          day = "TUE";
-          break;
-        case 3:
-          day = "WED";
-          break;
-        case 4:
-          day = "THU";
-          break;
-        case 5:
-          day = "FRI";
-          break;
-        case 6:
-          day = "SAT";
-          break;
-        default:
-          break;
-      }
+      const newDay = createWeeklyTitle(i);
+      newWeeklyTableTitle.push(newDay);
 
-      tableDay.innerHTML = `${month}/${date}<br/>${day}`;
-
-      /************************************
-        get exsisted orders from firebase
-      *************************************/
-      getExistedOrders(`${year}`, `${month}`, `${date}`, thisField, getOrders);
+      getExistedOrders(
+        `${newDay.year}`,
+        `${newDay.month}`,
+        `${newDay.date}`,
+        thisField,
+        getOrders
+      );
 
       function getOrders(data) {
-        // console.log(i, data);
         setOrderRecord((prevState) => [...prevState, data]);
       }
     }
+    setWeeklyTableTitle(newWeeklyTableTitle);
   }, [field, cancelOrderId]);
 
-  /***************************************** 
-    create table elements with specific id
-  ******************************************/
   useEffect(() => {
-    let timeTitle = [];
-    let timeTable = [];
-
-    for (let i = 0; i < 13; i++) {
-      let time = i + 9;
-      if (time.toString().length < 2) {
-        time = `0${time}`;
-      }
-      timeTitle[i] = `time${time}`;
-    }
-
-    for (let i = 0; i < 7; i++) {
-      let day = new Date();
-      let milliseconds = day.getTime() + 86400000 * i; //get milliseconds of the day
-      day.setTime(milliseconds);
-      let year = day.getFullYear();
-      let month = day.getMonth() + 1;
-      let date = day.getDate();
-      if (month.toString().length < 2) {
-        month = `0${month}`;
-      }
-      if (date.toString().length < 2) {
-        date = `0${date}`;
-      }
-      timeTable[i] = [];
-      for (let j = 0; j < 13; j++) {
-        let time = j + 9;
-        if (time.toString().length < 2) {
-          time = `0${time}`;
-        }
-        timeTable[i][j] = `time${year}${month}${date}${time}`; // prepare id of each <div> ex. <div id="121109">
-      }
-    }
-
+    const timeTitle = createTimeTitleForField();
+    const timeTable = createTimeTableForField();
     setTimeTitle(timeTitle);
     setTimeTable(timeTable);
   }, []);
@@ -258,7 +189,7 @@ export default function Field(props) {
         }
       }
     }
-    console.log(selectedOrderId);
+
     setCancelOrderId(selectedOrderId);
     setShowDeleteOrderConfirm(true);
     setConfirmMessage("是否確定取消預借？");
@@ -283,9 +214,6 @@ export default function Field(props) {
     });
   }
 
-  /*********** 
-  Close alert
-  ************/
   function closeAlert(e) {
     e.preventDefault();
     setAlertDownward(false);
@@ -307,6 +235,7 @@ export default function Field(props) {
       <form className={styles.fieldApply}>
         <label className={styles.applyTitle}>場地</label>
         <select
+          ref={selectField}
           id="selectField"
           className={styles.selectField}
           onChange={(e) => {
@@ -331,13 +260,18 @@ export default function Field(props) {
       <div className={styles.fieldTable}>
         <div className={styles.titleWrapper}>
           <div className={styles.tableTitle}></div>
-          <div id="tday0" className={styles.tableTitle}></div>
-          <div id="tday1" className={styles.tableTitle}></div>
-          <div id="tday2" className={styles.tableTitle}></div>
-          <div id="tday3" className={styles.tableTitle}></div>
-          <div id="tday4" className={styles.tableTitle}></div>
-          <div id="tday5" className={styles.tableTitle}></div>
-          <div id="tday6" className={styles.tableTitle}></div>
+          {weeklyTableTitle.map((dayTitle) => {
+            return (
+              <div
+                className={styles.tableTitle}
+                key={`tableTitle${dayTitle.month}${dayTitle.date}`}
+              >
+                {`${dayTitle.month}/${dayTitle.date}`}
+                <br />
+                {`${dayTitle.day}`}
+              </div>
+            );
+          })}
         </div>
         <ApplyTable
           userEmail={props.userEmail}

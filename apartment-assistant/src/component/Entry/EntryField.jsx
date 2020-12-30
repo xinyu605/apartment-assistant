@@ -6,11 +6,14 @@ import ConfirmMsg from "./../Common/ConfirmMsg";
 import {
   getExistedOrders,
   uploadFieldOrder,
-  deleteFieldOrder,
   deleteDocById,
 } from "../../firebase";
 import styles from "./EntryField.module.scss";
 import calendarIcon from "./../../img/calendar.svg";
+import {
+  createTimeTableForField,
+  createTimeTitleForField,
+} from "../../utils/lib";
 
 export default function EntryField(props) {
   const [timeTitle, setTimeTitle] = useState([]);
@@ -44,7 +47,7 @@ export default function EntryField(props) {
       days.setTime(milliseconds);
       let year = days.getFullYear();
       let month = days.getMonth() + 1;
-      let date = days.getDate(); //type: number
+      let date = days.getDate();
       let day = days.getDay();
       if (month.toString().length < 2) {
         month = `0${month.toString()}`;
@@ -52,7 +55,7 @@ export default function EntryField(props) {
       if (date.toString().length < 2) {
         date = `0${date.toString()}`;
       }
-      // console.log(date, day);
+
       switch (day) {
         case 0:
           day = "SUN";
@@ -81,63 +84,21 @@ export default function EntryField(props) {
 
       tableDay.innerHTML = `${month}/${date}<br/>${day}`;
 
-      /************************************
-        get exsisted orders from firebase
-      *************************************/
       getExistedOrders(`${year}`, `${month}`, `${date}`, thisField, getOrders);
 
       function getOrders(data) {
-        // console.log(i, data);
         setOrderRecord((prevState) => [...prevState, data]);
       }
     }
   }, [field, cancelOrderId]);
 
-  /***************************************** 
-    create table elements with specific id
-  ******************************************/
   useEffect(() => {
-    let timeTitle = [];
-    let timeTable = [];
-
-    for (let i = 0; i < 13; i++) {
-      let time = i + 9;
-      if (time.toString().length < 2) {
-        time = `0${time}`;
-      }
-      timeTitle[i] = `time${time}`;
-    }
-
-    for (let i = 0; i < 7; i++) {
-      let day = new Date();
-      let milliseconds = day.getTime() + 86400000 * i; //get milliseconds of the day
-      day.setTime(milliseconds);
-      let year = day.getFullYear();
-      let month = day.getMonth() + 1;
-      let date = day.getDate();
-      if (month.toString().length < 2) {
-        month = `0${month}`;
-      }
-      if (date.toString().length < 2) {
-        date = `0${date}`;
-      }
-      timeTable[i] = [];
-      for (let j = 0; j < 13; j++) {
-        let time = j + 9;
-        if (time.toString().length < 2) {
-          time = `0${time}`;
-        }
-        timeTable[i][j] = `time${year}${month}${date}${time}`; // prepare id of each <div> ex. <div id="121109">
-      }
-    }
-
+    const timeTitle = createTimeTitleForField();
+    const timeTable = createTimeTableForField();
     setTimeTitle(timeTitle);
     setTimeTable(timeTable);
   }, []);
 
-  /************************
-    Change selected field
-  *************************/
   function changeField(e) {
     setField(e.currentTarget.value);
   }

@@ -26,7 +26,7 @@ export default function EntryBoard() {
 
       <ul className={styles.issueList}>
         {issues.map((issue) => {
-          return <Issue issue={issue} />;
+          return <Issue issue={issue} key={`issue${issue.issueId}`} />;
         })}
       </ul>
     </div>
