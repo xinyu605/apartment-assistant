@@ -11,9 +11,6 @@ export function SmallCalendar(props) {
   const [thisYear, setThisYear] = useState(props.year);
   const [thisMonth, setThisMonth] = useState(props.month);
   const [receiveDate, setReceiveDate] = useState(props.date);
-  // const [thisYear, setThisYear] = useState(new Date().getFullYear());
-  // const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
-  // const [receiveDate, setReceiveDate] = useState(new Date().getDate());
 
   const containerElement = useRef(null);
   const remindYear = useRef(null);
@@ -41,7 +38,6 @@ export function SmallCalendar(props) {
   }
 
   function updateYear(e) {
-    const todayYear = new Date().getFullYear();
     let result = checkYearInput(e.currentTarget.value);
     if (result === false) {
       remindYear.current.style.opacity = "1";

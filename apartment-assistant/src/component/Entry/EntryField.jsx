@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ApplyTable from "./../Common/ApplyTable";
 import AlertDownward from "./../Common/AlertDownward";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
@@ -13,14 +13,19 @@ import calendarIcon from "./../../img/calendar.svg";
 import {
   createTimeTableForField,
   createTimeTitleForField,
-} from "../../utils/lib";
+  createWeeklyTitle,
+} from "./../../utils/lib";
 
 export default function EntryField(props) {
   const [timeTitle, setTimeTitle] = useState([]);
   const [timeTable, setTimeTable] = useState([]);
+  const [weeklyTableTitle, setWeeklyTableTitle] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
+  const [orderApply, setOrderApply] = useState([]);
   const [field, setField] = useState("交誼廳");
   const [cancelOrderId, setCancelOrderId] = useState("");
+
+  const selectedField = useRef(null);
 
   // alert dialogs
   const [showAlertDownward, setAlertDownward] = useState(false);
@@ -34,62 +39,27 @@ export default function EntryField(props) {
     show weekly date choice
   **************************/
   useEffect(() => {
-    const thisField = document.querySelector("#selectField").value;
+    const thisField = selectedField.current.value;
     setOrderRecord([]);
 
-    /********************** 
-      Render weekly title 
-    ***********************/
+    const newWeeklyTableTitle = [];
     for (let i = 0; i < 7; i++) {
-      const tableDay = document.querySelector(`#tday${i}`);
-      let days = new Date();
-      let milliseconds = days.getTime() + 86400000 * i; //get milliseconds of the day
-      days.setTime(milliseconds);
-      let year = days.getFullYear();
-      let month = days.getMonth() + 1;
-      let date = days.getDate();
-      let day = days.getDay();
-      if (month.toString().length < 2) {
-        month = `0${month.toString()}`;
-      }
-      if (date.toString().length < 2) {
-        date = `0${date.toString()}`;
-      }
+      const newDay = createWeeklyTitle(i);
+      newWeeklyTableTitle.push(newDay);
 
-      switch (day) {
-        case 0:
-          day = "SUN";
-          break;
-        case 1:
-          day = "MON";
-          break;
-        case 2:
-          day = "TUE";
-          break;
-        case 3:
-          day = "WED";
-          break;
-        case 4:
-          day = "THU";
-          break;
-        case 5:
-          day = "FRI";
-          break;
-        case 6:
-          day = "SAT";
-          break;
-        default:
-          break;
-      }
-
-      tableDay.innerHTML = `${month}/${date}<br/>${day}`;
-
-      getExistedOrders(`${year}`, `${month}`, `${date}`, thisField, getOrders);
+      getExistedOrders(
+        `${newDay.year}`,
+        `${newDay.month}`,
+        `${newDay.date}`,
+        thisField,
+        getOrders
+      );
 
       function getOrders(data) {
         setOrderRecord((prevState) => [...prevState, data]);
       }
     }
+    setWeeklyTableTitle(newWeeklyTableTitle);
   }, [field, cancelOrderId]);
 
   useEffect(() => {
@@ -103,61 +73,60 @@ export default function EntryField(props) {
     setField(e.currentTarget.value);
   }
 
-  /******************************************* 
-    Click order button to submit orderList
-  ********************************************/
-  function orderField(e) {
-    e.preventDefault();
-    let orderList = [];
-    let data = [];
-    const orderBoxes = document.querySelectorAll("input[type=checkbox]");
-    const selectedField = document.querySelector("#selectField");
-
-    // 1. collect checked list
-    for (let i = 0; i < orderBoxes.length; i++) {
-      if (orderBoxes[i].checked === true) {
-        orderList = [
-          ...orderList,
-          {
-            date: orderBoxes[i].id.slice(5, 13),
-            time: orderBoxes[i].id.slice(13),
-          },
-        ];
-      }
-    }
-
-    // 2. prepare data to upload firebase
-    for (let i = 0; i < orderList.length; i++) {
-      data[i] = {
-        user: props.userName,
-        userEmail: props.userEmail,
-        field: selectedField.value,
-        date: orderList[i].date,
-        startTime: orderList[i].time,
-      };
-    }
-    // console.log(data);
-
-    // 3. pass data to firebase
-    uploadFieldOrder(data);
-
-    // 4. remind user apply successful
-    // window.alert(`${selectedField.value}預約成功！`);
-    setSuccessAlert(true);
-    setSuccessMessage(`${selectedField.value}預約成功！`);
-    window.setTimeout(() => {
-      setSuccessAlert(false);
-    }, 2000);
-
-    // 5. clear all checkbox
-    for (let i = 0; i < orderBoxes.length; i++) {
-      orderBoxes[i].checked = false;
+  function collectCheckedList(e) {
+    if (e.currentTarget.checked) {
+      const newOrderApply = [
+        ...orderApply,
+        {
+          date: e.currentTarget.id.slice(5, 13),
+          time: e.currentTarget.id.slice(13),
+        },
+      ];
+      setOrderApply(newOrderApply);
+    } else {
+      const newOrderApply = orderApply.filter(
+        (order) =>
+          order.date !== e.currentTarget.id.slice(5, 13) ||
+          order.time !== e.currentTarget.id.slice(13)
+      );
+      setOrderApply(newOrderApply);
     }
   }
 
-  /*******************************************
-    Cancel order and update Order record
-********************************************/
+  function checkOrderLength() {
+    if (orderApply.length === 0) {
+      setAlertDownward(true);
+      setAlertDownwardMessage("請先預約時段");
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function orderField(e) {
+    e.preventDefault();
+    const checkOrderInputResult = checkOrderLength();
+    if (checkOrderInputResult) {
+      const fieldOrders = orderApply.map((order) => {
+        return {
+          user: props.userName,
+          userEmail: props.userEmail,
+          field: selectedField.current.value,
+          date: order.date,
+          startTime: order.time,
+        };
+      });
+
+      uploadFieldOrder(fieldOrders);
+      setSuccessAlert(true);
+      setSuccessMessage(`${selectedField.current.value}預約成功！`);
+      window.setTimeout(() => {
+        setSuccessAlert(false);
+      }, 2000);
+
+      setOrderApply([]);
+    }
+  }
 
   function cancelOrder(e) {
     const cancelDate = e.currentTarget.id.slice(13, 21);
@@ -197,9 +166,6 @@ export default function EntryField(props) {
     });
   }
 
-  /*********** 
-  Close alert
-  ************/
   function closeAlert(e) {
     e.preventDefault();
     setAlertDownward(false);
@@ -221,6 +187,7 @@ export default function EntryField(props) {
       <form className={styles.fieldApply}>
         <label className={styles.applyTitle}>場地</label>
         <select
+          ref={selectedField}
           id="selectField"
           className={styles.selectField}
           onChange={changeField}
@@ -238,13 +205,18 @@ export default function EntryField(props) {
       <div className={styles.fieldTable}>
         <div className={styles.titleWrapper}>
           <div className={styles.tableTitle}></div>
-          <div id="tday0" className={styles.tableTitle}></div>
-          <div id="tday1" className={styles.tableTitle}></div>
-          <div id="tday2" className={styles.tableTitle}></div>
-          <div id="tday3" className={styles.tableTitle}></div>
-          <div id="tday4" className={styles.tableTitle}></div>
-          <div id="tday5" className={styles.tableTitle}></div>
-          <div id="tday6" className={styles.tableTitle}></div>
+          {weeklyTableTitle.map((dayTitle) => {
+            return (
+              <div
+                className={styles.tableTitle}
+                key={`tableTitle${dayTitle.month}${dayTitle.date}`}
+              >
+                {`${dayTitle.month}/${dayTitle.date}`}
+                <br />
+                {`${dayTitle.day}`}
+              </div>
+            );
+          })}
         </div>
 
         <ApplyTable
@@ -254,6 +226,7 @@ export default function EntryField(props) {
           orderRecord={orderRecord}
           field={field}
           cancelOrder={cancelOrder}
+          collectCheckedList={collectCheckedList}
         />
 
         <AlertDownward

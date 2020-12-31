@@ -4,7 +4,7 @@ import AlertDownward from "./../Common/AlertDownward";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import styles from "./DetailArea.module.scss";
 import { showDate } from "./../../utils/lib";
-import { getTimeStamp, updateDocById, updateIssue } from "./../../firebase";
+import { getTimeStamp, updateDocById } from "./../../firebase";
 import editIcon from "./../../img/edit555.svg";
 import trashIcon from "./../../img/trash555.svg";
 import doneIcon from "./../../img/check.svg";

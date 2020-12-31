@@ -25,16 +25,15 @@ export default function Field(props) {
   const [timeTable, setTimeTable] = useState([]);
   const [weeklyTableTitle, setWeeklyTableTitle] = useState([]);
   const [orderRecord, setOrderRecord] = useState([]);
+  const [orderApply, setOrderApply] = useState([]);
   const [field, setField] = useState("交誼廳");
   const [isApplying, setApplying] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  const [orderList, setOrderList] = useState([]);
   const [cancelOrderId, setCancelOrderId] = useState("");
 
-  const selectField = useRef(null);
+  const selectedField = useRef(null);
 
-  // alert dialogs
   const [showAlertDownward, setAlertDownward] = useState(false);
   const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
@@ -43,7 +42,7 @@ export default function Field(props) {
   const [confirmMessage, setConfirmMessage] = useState("");
 
   useEffect(() => {
-    const thisField = selectField.current.value;
+    const thisField = selectedField.current.value;
     setOrderRecord([]);
 
     const newWeeklyTableTitle = [];
@@ -73,13 +72,15 @@ export default function Field(props) {
     setTimeTable(timeTable);
   }, []);
 
-  /******************************************* 
-  Click order button to submit orderList
-********************************************/
-
   function openApplyForm(e) {
     e.preventDefault();
-    setApplying(true);
+    const checkOrderInputResult = orderApply.length === 0 ? false : true;
+    if (checkOrderInputResult) {
+      setApplying(true);
+    } else {
+      setAlertDownward(true);
+      setAlertDownwardMessage("尚未勾選租借時段");
+    }
   }
 
   function closeApplyForm(e) {
@@ -87,34 +88,48 @@ export default function Field(props) {
     setApplying(false);
   }
 
-  function getApplicantInfo(e) {
-    e.preventDefault();
-    let orderList = [];
-    let data = [];
-    let checkResult = false;
-    const orderBoxes = document.querySelectorAll("input[type=checkbox]");
-    const selectedField = document.querySelector("#selectField");
-    const applicantName = document.querySelector("#applicantName").value;
-    const applicantEmail = document.querySelector("#applicantEmail").value;
-
-    // Collect checked list
-    const checkNameResult = checkUserName(applicantName);
-    const checkEmailResult = checkEmailFormat(applicantEmail);
-    for (let i = 0; i < orderBoxes.length; i++) {
-      if (orderBoxes[i].checked === true) {
-        orderList = [
-          ...orderList,
-          {
-            date: orderBoxes[i].id.slice(5, 13),
-            time: orderBoxes[i].id.slice(13),
-          },
-        ];
-      }
+  function collectCheckedList(e) {
+    if (e.currentTarget.checked) {
+      const newOrderApply = [
+        ...orderApply,
+        {
+          date: e.currentTarget.id.slice(5, 13),
+          time: e.currentTarget.id.slice(13),
+        },
+      ];
+      setOrderApply(newOrderApply);
+    } else {
+      const newOrderApply = orderApply.filter(
+        (order) =>
+          order.date !== e.currentTarget.id.slice(5, 13) ||
+          order.time !== e.currentTarget.id.slice(13)
+      );
+      setOrderApply(newOrderApply);
     }
+  }
 
-    /***************************** 
-      Check inputs and checkboxes
-    ******************************/
+  function changeApplicantInfo(e) {
+    switch (e.currentTarget.id) {
+      case "applicantName":
+        setUserName(e.currentTarget.value);
+        break;
+      case "applicantEmail":
+        setUserEmail(e.currentTarget.value);
+        break;
+      default:
+        break;
+    }
+  }
+
+  function sendApplicantInfo(e) {
+    e.preventDefault();
+
+    let checkResult = false;
+    let fieldOrders;
+
+    const checkNameResult = checkUserName(userName);
+    const checkEmailResult = checkEmailFormat(userEmail);
+
     if (
       checkNameResult === "姓名欄位不可留空" ||
       checkEmailResult === "Email欄位不可留空"
@@ -124,35 +139,23 @@ export default function Field(props) {
     } else if (checkEmailResult === "Email格式錯誤") {
       setAlertDownward(true);
       setAlertDownwardMessage(checkEmailResult);
-    } else if (orderList.length === 0) {
-      setAlertDownward(true);
-      setAlertDownwardMessage("尚未勾選租借時段");
     } else {
-      setUserName(applicantName);
-      setUserEmail(applicantEmail);
-      setOrderList(orderList);
+      fieldOrders = orderApply.map((order) => {
+        return {
+          user: userName,
+          userEmail: userEmail,
+          field: selectedField.current.value,
+          date: order.date,
+          startTime: order.time,
+        };
+      });
       checkResult = true;
     }
 
     if (checkResult) {
-      // 1. prepare data to upload firebase
-      for (let i = 0; i < orderList.length; i++) {
-        data[i] = {
-          user: applicantName,
-          userEmail: applicantEmail,
-          field: selectedField.value,
-          date: orderList[i].date,
-          startTime: orderList[i].time,
-        };
-      }
-      // console.log(data);
-
-      // 2. pass data to firebase
-      uploadFieldOrder(data);
-
-      // 3. remind user apply successful
+      uploadFieldOrder(fieldOrders);
       setSuccessAlert(true);
-      setSuccessMessage(`${selectedField.value}預約成功！`);
+      setSuccessMessage(`${selectedField.current.value}預約成功！`);
       window.setTimeout(() => {
         setSuccessAlert(false);
       }, 2000);
@@ -160,25 +163,16 @@ export default function Field(props) {
         setApplying(false);
       }, 2001);
 
-      // 4. clear all checkbox and let values back to default (except for field)
-      for (let i = 0; i < orderBoxes.length; i++) {
-        orderBoxes[i].checked = false;
-      }
       setUserName("");
       setUserEmail("");
-      setOrderList([]);
+      setOrderApply([]);
     }
   }
-
-  /*******************************************
-    Cancel order and update Order record
-  ********************************************/
 
   function cancelOrder(e) {
     const cancelDate = e.currentTarget.id.slice(13, 21);
     const cancelTime = e.currentTarget.id.slice(21);
     let selectedOrderId = "";
-    // console.log(cancelDate, cancelTime);
     for (let i = 0; i < orderRecord.length; i++) {
       for (let j = 0; j < orderRecord[i].length; j++) {
         if (
@@ -235,7 +229,7 @@ export default function Field(props) {
       <form className={styles.fieldApply}>
         <label className={styles.applyTitle}>場地</label>
         <select
-          ref={selectField}
+          ref={selectedField}
           id="selectField"
           className={styles.selectField}
           onChange={(e) => {
@@ -280,13 +274,16 @@ export default function Field(props) {
           orderRecord={orderRecord}
           field={field}
           cancelOrder={cancelOrder}
+          collectCheckedList={collectCheckedList}
         />
       </div>
-      <UserApplyForm
-        isApplying={isApplying}
-        closeApplyForm={closeApplyForm}
-        getApplicantInfo={getApplicantInfo}
-      />
+      {isApplying && (
+        <UserApplyForm
+          closeApplyForm={closeApplyForm}
+          changeApplicantInfo={changeApplicantInfo}
+          sendApplicantInfo={sendApplicantInfo}
+        />
+      )}
       <AlertDownward
         showAlertDownward={showAlertDownward}
         alertDownwardMessage={alertDownwardMessage}
