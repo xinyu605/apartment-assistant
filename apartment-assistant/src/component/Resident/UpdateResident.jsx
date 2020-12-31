@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import Alertbox from "./../Common/Alertbox";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import styles from "./UpdateResident.module.scss";
-import { uploadResident, getTimeStamp } from "./../../firebase";
+import { uploadResident, transferToFirebaseTimeStamp } from "./../../firebase";
 import { nanoid } from "nanoid";
 import memberIcon from "./../../img/members.svg";
 import plus from "./../../img/plus555.svg";
@@ -157,7 +157,7 @@ export default function UpdateResident(props) {
     const year = updateTime.getFullYear();
     const month = updateTime.getMonth() + 1;
     const date = updateTime.getDate();
-    const secondsToFirebase = getTimeStamp(year, month, date);
+    const secondsToFirebase = transferToFirebaseTimeStamp(year, month, date);
     // console.log(secondsToFirebase);
 
     const infoPackage = {

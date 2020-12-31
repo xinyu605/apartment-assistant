@@ -13,7 +13,6 @@ export default function Mailbox() {
   const [residentList, setResidentList] = useState([]);
   const [removeMailId, setRemoveMailId] = useState("");
 
-  //confirm dialog
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
 

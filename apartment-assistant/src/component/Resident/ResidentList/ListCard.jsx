@@ -11,7 +11,10 @@ import check from "./../../../img/check.svg";
 import close from "./../../../img/close.svg";
 import plus from "./../../../img/plus555.svg";
 import remark from "./../../../img/remark.svg";
-import { getTimeStamp, updateDocById } from "./../../../firebase";
+import {
+  transferToFirebaseTimeStamp,
+  updateDocById,
+} from "./../../../firebase";
 import { nanoid } from "nanoid";
 import {
   checkEmailFormat,
@@ -36,13 +39,11 @@ export default function ListCard(props) {
   const [familyMembers, setFamilyMembers] = useState(list.familyMembers);
   const [familyMembersForm, setFamilyMembersForm] = useState([]);
 
-  // alert dialogs
   const [showAlertDownward, setAlertDownward] = useState(false);
   const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  //ref
   const trashIconImg = useRef(null);
   const editResidentNumbers = useRef(null);
   const editResidentAddress = useRef(null);
@@ -72,11 +73,14 @@ export default function ListCard(props) {
   function editResident(e) {
     setEditing(true);
 
-    //get updateDate as turn on editing mode
     const editYear = new Date().getFullYear();
     const editMonth = new Date().getMonth() + 1;
     const editDate = new Date().getDate();
-    const secondsToFirebase = getTimeStamp(editYear, editMonth, editDate);
+    const secondsToFirebase = transferToFirebaseTimeStamp(
+      editYear,
+      editMonth,
+      editDate
+    );
     setUpdateDateWhenEdit(secondsToFirebase);
     setDateWhenEditing(showDate(new Date().getTime() / 1000));
   }

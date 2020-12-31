@@ -148,22 +148,16 @@ export default function EntryField(props) {
   }
 
   function confirmCancelOrder() {
-    deleteDocById("field", cancelOrderId).then((result) => {
-      if (result) {
-        setSuccessAlert(true);
-        setSuccessMessage("已取消預借");
-        window.setTimeout(() => {
-          setCancelOrderId("");
-          setShowDeleteOrderConfirm(false);
-        }, 2000);
-        window.setTimeout(() => {
-          setSuccessAlert(false);
-        }, 2001);
-      } else {
-        setAlertDownward(true);
-        setAlertDownwardMessage("取消預借失敗，請重新操作");
-      }
-    });
+    deleteDocById("field", cancelOrderId);
+    setSuccessAlert(true);
+    setSuccessMessage("已取消預借");
+    window.setTimeout(() => {
+      setCancelOrderId("");
+      setShowDeleteOrderConfirm(false);
+    }, 2000);
+    window.setTimeout(() => {
+      setSuccessAlert(false);
+    }, 2001);
   }
 
   function closeAlert(e) {

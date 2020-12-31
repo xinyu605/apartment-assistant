@@ -12,7 +12,6 @@ const firebaseConfig = {
   measurementId: "G-W0TFBHTCR0",
 };
 
-// Initialize Cloud Firestore through Firebase
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();
 let auth = firebase.auth();
@@ -26,25 +25,16 @@ let refField = db.collection("field");
 /***********************************************************************
   call Firebase cloud function: emailSender (自定義，檔案在 src/index.js)
  ***********************************************************************/
-
 export function sendMail(data) {
-  // let data = {
-  //   name: "xinyu",
-  //   email: "xinyuyan605@gmail.com",
-  //   subject: "測試",
-  //   content: "測試內容",
-  // };
   let emailSender = functions.httpsCallable("emailSender");
-  emailSender(data)
-    .then((result) => {
-      // console.log(result.data.text);
-      console.log(result);
-    })
-    .catch((error) => {
-      console.log(error.code);
-      console.log(error.message);
-      console.log(error.details);
-    });
+  emailSender(data);
+}
+
+export function transferToFirebaseTimeStamp(year, month, date) {
+  const timeStamp = firebase.firestore.Timestamp.fromDate(
+    new Date(year, month - 1, date)
+  );
+  return timeStamp;
 }
 
 export function getUserProfile(uid) {
@@ -133,15 +123,7 @@ export function deleteDocById(collection, id) {
     default:
       break;
   }
-  return ref
-    .doc(id)
-    .delete()
-    .then(() => {
-      return true;
-    })
-    .catch((error) => {
-      return error;
-    });
+  return ref.doc(id).delete();
 }
 
 export function updateDocById(collection, id, data) {
@@ -168,20 +150,9 @@ export function updateDocById(collection, id, data) {
 }
 
 export function updateMailStatus(mailId, status) {
-  return refMailbox
-    .doc(mailId)
-    .update({ status: status })
-    .then(() => {
-      console.log("update successful");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  return refMailbox.doc(mailId).update({ status: status });
 }
 
-/*********************************** 
-  upload announcement on board
-***********************************/
 export function uploadAnnouncement(data) {
   refBoard
     .add({
@@ -198,16 +169,9 @@ export function uploadAnnouncement(data) {
         },
         { merge: true }
       );
-      console.log("upload announcement successful");
-    })
-    .catch((error) => {
-      console.log(error);
     });
 }
 
-/*********************
-  upload resident list
-**********************/
 export function uploadResident(data) {
   refResident
     .add({
@@ -221,13 +185,7 @@ export function uploadResident(data) {
     .then((docRef) => {
       refResident
         .doc(docRef.id)
-        .set({ residentId: docRef.id }, { merge: true })
-        .then(() => {
-          console.log("add residentId successful");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        .set({ residentId: docRef.id }, { merge: true });
 
       for (let i = 0; i < data.familyMembers.length; i++) {
         refResident
@@ -244,56 +202,19 @@ export function uploadResident(data) {
             { merge: true }
           );
       }
-    })
-    .catch((error) => {
-      console.log(error);
     });
 }
 
-/****************************************
-  upload new mail list to firestore
- ****************************************/
 export function uploadMailList(data, mailId) {
-  console.log(data);
-  refMailbox
-    .doc(mailId)
-    .set(data)
-    .then(() => {
-      console.log("add data successful!");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  refMailbox.doc(mailId).set(data);
 }
 
-/****************************************
-  turn time into firebase timeStamp
- ****************************************/
-export function getTimeStamp(year, month, date) {
-  const timeStamp = firebase.firestore.Timestamp.fromDate(
-    new Date(year, month - 1, date)
-  );
-  // console.log(timeStamp);
-  return timeStamp;
-}
-
-/******************************** 
-  upload Field order lists
-*********************************/
 export function uploadFieldOrder(data) {
   console.log(data);
   for (let i = 0; i < data.length; i++) {
-    refField
-      .add(data[i])
-      .then((docRef) => {
-        refField.doc(docRef.id).set({ orderId: docRef.id }, { merge: true });
-      })
-      .then(() => {
-        console.log("upload fieldList successful");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    refField.add(data[i]).then((docRef) => {
+      refField.doc(docRef.id).set({ orderId: docRef.id }, { merge: true });
+    });
   }
 }
 
@@ -337,8 +258,6 @@ export function signInWithGoogle() {
   return auth
     .signInWithPopup(provider)
     .then(function (result) {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      let token = result.credential.accessToken;
       let user = result.user;
       if (user.email === "admin@apartment.com") {
         return "admin";

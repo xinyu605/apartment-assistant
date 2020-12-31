@@ -4,7 +4,7 @@ import AlertboxForMailbox from "./../Common/AlertboxForMailbox";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import { EmailForm } from "./EmailForm";
 import styles from "./UpdateMailList.module.scss";
-import { uploadMailList, getTimeStamp } from "./../../firebase";
+import { uploadMailList, transferToFirebaseTimeStamp } from "./../../firebase";
 import { nanoid } from "nanoid";
 import envelope from "./../../img/envelope.svg";
 import send from "./../../img/send.svg";
@@ -43,7 +43,7 @@ export function UpdateMailList(props) {
 
   function updateReceiveDate(year, month, date) {
     // console.log(year, month, date);
-    const seconds = getTimeStamp(year, month, date);
+    const seconds = transferToFirebaseTimeStamp(year, month, date);
     // console.log(seconds);
     setReceiveDate(seconds);
     setYear(year);

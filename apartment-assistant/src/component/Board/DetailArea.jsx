@@ -4,7 +4,7 @@ import AlertDownward from "./../Common/AlertDownward";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import styles from "./DetailArea.module.scss";
 import { showDate } from "./../../utils/lib";
-import { getTimeStamp, updateDocById } from "./../../firebase";
+import { transferToFirebaseTimeStamp, updateDocById } from "./../../firebase";
 import editIcon from "./../../img/edit555.svg";
 import trashIcon from "./../../img/trash555.svg";
 import doneIcon from "./../../img/check.svg";
@@ -89,7 +89,7 @@ export default function DetailArea(props) {
   prepare seconds for firebase
   ******************************/
   function updatePublishDate(year, month, date) {
-    const seconds = getTimeStamp(year, month, date);
+    const seconds = transferToFirebaseTimeStamp(year, month, date);
     setPublishTimeStamp(seconds);
     setYearPublish(year);
     setMonthPublish(month);
@@ -97,7 +97,7 @@ export default function DetailArea(props) {
   }
 
   function updateDeadline(year, month, date) {
-    const seconds = getTimeStamp(year, month, date);
+    const seconds = transferToFirebaseTimeStamp(year, month, date);
     setDeadlineTimeStamp(seconds);
     setYearDeadline(year);
     setMonthDeadline(month);

@@ -1,6 +1,9 @@
 import React, { useState, useRef } from "react";
 import { SmallCalendar } from "./SmallCalendar";
-import { getTimeStamp, uploadAnnouncement } from "./../../firebase";
+import {
+  transferToFirebaseTimeStamp,
+  uploadAnnouncement,
+} from "./../../firebase";
 import styles from "./UpdateBoardList.module.scss";
 import clipBoard from "./../../img/clipboard.svg";
 import Alertbox from "./../Common/Alertbox";
@@ -28,7 +31,7 @@ export default function UpdateBoardList() {
     e.preventDefault();
     const inputs = updateForm.current.querySelectorAll("input");
     let dd = new Date();
-    let updateTime = getTimeStamp(
+    let updateTime = transferToFirebaseTimeStamp(
       dd.getFullYear(),
       dd.getMonth() + 1,
       dd.getDate()
@@ -91,7 +94,7 @@ export default function UpdateBoardList() {
   prepare seconds for firebase
   ******************************/
   function updateDate(year, month, date) {
-    const seconds = getTimeStamp(year, month, date);
+    const seconds = transferToFirebaseTimeStamp(year, month, date);
     setDeadline(seconds);
     setYear(year);
     setMonth(month);
