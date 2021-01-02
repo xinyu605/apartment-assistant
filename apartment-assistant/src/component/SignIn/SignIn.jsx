@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import SignUp from "./SignUp";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
@@ -15,6 +15,7 @@ export default function SignIn(props) {
   let history = useHistory();
   const [emailSignIn, setEmailSignIn] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
+  const [showSignInMobile, setSignInMobile] = useState(true);
 
   const [showAlertbox, setAlertbox] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -25,6 +26,8 @@ export default function SignIn(props) {
   const passwordSignInInput = useRef(null);
   const remindEmailSignIn = useRef(null);
   const remindPasswordSignIn = useRef(null);
+  const imageCard = useRef(null);
+  const signInCard = useRef(null);
 
   function checkSignInInput(e) {
     const target = e.currentTarget;
@@ -66,6 +69,17 @@ export default function SignIn(props) {
     }
   }
 
+  function initInputDisplay() {
+    setEmailSignIn("");
+    setPasswordSignIn("");
+    emailSignInInput.current.value = "";
+    passwordSignInInput.current.value = "";
+    remindEmailSignIn.current.textContent = "管理員Email：admin@apartment.com";
+    remindEmailSignIn.current.style.color = "#96bbbb";
+    remindPasswordSignIn.current.textContent = "管理員密碼：apartment";
+    remindPasswordSignIn.current.style.color = "#96bbbb";
+  }
+
   function submitSignInData(e) {
     e.preventDefault();
 
@@ -89,15 +103,7 @@ export default function SignIn(props) {
         } else {
           setAlertbox(true);
           setAlertMessage(`登入失敗！請重新登入(Error: ${result.message})`);
-          setEmailSignIn("");
-          setPasswordSignIn("");
-          emailSignInInput.current.value = "";
-          passwordSignInInput.current.value = "";
-          remindEmailSignIn.current.textContent =
-            "管理員Email：admin@apartment.com";
-          remindEmailSignIn.current.style.color = "#96bbbb";
-          remindPasswordSignIn.current.textContent = "管理員密碼：apartment";
-          remindPasswordSignIn.current.style.color = "#96bbbb";
+          initInputDisplay();
         }
       });
     } else {
@@ -109,7 +115,6 @@ export default function SignIn(props) {
   function googleSignIn(e) {
     e.preventDefault();
     signInWithGoogle().then((result) => {
-      console.log(result);
       if (result === "admin") {
         setSuccessAlert(true);
         setSuccessMessage("Welcome!");
@@ -130,35 +135,34 @@ export default function SignIn(props) {
   }
 
   function moveCard(e) {
-    const imageCard = document.querySelector("#imageCard");
     if (e.currentTarget.id === "clickToSignUp") {
-      imageCard.style.transform = "translateX(360px)";
-      imageCard.style.transition = "all 0.5s ease";
+      imageCard.current.style.transform = "translateX(360px)";
+      imageCard.current.style.transition = "all 0.5s ease";
     } else {
-      imageCard.style.transform = "translateX(0px)";
-      imageCard.style.transition = "all 0.5s ease";
+      imageCard.current.style.transform = "translateX(0px)";
+      imageCard.current.style.transition = "all 0.5s ease";
     }
   }
 
   function exchangeCards(e) {
-    const signUpCard = document.querySelector("#signUpCard");
-    const signInCard = document.querySelector("#signInCard");
     if (e.currentTarget.id === "clickToSignUpMobile") {
-      signUpCard.style.transform = "translateY(-410px)";
-      signUpCard.style.opacity = "1";
-      signUpCard.style.transition = "all 0.5s ease";
-      signInCard.style.transform = "translateY(410px)";
-      signInCard.style.opacity = "0";
-      signInCard.style.transition = "all 0.5s ease";
+      setSignInMobile(false);
     } else {
-      signInCard.style.transform = "translateY(0px)";
-      signInCard.style.opacity = "1";
-      signInCard.style.transition = "all 0.5s ease";
-      signUpCard.style.transform = "translateY(0px)";
-      signUpCard.style.opacity = "0";
-      signUpCard.style.transition = "all 0.5s ease";
+      setSignInMobile(true);
     }
   }
+
+  useEffect(() => {
+    if (showSignInMobile) {
+      signInCard.current.style.transform = "translateY(0px)";
+      signInCard.current.style.opacity = "1";
+      signInCard.current.style.transition = "all 0.5s ease";
+    } else {
+      signInCard.current.style.transform = "translateY(410px)";
+      signInCard.current.style.opacity = "0";
+      signInCard.current.style.transition = "all 0.5s ease";
+    }
+  }, [showSignInMobile]);
 
   return (
     <div className={styles.body}>
@@ -168,7 +172,7 @@ export default function SignIn(props) {
         </div>
       </div>
       <div className={styles.container}>
-        <div id="imageCard" className={styles.image}>
+        <div ref={imageCard} id="imageCard" className={styles.image}>
           <img src={vintage} className={styles.coverImg} />
           <div className={styles.imgWrapper}>
             <img src={logo} className={styles.logoImg} />
@@ -184,7 +188,7 @@ export default function SignIn(props) {
           </div>
         </div>
 
-        <div id="signInCard" className={styles.signIn}>
+        <div ref={signInCard} id="signInCard" className={styles.signIn}>
           <h2>會員登入</h2>
           <form id="signInPageForm" className={styles.signInPageForm}>
             <div className={styles.inputWrapper}>
@@ -256,7 +260,11 @@ export default function SignIn(props) {
           </div>
         </div>
 
-        <SignUp moveCard={moveCard} exchangeCards={exchangeCards} />
+        <SignUp
+          moveCard={moveCard}
+          exchangeCards={exchangeCards}
+          showSignInMobile={showSignInMobile}
+        />
       </div>
       {showAlertbox && (
         <Alertbox

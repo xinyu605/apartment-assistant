@@ -4,9 +4,6 @@ import {
   Switch,
   Route,
   Link,
-  NavLink,
-  Redirect,
-  // useParams,   //nested router
   useRouteMatch,
   useLocation,
 } from "react-router-dom";
@@ -25,7 +22,7 @@ let auth = firebase.auth();
 export function Admin(props) {
   const match = useRouteMatch();
   const [isLogin, setLogin] = useState(undefined);
-  const [isShowing, setShowing] = useState(false);
+  const [isShowing, setShowing] = useState(true);
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
@@ -39,20 +36,10 @@ export function Admin(props) {
     });
   }, []);
 
-  function toggleSidebar(e) {
-    const sidebar = document.querySelector("#sidebar");
-    const toggleBtn = document.querySelector("#toggleBtn");
+  function toggleSidebar() {
     if (isShowing) {
-      sidebar.style.transform = "translateX(0)";
-      sidebar.style.transition = "all 0.5s ease";
-      toggleBtn.className = `${styles.toggleBtn}`;
       setShowing(false);
     } else {
-      sidebar.style.transform = "translateX(250px)";
-      sidebar.style.background =
-        "linear-gradient(336deg, rgba(251, 196, 63, 1) 0%, rgba(135, 216, 241, 1) 100%)";
-      sidebar.style.transition = "all 0.5s ease";
-      toggleBtn.className = `${styles.toggleBtn} ${styles.open}`;
       setShowing(true);
     }
   }
@@ -61,7 +48,11 @@ export function Admin(props) {
     <div className={styles.admin}>
       <div className={styles.topBar}>
         <div
-          className={styles.toggleBtn}
+          className={
+            isShowing
+              ? `${styles.toggleBtn}`
+              : `${styles.toggleBtn} ${styles.open}`
+          }
           id="toggleBtn"
           onClick={toggleSidebar}
         >
@@ -72,7 +63,7 @@ export function Admin(props) {
         </div>
       </div>
       <AskLogin isLogin={isLogin} />
-      <Sidebar logout={props.logout} />
+      <Sidebar isShowing={isShowing} logout={props.logout} />
 
       <Switch>
         <Route path="/admin/resident">
@@ -94,7 +85,6 @@ export function Admin(props) {
 
 function Sidebar(props) {
   let location = useLocation();
-  // console.log(location);
   const linkBoard = useRef(null);
   const linkResident = useRef(null);
   const linkMailbox = useRef(null);
@@ -121,7 +111,19 @@ function Sidebar(props) {
   }, [location]);
 
   return (
-    <div className={styles.sidebar} id="sidebar">
+    <div
+      className={styles.sidebar}
+      id="sidebar"
+      style={
+        props.isShowing
+          ? { transform: "translateX(0)" }
+          : {
+              transform: "translateX(250px)",
+              background:
+                "linear-gradient(336deg, rgba(251, 196, 63, 1) 0%, rgba(135, 216, 241, 1) 100%)",
+            }
+      }
+    >
       <div className={styles.logoArea}>
         <div className={styles.imgWrapper}>
           <img src={logo} />

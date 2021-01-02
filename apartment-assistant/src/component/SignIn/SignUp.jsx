@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Alertbox from "./../Common/Alertbox";
 import styles from "./SignIn.module.scss";
 import user from "./../../img/user.svg";
@@ -28,6 +28,19 @@ export default function SignUp(props) {
   const remindNameSignUp = useRef(null);
   const remindEmailSignUp = useRef(null);
   const remindPasswordSignUp = useRef(null);
+  const signUpCard = useRef(null);
+
+  useEffect(() => {
+    if (props.showSignInMobile) {
+      signUpCard.current.style.transform = "translateY(0px)";
+      signUpCard.current.style.opacity = "0";
+      signUpCard.current.style.transition = "all 0.5s ease";
+    } else {
+      signUpCard.current.style.transform = "translateY(-410px)";
+      signUpCard.current.style.opacity = "1";
+      signUpCard.current.style.transition = "all 0.5s ease";
+    }
+  }, [props.showSignInMobile]);
 
   function checkSignUpInput(e) {
     const target = e.currentTarget;
@@ -123,7 +136,7 @@ export default function SignUp(props) {
   }
 
   return (
-    <div id="signUpCard" className={styles.signUp}>
+    <div ref={signUpCard} id="signUpCard" className={styles.signUp}>
       <h2>註冊新帳號</h2>
       <form className={styles.signUpPageForm}>
         <div className={styles.inputWrapper}>
