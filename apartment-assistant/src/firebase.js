@@ -210,7 +210,6 @@ export function uploadMailList(data, mailId) {
 }
 
 export function uploadFieldOrder(data) {
-  console.log(data);
   for (let i = 0; i < data.length; i++) {
     refField.add(data[i]).then((docRef) => {
       refField.doc(docRef.id).set({ orderId: docRef.id }, { merge: true });
@@ -222,7 +221,6 @@ export function nativeSignUp(email, password, name) {
   return auth
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
-      console.log("sign up successful!, userID:", auth.currentUser.uid);
       const signUpTime = new Date();
       users.doc(auth.currentUser.uid).set({
         userName: name,
@@ -241,7 +239,6 @@ export function nativeSignIn(email, password) {
   return auth
     .signInWithEmailAndPassword(email, password)
     .then(() => {
-      console.log("sign in successful!");
       if (email === "admin@apartment.com") {
         return "admin";
       } else {

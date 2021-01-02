@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Member from "./Member";
 import NewMember from "./NewMember";
-import AlertDownward from "./../../Common/AlertDownward";
+import Alertbox from "./../../Common/Alertbox";
 import AlertSuccessMsg from "./../../Common/AlertSuccessMsg";
 import styles from "./ResidentList.module.scss";
 import editIcon from "./../../../img/edit555.svg";
@@ -39,8 +39,8 @@ export default function ListCard(props) {
   const [familyMembers, setFamilyMembers] = useState(list.familyMembers);
   const [familyMembersForm, setFamilyMembersForm] = useState([]);
 
-  const [showAlertDownward, setAlertDownward] = useState(false);
-  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showAlertbox, setAlertbox] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -245,24 +245,24 @@ export default function ListCard(props) {
     }
 
     if (repeatResidentNumbers) {
-      setAlertDownward(true);
-      setAlertDownwardMessage("此戶號已存在，請重新填寫");
+      setAlertbox(true);
+      setAlertMessage("此戶號已存在，請重新填寫");
     } else if (
       editResidentNumbers.current.value === "" ||
       editResidentAddress.current.value === "" ||
       errorRecord.emptyInputCount > 0
     ) {
-      setAlertDownward(true);
-      setAlertDownwardMessage("欄位不可留空");
+      setAlertbox(true);
+      setAlertMessage("欄位不可留空");
     } else if (errorRecord.phoneInputError > 0) {
-      setAlertDownward(true);
-      setAlertDownwardMessage("請填寫正確的手機號碼格式，如0912345678");
+      setAlertbox(true);
+      setAlertMessage("請填寫正確的手機號碼格式，如0912345678");
     } else if (errorRecord.emailInputError > 0) {
-      setAlertDownward(true);
-      setAlertDownwardMessage("請填寫正確的Email格式");
+      setAlertbox(true);
+      setAlertMessage("請填寫正確的Email格式");
     } else if (familyMembers.length < 1) {
-      setAlertDownward(true);
-      setAlertDownwardMessage("住戶成員不能少於一位");
+      setAlertbox(true);
+      setAlertMessage("住戶成員不能少於一位");
     } else {
       updateDocById("residents", list.residentId, infoPackage);
       setSuccessAlert(true);
@@ -275,11 +275,6 @@ export default function ListCard(props) {
         setEditing(false);
       }, 2001);
     }
-  }
-
-  function closeAlert(e) {
-    e.preventDefault();
-    setAlertDownward(false);
   }
 
   if (isEditing === false) {
@@ -426,15 +421,18 @@ export default function ListCard(props) {
             );
           })}
         </div>
-        <AlertDownward
-          showAlertDownward={showAlertDownward}
-          alertDownwardMessage={alertDownwardMessage}
-          closeAlert={closeAlert}
-        />
-        <AlertSuccessMsg
-          showSuccessAlert={showSuccessAlert}
-          successMessage={successMessage}
-        />
+        {showAlertbox && (
+          <Alertbox
+            category="downward"
+            alertMessage={alertMessage}
+            closeAlert={() => {
+              setAlertbox(false);
+            }}
+          />
+        )}
+        {showSuccessAlert && (
+          <AlertSuccessMsg successMessage={successMessage} />
+        )}
       </div>
     );
   }

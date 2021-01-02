@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { SmallCalendar } from "./SmallCalendar";
-import AlertboxForMailbox from "./../Common/AlertboxForMailbox";
+import Alertbox from "./../Common/Alertbox";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import { EmailForm } from "./EmailForm";
 import styles from "./UpdateMailList.module.scss";
@@ -23,18 +23,15 @@ export function UpdateMailList(props) {
   const [familyMembers, setFamilyMembers] = useState([]);
   const [familyMembersEmail, setFamilyMembersEmail] = useState([]);
   const [isEditingMail, setIsEditingMail] = useState(false);
-  //
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [date, setDate] = useState(new Date().getDate());
 
-  //alert dialog
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  //ref
   const mailNumberInput = useRef(null);
   const remindMailNumber = useRef(null);
   const residentNumberInput = useRef(null);
@@ -42,9 +39,7 @@ export function UpdateMailList(props) {
   const receiverSelect = useRef(null);
 
   function updateReceiveDate(year, month, date) {
-    // console.log(year, month, date);
     const seconds = transferToFirebaseTimeStamp(year, month, date);
-    // console.log(seconds);
     setReceiveDate(seconds);
     setYear(year);
     setMonth(month);
@@ -61,13 +56,11 @@ export function UpdateMailList(props) {
     setFamilyMembers([]);
     setFamilyMembersEmail([]);
     const residentList = props.residentList;
-    console.log(residentList);
     let familyMembersName = [];
     let familyMembersEmail = [];
     let residentNumberExist = false;
     for (let i = 0; i < residentList.length; i++) {
       if (residentList[i].residentNumbers === residentNumber) {
-        // console.log(residentList[i]);
         residentNumberExist = true;
         for (let j = 0; j < residentList[i].familyMembers.length; j++) {
           familyMembersName = [
@@ -112,7 +105,6 @@ export function UpdateMailList(props) {
   }
 
   function updateHook(e) {
-    // console.log(e.currentTarget.id);
     switch (e.currentTarget.id) {
       case "mailNumber":
         const checkMailNumberResult = checkNumbers(
@@ -133,7 +125,6 @@ export function UpdateMailList(props) {
         break;
       case "receiver":
         setReceiver(e.currentTarget.value);
-        // console.log(e.currentTarget.options.selectedIndex);
         setReceiverIndex(e.currentTarget.options.selectedIndex - 1);
         break;
       case "mailType":
@@ -156,14 +147,12 @@ export function UpdateMailList(props) {
     const inputs = document.querySelectorAll("input");
     const checkMailNumberResult = checkNumbers(mailNumberInput.current.value);
 
-    // init inputs style before checking format
     for (let i = 0; i < inputs.length; i++) {
       inputs[i].style.boxShadow = "none";
     }
 
     const index = familyMembers.indexOf(receiver);
     const receiverEmail = familyMembersEmail[index];
-    console.log(receiverEmail);
     data = {
       mailNumbers: parseInt(mailNumber),
       mailId: nanoid(),
@@ -176,7 +165,6 @@ export function UpdateMailList(props) {
       status: false,
       remark: remark,
     };
-    console.log(data);
 
     /********************* 
       Check inputs format
@@ -232,30 +220,10 @@ export function UpdateMailList(props) {
     isEditingMail === true ? setIsEditingMail(false) : setIsEditingMail(true);
   }
 
-  /***************** 
-    Close Email form
-  ******************/
   function closeForm() {
     setIsEditingMail(false);
   }
 
-  /************* 
-    Close alert
-  **************/
-  function closeAlert(e) {
-    e.preventDefault();
-    switch (e.currentTarget.id) {
-      case "closeAlertBtn":
-        setShowAlert(false);
-        break;
-      default:
-        break;
-    }
-  }
-
-  /********************************************* 
-    Set receiver Email by selected option index
-  *********************************************/
   useEffect(() => {
     setReceiverEmail(familyMembersEmail[receiverIndex]);
   }, [receiver]);
@@ -402,11 +370,15 @@ export function UpdateMailList(props) {
           >
             確認送出
           </button>
-          <AlertboxForMailbox
-            alertMessage={alertMessage}
-            showAlert={showAlert}
-            closeAlert={closeAlert}
-          />
+          {showAlert && (
+            <Alertbox
+              category="updateMailbox"
+              alertMessage={alertMessage}
+              closeAlert={() => {
+                setShowAlert(false);
+              }}
+            />
+          )}
         </div>
       </div>
 
@@ -419,11 +391,7 @@ export function UpdateMailList(props) {
         toggleEmailForm={toggleEmailForm}
         closeForm={closeForm}
       />
-      <AlertSuccessMsg
-        showSuccessAlert={showSuccessAlert}
-        successMessage={successMessage}
-        closeAlert={closeAlert}
-      />
+      {showSuccessAlert && <AlertSuccessMsg successMessage={successMessage} />}
     </div>
   );
 }

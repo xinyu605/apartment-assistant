@@ -209,6 +209,10 @@ export default function UpdateResident(props) {
       uploadResident(infoPackage);
       setSuccessAlert(true);
       setSuccessMessage("新增住戶成功");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.setTimeout(() => {
+        setSuccessAlert(false);
+      }, 2000);
 
       // back to default placeholer
       residentNumbers.current.placeholder = "請填寫戶號";
@@ -230,31 +234,6 @@ export default function UpdateResident(props) {
       }
     }
   }
-
-  /*********** 
-  Close alert
-  ************/
-  function closeAlert(e) {
-    e.preventDefault();
-    switch (e.currentTarget.id) {
-      case "closeAlertBtn":
-        setShowAlert(false);
-        break;
-      case "closeSuccessMsgBtn":
-        setSuccessAlert(false);
-        break;
-      default:
-        break;
-    }
-  }
-
-  /****************************
-    FamilyMembersForm component
-   ****************************/
-
-  const FamilyMemberForm = familyMembersForm.map((item) => {
-    return <FamilyMembers id={`family${item.id}`} key={`family${item.id}`} />;
-  });
 
   return (
     <div className={styles.updateResident} id="updateResident">
@@ -341,22 +320,26 @@ export default function UpdateResident(props) {
             </div>
           </div>
 
-          {FamilyMemberForm}
+          {familyMembersForm.map((item) => {
+            return (
+              <FamilyMembers id={`family${item.id}`} key={`family${item.id}`} />
+            );
+          })}
         </div>
         <button className={styles.submitMemberList} onClick={packingInfo}>
           確認送出
         </button>
-        <Alertbox
-          alertMessage={alertMessage}
-          showAlert={showAlert}
-          closeAlert={closeAlert}
-        />
+        {showAlert && (
+          <Alertbox
+            category={"updateResident"}
+            alertMessage={alertMessage}
+            closeAlert={() => {
+              setShowAlert(false);
+            }}
+          />
+        )}
       </form>
-      <AlertSuccessMsg
-        showSuccessAlert={showSuccessAlert}
-        successMessage={successMessage}
-        closeAlert={closeAlert}
-      />
+      {showSuccessAlert && <AlertSuccessMsg successMessage={successMessage} />}
     </div>
   );
 }

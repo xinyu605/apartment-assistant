@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import ApplyTable from "./../Common/ApplyTable";
-import AlertDownward from "./../Common/AlertDownward";
+import Alertbox from "./../Common/Alertbox";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import ConfirmMsg from "./../Common/ConfirmMsg";
 import {
@@ -27,9 +27,8 @@ export default function EntryField(props) {
 
   const selectedField = useRef(null);
 
-  // alert dialogs
-  const [showAlertDownward, setAlertDownward] = useState(false);
-  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showAlertbox, setAlertbox] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [showDeleteOrderConfirm, setShowDeleteOrderConfirm] = useState(false);
@@ -95,8 +94,8 @@ export default function EntryField(props) {
 
   function checkOrderLength() {
     if (orderApply.length === 0) {
-      setAlertDownward(true);
-      setAlertDownwardMessage("請先預約時段");
+      setAlertbox(true);
+      setAlertMessage("請先預約時段");
       return false;
     } else {
       return true;
@@ -160,11 +159,6 @@ export default function EntryField(props) {
     }, 2001);
   }
 
-  function closeAlert(e) {
-    e.preventDefault();
-    setAlertDownward(false);
-  }
-
   function cancelConfirm(e) {
     e.preventDefault();
     setShowDeleteOrderConfirm(false);
@@ -222,18 +216,18 @@ export default function EntryField(props) {
           cancelOrder={cancelOrder}
           collectCheckedList={collectCheckedList}
         />
-
-        <AlertDownward
-          showAlertDownward={showAlertDownward}
-          alertDownwardMessage={alertDownwardMessage}
-          closeAlert={closeAlert}
-        />
-        <AlertSuccessMsg
-          showSuccessAlert={showSuccessAlert}
-          successMessage={successMessage}
-          closeAlert={closeAlert}
-        />
-
+        {showAlertbox && (
+          <Alertbox
+            category="downward"
+            alertMessage={alertMessage}
+            closeAlert={() => {
+              setAlertbox(false);
+            }}
+          />
+        )}
+        {showSuccessAlert && (
+          <AlertSuccessMsg successMessage={successMessage} />
+        )}
         <ConfirmMsg
           showConfirm={showDeleteOrderConfirm}
           confirmMessage={confirmMessage}

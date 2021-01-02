@@ -11,17 +11,13 @@ import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 
 export default function UpdateBoardList() {
   const [deadline, setDeadline] = useState(0);
-  //
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [date, setDate] = useState(new Date().getDate());
-
-  //alert dialog
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-
   const author = useRef(null);
   const topic = useRef(null);
   const content = useRef(null);
@@ -54,16 +50,13 @@ export default function UpdateBoardList() {
         deadline: deadline,
         content: content.current.value,
       };
-      // console.log(data);
       uploadAnnouncement(data);
       setSuccessAlert(true);
       setSuccessMessage("公告已成功上傳");
-
       window.setTimeout(() => {
         setSuccessAlert(false);
-      }, 2000);
+      }, 2001);
 
-      // back to initial condition
       inputs.forEach((input) => {
         input.value = "";
       });
@@ -76,23 +69,6 @@ export default function UpdateBoardList() {
     }
   }
 
-  /*********** 
-  Close alert
-  ************/
-  function closeAlert(e) {
-    e.preventDefault();
-    switch (e.currentTarget.id) {
-      case "closeAlertBtn":
-        setShowAlert(false);
-        break;
-      default:
-        break;
-    }
-  }
-
-  /*****************************
-  prepare seconds for firebase
-  ******************************/
   function updateDate(year, month, date) {
     const seconds = transferToFirebaseTimeStamp(year, month, date);
     setDeadline(seconds);
@@ -153,17 +129,17 @@ export default function UpdateBoardList() {
         <button className={styles.submitMatter} onClick={prepareToAnnounce}>
           確認送出
         </button>
-        <Alertbox
-          alertMessage={alertMessage}
-          showAlert={showAlert}
-          closeAlert={closeAlert}
-        />
+        {showAlert && (
+          <Alertbox
+            category={"updateBoard"}
+            alertMessage={alertMessage}
+            closeAlert={() => {
+              setShowAlert(false);
+            }}
+          />
+        )}
       </form>
-      <AlertSuccessMsg
-        showSuccessAlert={showSuccessAlert}
-        successMessage={successMessage}
-        closeAlert={closeAlert}
-      />
+      {showSuccessAlert && <AlertSuccessMsg successMessage={successMessage} />}
     </div>
   );
 }

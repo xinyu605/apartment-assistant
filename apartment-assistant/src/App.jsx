@@ -10,18 +10,18 @@ import ScrollToTop from "./component/Common/ScrollToTop";
 import { Admin } from "./component/Admin";
 import Entry from "./component/Entry/Entry";
 import SignIn from "./component/SignIn/SignIn";
-import AlertLogout from "./component/Common/AlertLogout";
+import Alertbox from "./component/Common/Alertbox";
 import firebase from "firebase";
 
 let auth = firebase.auth();
 
 function App() {
-  const [showAlertDownward, setShowAlertDownward] = useState(false);
-  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showAlertbox, setShowAlertbox] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
   function logout() {
-    setShowAlertDownward(true);
-    setAlertDownwardMessage("See You Later!");
+    setShowAlertbox(true);
+    setAlertMessage("See You Later!");
   }
 
   function closeAlert(e) {
@@ -29,7 +29,7 @@ function App() {
     auth.signOut().then(() => {
       window.location.href = "/signin";
     });
-    setShowAlertDownward(false);
+    setShowAlertbox(false);
   }
 
   return (
@@ -49,11 +49,13 @@ function App() {
             />
             <Route path="/signin" component={SignIn} />
           </Switch>
-          <AlertLogout
-            showAlertDownward={showAlertDownward}
-            alertDownwardMessage={alertDownwardMessage}
-            closeAlert={closeAlert}
-          />
+          {showAlertbox && (
+            <Alertbox
+              category="logout"
+              alertMessage={alertMessage}
+              closeAlert={closeAlert}
+            />
+          )}
         </div>
       </Route>
     </Router>

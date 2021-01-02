@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import ApplyTable from "./../Common/ApplyTable";
-import AlertDownward from "./../Common/AlertDownward";
+import Alertbox from "./../Common/Alertbox";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import ConfirmMsg from "./../Common/ConfirmMsg";
 import ScrollToTopBtn from "./../Common/ScrollToTopBtn";
@@ -34,8 +34,8 @@ export default function Field(props) {
 
   const selectedField = useRef(null);
 
-  const [showAlertDownward, setAlertDownward] = useState(false);
-  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showAlertbox, setAlertbox] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [showDeleteOrderConfirm, setShowDeleteOrderConfirm] = useState(false);
@@ -78,8 +78,8 @@ export default function Field(props) {
     if (checkOrderInputResult) {
       setApplying(true);
     } else {
-      setAlertDownward(true);
-      setAlertDownwardMessage("尚未勾選租借時段");
+      setAlertbox(true);
+      setAlertMessage("尚未勾選租借時段");
     }
   }
 
@@ -134,11 +134,11 @@ export default function Field(props) {
       checkNameResult === "姓名欄位不可留空" ||
       checkEmailResult === "Email欄位不可留空"
     ) {
-      setAlertDownward(true);
-      setAlertDownwardMessage("欄位不可留空");
+      setAlertbox(true);
+      setAlertMessage("欄位不可留空");
     } else if (checkEmailResult === "Email格式錯誤") {
-      setAlertDownward(true);
-      setAlertDownwardMessage(checkEmailResult);
+      setAlertbox(true);
+      setAlertMessage(checkEmailResult);
     } else {
       fieldOrders = orderApply.map((order) => {
         return {
@@ -200,11 +200,6 @@ export default function Field(props) {
     window.setTimeout(() => {
       setSuccessAlert(false);
     }, 2001);
-  }
-
-  function closeAlert(e) {
-    e.preventDefault();
-    setAlertDownward(false);
   }
 
   function cancelConfirm(e) {
@@ -278,16 +273,17 @@ export default function Field(props) {
           sendApplicantInfo={sendApplicantInfo}
         />
       )}
-      <AlertDownward
-        showAlertDownward={showAlertDownward}
-        alertDownwardMessage={alertDownwardMessage}
-        closeAlert={closeAlert}
-      />
-      <AlertSuccessMsg
-        showSuccessAlert={showSuccessAlert}
-        successMessage={successMessage}
-        closeAlert={closeAlert}
-      />
+      {showAlertbox && (
+        <Alertbox
+          category="downward"
+          alertMessage={alertMessage}
+          closeAlert={() => {
+            setAlertbox(false);
+          }}
+        />
+      )}
+      {showSuccessAlert && <AlertSuccessMsg successMessage={successMessage} />}
+
       <ConfirmMsg
         showConfirm={showDeleteOrderConfirm}
         confirmMessage={confirmMessage}

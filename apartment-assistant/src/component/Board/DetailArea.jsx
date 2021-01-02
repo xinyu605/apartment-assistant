@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { SmallCalendar } from "./SmallCalendar";
-import AlertDownward from "./../Common/AlertDownward";
+import Alertbox from "./../Common/Alertbox";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
 import styles from "./DetailArea.module.scss";
 import { showDate } from "./../../utils/lib";
@@ -25,14 +25,12 @@ export default function DetailArea(props) {
   const [monthDeadline, setMonthDeadline] = useState(0);
   const [dateDeadline, setDateDeadline] = useState(0);
 
-  //ref
   const topicInput = useRef(null);
   const authorInput = useRef(null);
   const contentInput = useRef(null);
 
-  //alert dialog
-  const [showAlertDownward, setAlertDownward] = useState(false);
-  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showAlertbox, setAlertbox] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -70,9 +68,6 @@ export default function DetailArea(props) {
     setEditing(false);
   }
 
-  /*****************************
-  get input values
-******************************/
   function getTopic(e) {
     setTopic(e.currentTarget.value);
   }
@@ -85,9 +80,6 @@ export default function DetailArea(props) {
     setContent(e.currentTarget.value);
   }
 
-  /*****************************
-  prepare seconds for firebase
-  ******************************/
   function updatePublishDate(year, month, date) {
     const seconds = transferToFirebaseTimeStamp(year, month, date);
     setPublishTimeStamp(seconds);
@@ -117,17 +109,14 @@ export default function DetailArea(props) {
       authorInput.current.value === "" ||
       contentInput.current.value === ""
     ) {
-      setAlertDownward(true);
-      setAlertDownwardMessage("欄位不可留空");
+      setAlertbox(true);
+      setAlertMessage("欄位不可留空");
     } else {
       updateDocById("board", details.issueId, data).then((result) => {
         if (result === true) {
           setSuccessAlert(true);
           setSuccessMessage("公告更新成功");
 
-          window.setTimeout(() => {
-            setSuccessAlert(false);
-          }, 1000);
           window.setTimeout(() => {
             setEditing(false);
           }, 1200);
@@ -139,16 +128,11 @@ export default function DetailArea(props) {
           setPublishTimeStamp(0);
           setDeadlineTimeStamp(0);
         } else {
-          setAlertDownward(true);
-          setAlertDownwardMessage("公告更新失敗，請重新操作");
+          setAlertbox(true);
+          setAlertMessage("公告更新失敗，請重新操作");
         }
       });
     }
-  }
-
-  function closeAlert(e) {
-    e.preventDefault();
-    setAlertDownward(false);
   }
 
   useEffect(() => {
@@ -234,15 +218,18 @@ export default function DetailArea(props) {
               onChange={getContent}
             ></textarea>
           </div>
-          <AlertDownward
-            showAlertDownward={showAlertDownward}
-            alertDownwardMessage={alertDownwardMessage}
-            closeAlert={closeAlert}
-          />
-          <AlertSuccessMsg
-            showSuccessAlert={showSuccessAlert}
-            successMessage={successMessage}
-          />
+          {showAlertbox && (
+            <Alertbox
+              category="downward"
+              alertMessage={alertMessage}
+              closeAlert={() => {
+                setAlertbox(false);
+              }}
+            />
+          )}
+          {showSuccessAlert && (
+            <AlertSuccessMsg successMessage={successMessage} />
+          )}
         </div>
       );
     }

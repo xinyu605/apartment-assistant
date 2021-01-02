@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { BrowserRouter as Router, useHistory } from "react-router-dom";
 import SignUp from "./SignUp";
 import AlertSuccessMsg from "./../Common/AlertSuccessMsg";
-import AlertDownward from "./../Common/AlertDownward";
+import Alertbox from "./../Common/Alertbox";
 import { nativeSignIn, signInWithGoogle } from "./../../firebase";
 import { checkEmailFormat, checkPasswordLength } from "./../../utils/lib";
 import styles from "./SignIn.module.scss";
@@ -16,9 +16,8 @@ export default function SignIn(props) {
   const [emailSignIn, setEmailSignIn] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
 
-  // alert dialogs
-  const [showAlertDownward, setAlertDownward] = useState(false);
-  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showAlertbox, setAlertbox] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -74,50 +73,7 @@ export default function SignIn(props) {
     const passwordInput = checkPasswordLength(passwordSignIn);
 
     if (emailInput === true && passwordInput === true) {
-      nativeSignIn(emailSignIn, passwordSignIn)
-        .then((result) => {
-          if (result === "admin") {
-            setSuccessAlert(true);
-            setSuccessMessage("Welcome!");
-            window.setTimeout(() => {
-              history.push("/admin");
-            }, 700);
-          } else if (result === "general") {
-            setSuccessAlert(true);
-            setSuccessMessage("Welcome!");
-            window.setTimeout(() => {
-              history.push("/entry");
-            }, 700);
-          } else {
-            setAlertDownward(true);
-            setAlertDownwardMessage(
-              `登入失敗！請重新登入(Error: ${result.message})`
-            );
-            setEmailSignIn("");
-            setPasswordSignIn("");
-            emailSignInInput.current.value = "";
-            passwordSignInInput.current.value = "";
-            remindEmailSignIn.current.textContent =
-              "管理員Email：admin@apartment.com";
-            remindEmailSignIn.current.style.color = "#96bbbb";
-            remindPasswordSignIn.current.textContent = "管理員密碼：apartment";
-            remindPasswordSignIn.current.style.color = "#96bbbb";
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      setAlertDownward(true);
-      setAlertDownwardMessage("資料填寫不完整，請重新登入");
-    }
-  }
-
-  function googleSignIn(e) {
-    e.preventDefault();
-    signInWithGoogle()
-      .then((result) => {
-        console.log(result);
+      nativeSignIn(emailSignIn, passwordSignIn).then((result) => {
         if (result === "admin") {
           setSuccessAlert(true);
           setSuccessMessage("Welcome!");
@@ -131,18 +87,50 @@ export default function SignIn(props) {
             history.push("/entry");
           }, 700);
         } else {
-          setAlertDownward(true);
-          setAlertDownwardMessage("登入失敗！請重新登入");
+          setAlertbox(true);
+          setAlertMessage(`登入失敗！請重新登入(Error: ${result.message})`);
+          setEmailSignIn("");
+          setPasswordSignIn("");
+          emailSignInInput.current.value = "";
+          passwordSignInInput.current.value = "";
+          remindEmailSignIn.current.textContent =
+            "管理員Email：admin@apartment.com";
+          remindEmailSignIn.current.style.color = "#96bbbb";
+          remindPasswordSignIn.current.textContent = "管理員密碼：apartment";
+          remindPasswordSignIn.current.style.color = "#96bbbb";
         }
-      })
-      .catch((error) => {
-        console.log(error);
       });
+    } else {
+      setAlertbox(true);
+      setAlertMessage("資料填寫不完整，請重新登入");
+    }
+  }
+
+  function googleSignIn(e) {
+    e.preventDefault();
+    signInWithGoogle().then((result) => {
+      console.log(result);
+      if (result === "admin") {
+        setSuccessAlert(true);
+        setSuccessMessage("Welcome!");
+        window.setTimeout(() => {
+          history.push("/admin");
+        }, 700);
+      } else if (result === "general") {
+        setSuccessAlert(true);
+        setSuccessMessage("Welcome!");
+        window.setTimeout(() => {
+          history.push("/entry");
+        }, 700);
+      } else {
+        setAlertbox(true);
+        setAlertMessage("登入失敗！請重新登入");
+      }
+    });
   }
 
   function moveCard(e) {
     const imageCard = document.querySelector("#imageCard");
-    // console.log(imageCard);
     if (e.currentTarget.id === "clickToSignUp") {
       imageCard.style.transform = "translateX(360px)";
       imageCard.style.transition = "all 0.5s ease";
@@ -169,20 +157,6 @@ export default function SignIn(props) {
       signUpCard.style.transform = "translateY(0px)";
       signUpCard.style.opacity = "0";
       signUpCard.style.transition = "all 0.5s ease";
-    }
-  }
-
-  /*********** 
-  Close alert
-  ************/
-  function closeAlert(e) {
-    e.preventDefault();
-    switch (e.currentTarget.id) {
-      case "closeAlertBtn":
-        setAlertDownward(false);
-        break;
-      default:
-        break;
     }
   }
 
@@ -284,15 +258,16 @@ export default function SignIn(props) {
 
         <SignUp moveCard={moveCard} exchangeCards={exchangeCards} />
       </div>
-      <AlertSuccessMsg
-        showSuccessAlert={showSuccessAlert}
-        successMessage={successMessage}
-      />
-      <AlertDownward
-        showAlertDownward={showAlertDownward}
-        alertDownwardMessage={alertDownwardMessage}
-        closeAlert={closeAlert}
-      />
+      {showAlertbox && (
+        <Alertbox
+          category="downward"
+          alertMessage={alertMessage}
+          closeAlert={() => {
+            setAlertbox(false);
+          }}
+        />
+      )}
+      {showSuccessAlert && <AlertSuccessMsg successMessage={successMessage} />}
     </div>
   );
 }

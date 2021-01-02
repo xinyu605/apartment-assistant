@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import AlertDownward from "./../Common/AlertDownward";
+import Alertbox from "./../Common/Alertbox";
 import styles from "./SignIn.module.scss";
 import user from "./../../img/user.svg";
 import email from "./../../img/email.svg";
@@ -17,8 +17,8 @@ export default function SignUp(props) {
   const [emailSignUp, setEmailSignUp] = useState("");
   const [passwordSignUp, setPasswordSignUp] = useState("");
 
-  const [showAlertDownward, setAlertDownward] = useState(false);
-  const [alertDownwardMessage, setAlertDownwardMessage] = useState("");
+  const [showAlertbox, setAlertbox] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [showSuccessAlert, setSuccessAlert] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -92,53 +92,33 @@ export default function SignUp(props) {
       checkPasswordLength(passwordSignUp) === true &&
       checkUserName(userName) === true
     ) {
-      nativeSignUp(emailSignUp, passwordSignUp, userName)
-        .then((result) => {
-          console.log(result);
-          if (result === "success") {
-            setSuccessAlert(true);
-            setSuccessMessage("註冊成功！請重新登入");
+      nativeSignUp(emailSignUp, passwordSignUp, userName).then((result) => {
+        console.log(result);
+        if (result === "success") {
+          setSuccessAlert(true);
+          setSuccessMessage("註冊成功！請重新登入");
 
-            setUserName("");
-            setEmailSignUp("");
-            setPasswordSignUp("");
-            nameSignUpInput.current.value = "";
-            emailSignUpInput.current.value = "";
-            passwordSignUpInput.current.value = "";
+          setUserName("");
+          setEmailSignUp("");
+          setPasswordSignUp("");
+          nameSignUpInput.current.value = "";
+          emailSignUpInput.current.value = "";
+          passwordSignUpInput.current.value = "";
 
-            //move image card
-            window.setTimeout(() => {
-              const imageCard = document.querySelector("#imageCard");
-              imageCard.style.transform = "translateX(0px)";
-              imageCard.style.transition = "all 0.5s ease";
-            }, 500);
-          } else {
-            setAlertDownward(true);
-            setAlertDownwardMessage(
-              `註冊失敗！請重新註冊(Error: ${result.message})`
-            );
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          //move image card
+          window.setTimeout(() => {
+            const imageCard = document.querySelector("#imageCard");
+            imageCard.style.transform = "translateX(0px)";
+            imageCard.style.transition = "all 0.5s ease";
+          }, 500);
+        } else {
+          setAlertbox(true);
+          setAlertMessage(`註冊失敗！請重新註冊(Error: ${result.message})`);
+        }
+      });
     } else {
-      setAlertDownward(true);
-      setAlertDownwardMessage("資料填寫不完整，請重新註冊");
-    }
-  }
-
-  /*********** 
-  Close alert
-  ************/
-  function closeAlert(e) {
-    e.preventDefault();
-    switch (e.currentTarget.id) {
-      case "closeAlertBtn":
-        setAlertDownward(false);
-        break;
-      default:
-        break;
+      setAlertbox(true);
+      setAlertMessage("資料填寫不完整，請重新註冊");
     }
   }
 
@@ -225,15 +205,17 @@ export default function SignUp(props) {
           登入
         </div>
       </form>
-      <AlertSuccessMsg
-        showSuccessAlert={showSuccessAlert}
-        successMessage={successMessage}
-      />
-      <AlertDownward
-        showAlertDownward={showAlertDownward}
-        alertDownwardMessage={alertDownwardMessage}
-        closeAlert={closeAlert}
-      />
+
+      {showAlertbox && (
+        <Alertbox
+          category="downward"
+          alertMessage={alertMessage}
+          closeAlert={() => {
+            setAlertbox(false);
+          }}
+        />
+      )}
+      {showSuccessAlert && <AlertSuccessMsg successMessage={successMessage} />}
     </div>
   );
 }

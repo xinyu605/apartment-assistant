@@ -32,6 +32,10 @@
     @include button-icon;
     background-color: $color-fireOpal;
 
+    &:hover {
+      background-color: $color-fireOpal;
+    }
+
     img {
       width: 80%;
     }
