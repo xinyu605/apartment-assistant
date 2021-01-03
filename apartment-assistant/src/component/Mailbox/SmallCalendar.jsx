@@ -60,7 +60,6 @@ export function SmallCalendar(props) {
   }
 
   function selectDate(e) {
-    // console.log(e.currentTarget.id.slice(4));
     const date = e.currentTarget.id.slice(4);
     const days = document.querySelectorAll(".day");
     for (let i = 0; i < days.length; i++) {
@@ -74,7 +73,7 @@ export function SmallCalendar(props) {
   useEffect(() => {
     if (isCalendarShowing) {
       const containerElement = document.querySelector("#calendar");
-      showCalendar(containerElement, thisYear, thisMonth);
+      showCalendar(thisYear, thisMonth);
       const selectMonth = containerElement.querySelectorAll("option");
       selectMonth[thisMonth - 1].setAttribute("selected", true);
     }
@@ -84,7 +83,6 @@ export function SmallCalendar(props) {
   useEffect(() => {
     if (isCalendarShowing) {
       const selectDay = document.querySelector(`#date${receiveDate}`);
-      // console.log(selectDay);
       selectDay.classList.add(styles.initial);
     }
   }, [isCalendarShowing]);

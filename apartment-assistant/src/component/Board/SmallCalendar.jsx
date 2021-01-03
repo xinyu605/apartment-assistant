@@ -8,9 +8,6 @@ import edit from "./../../img/edit.svg";
 *************************/
 export function SmallCalendar(props) {
   const [isCalendarShowing, setCalendarShowing] = useState(false);
-  // const [thisYear, setThisYear] = useState(new Date().getFullYear());
-  // const [thisMonth, setThisMonth] = useState(new Date().getMonth() + 1);
-  // const [deadline, setDeadline] = useState(new Date().getDate());
   const [thisYear, setThisYear] = useState(props.year);
   const [thisMonth, setThisMonth] = useState(props.month);
   const [deadline, setDeadline] = useState(props.date);
@@ -82,7 +79,7 @@ export function SmallCalendar(props) {
   // show the small calendar of selected month
   useEffect(() => {
     if (isCalendarShowing) {
-      showCalendar(containerElement, thisYear, thisMonth, true);
+      showCalendar(thisYear, thisMonth, true);
       const selectMonth = containerElement.current.querySelectorAll("option");
       selectMonth[thisMonth - 1].setAttribute("selected", true);
     }

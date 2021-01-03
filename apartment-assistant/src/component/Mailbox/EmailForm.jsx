@@ -109,79 +109,72 @@ export function EmailForm(props) {
     }
   }
 
-  if (props.isEditingMail) {
-    return (
-      <div className={styles.emailBackground}>
-        <div className={styles.emailFrom}>
-          <div className={styles.informTitle}>
-            <h2>通知信件即將寄出，請確認！</h2>
-            <button className={styles.closeBtn} onClick={props.toggleEmailForm}>
-              <img src={close} />
-            </button>
-          </div>
-
-          <form className={styles.fillPlace}>
-            <p
-              className={`${styles.emailInputTitle} ${styles.emailInputTitle1}`}
-            >
-              收件者
-            </p>
-            <input
-              ref={recipientEmailInput}
-              id="recipientEmail"
-              className={`${styles.emailInput} ${styles.emailInput1}`}
-              type="text"
-              placeholder="請輸入email"
-              onChange={updateEmailInfo}
-            ></input>
-
-            <p
-              className={`${styles.emailInputTitle} ${styles.emailInputTitle2}`}
-            >
-              主旨
-            </p>
-            <input
-              ref={subjectInput}
-              id="subject"
-              className={`${styles.emailInput} ${styles.emailInput2}`}
-              type="text"
-              placeholder="請輸入主旨"
-              onChange={updateEmailInfo}
-            ></input>
-
-            <p
-              className={`${styles.emailInputTitle} ${styles.emailInputTitle3}`}
-            >
-              內容
-            </p>
-            <textarea
-              ref={contentTextarea}
-              id="content"
-              className={`${styles.emailInput} ${styles.emailInput3}`}
-              rows="8"
-              onChange={updateEmailInfo}
-            ></textarea>
-
-            <button className={styles.sendBtn} onClick={prepareToSendEmail}>
-              送出
-            </button>
-          </form>
-        </div>
-        {showAlertbox && (
-          <Alertbox
-            category="downward"
-            alertMessage={alertMessage}
-            closeAlert={() => {
-              setAlertbox(false);
+  return (
+    <div className={styles.emailBackground}>
+      <div className={styles.emailFrom}>
+        <div className={styles.informTitle}>
+          <h2>通知信件即將寄出，請確認！</h2>
+          <button
+            className={styles.closeBtn}
+            onClick={() => {
+              props.closeForm();
             }}
-          />
-        )}
-        {showSuccessAlert && (
-          <AlertSuccessMsg successMessage={successMessage} />
-        )}
+          >
+            <img src={close} />
+          </button>
+        </div>
+
+        <form className={styles.fillPlace}>
+          <p className={`${styles.emailInputTitle} ${styles.emailInputTitle1}`}>
+            收件者
+          </p>
+          <input
+            ref={recipientEmailInput}
+            id="recipientEmail"
+            className={`${styles.emailInput} ${styles.emailInput1}`}
+            type="text"
+            placeholder="請輸入email"
+            onChange={updateEmailInfo}
+          ></input>
+
+          <p className={`${styles.emailInputTitle} ${styles.emailInputTitle2}`}>
+            主旨
+          </p>
+          <input
+            ref={subjectInput}
+            id="subject"
+            className={`${styles.emailInput} ${styles.emailInput2}`}
+            type="text"
+            placeholder="請輸入主旨"
+            onChange={updateEmailInfo}
+          ></input>
+
+          <p className={`${styles.emailInputTitle} ${styles.emailInputTitle3}`}>
+            內容
+          </p>
+          <textarea
+            ref={contentTextarea}
+            id="content"
+            className={`${styles.emailInput} ${styles.emailInput3}`}
+            rows="8"
+            onChange={updateEmailInfo}
+          ></textarea>
+
+          <button className={styles.sendBtn} onClick={prepareToSendEmail}>
+            送出
+          </button>
+        </form>
       </div>
-    );
-  } else {
-    return <div></div>;
-  }
+      {showAlertbox && (
+        <Alertbox
+          category="downward"
+          alertMessage={alertMessage}
+          closeAlert={() => {
+            setAlertbox(false);
+          }}
+        />
+      )}
+      {showSuccessAlert && <AlertSuccessMsg successMessage={successMessage} />}
+    </div>
+  );
 }

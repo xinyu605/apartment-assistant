@@ -7,7 +7,7 @@ export function showDate(seconds) {
   return `${year}年${month}月${date}日`;
 }
 
-export function showCalendar(element, getYear, getMonth, blockPast = false) {
+export function showCalendar(getYear, getMonth, blockPast = false) {
   const todayYear = new Date().getFullYear();
   const todayMonth = new Date().getMonth();
   const todayDate = new Date().getDate();
@@ -23,7 +23,6 @@ export function showCalendar(element, getYear, getMonth, blockPast = false) {
     monthNormal
   );
 
-  //6.render
   //在當月第一天前面建立空白的<li>
   for (let i = 0; i < firstDayInSelectedMonth; i++) {
     let blankDays = document.createElement("li");

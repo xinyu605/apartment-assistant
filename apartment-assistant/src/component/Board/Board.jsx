@@ -12,6 +12,7 @@ import boardIcon from "./../../img/blackboard.svg";
 
 export default function Board() {
   const [matters, setMatters] = useState([]);
+  const [matterStatus, setMatterStatus] = useState([]);
   const [details, setDetails] = useState({});
   const [issueIndex, setIssueIndex] = useState(0);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -22,20 +23,32 @@ export default function Board() {
     function handleBoardList(boardList) {
       setMatters(boardList);
       setDetails(boardList[0]);
+
+      const currentMatterStatus = [...matterStatus];
+      for (let i = 0; i < boardList.length; i++) {
+        currentMatterStatus.push(false);
+        setMatterStatus(currentMatterStatus);
+      }
     }
   }, []);
+
+  useEffect(() => {}, [issueIndex]);
+
+  function updateMatterStatus(index) {
+    const currentMatterStatus = [];
+    for (let i = 0; i < matterStatus.length; i++) {
+      currentMatterStatus[i] = i === index ? true : false;
+    }
+    return currentMatterStatus;
+  }
 
   function selectMatterDetail(e) {
     const index = parseInt(e.currentTarget.id.slice(13));
     setIssueIndex(index);
     setDetails(matters[index]);
-
-    const allMatters = document.querySelectorAll(`.${styles.matter}`);
-    const matter = allMatters[index];
-    allMatters.forEach((item) => {
-      item.classList.remove(styles.currentMatter);
+    Promise.all(updateMatterStatus(index)).then((currentMatterStatus) => {
+      setMatterStatus(currentMatterStatus);
     });
-    matter.classList.add(styles.currentMatter);
   }
 
   function deleteIssue(e) {
@@ -65,6 +78,7 @@ export default function Board() {
         </div>
         <Announcement
           matters={matters}
+          matterStatus={matterStatus}
           selectMatterDetail={selectMatterDetail}
         />
         <DetailArea details={details} deleteIssue={deleteIssue} />
@@ -113,6 +127,7 @@ function Announcement(props) {
                 key={`matter${matter.issueId}`}
                 matters={matters}
                 matter={matter}
+                matterStatus={props.matterStatus}
                 selectMatterDetail={props.selectMatterDetail}
               />
             );
@@ -126,13 +141,25 @@ function Announcement(props) {
 function List(props) {
   const updateTime = showDate(props.matter.updateTime.seconds);
   const index = props.matters.indexOf(props.matter);
+  const matterStatus = props.matterStatus[index];
   return (
-    <li className={styles.matter} key={nanoid()}>
+    <li
+      className={
+        matterStatus
+          ? `${styles.matter} ${styles.currentMatter}`
+          : styles.matter
+      }
+      key={nanoid()}
+    >
       <p className={styles.matterDate}>{updateTime}</p>
       <h4 className={styles.matterTitle}>{props.matter.topic}</h4>
       <button
         id={`showDetailBtn${index}`}
-        className={styles.readMoreBtn}
+        className={
+          matterStatus
+            ? `${styles.readMoreBtn} ${styles.currentReadMoreBtn}`
+            : styles.readMoreBtn
+        }
         onClick={props.selectMatterDetail}
       ></button>
     </li>

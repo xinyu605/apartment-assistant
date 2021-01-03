@@ -37,6 +37,7 @@ export function UpdateMailList(props) {
   const residentNumberInput = useRef(null);
   const remindResidentNumbers = useRef(null);
   const receiverSelect = useRef(null);
+  const remarkInput = useRef(null);
 
   function updateReceiveDate(year, month, date) {
     const seconds = transferToFirebaseTimeStamp(year, month, date);
@@ -45,11 +46,6 @@ export function UpdateMailList(props) {
     setMonth(month);
     setDate(date);
   }
-
-  const ReceiverOptions = familyMembers.map((member) => {
-    const index = familyMembers.indexOf(member);
-    return <option key={nanoid()}>{member}</option>;
-  });
 
   async function getResidentData(residentNumber) {
     setResidentNumber(residentNumber);
@@ -141,15 +137,36 @@ export function UpdateMailList(props) {
     }
   }
 
+  function initInputDisplay() {
+    mailNumberInput.current.style.boxShadow = "none";
+    residentNumberInput.current.style.boxShadow = "none";
+  }
+
+  function backToDefaultValue() {
+    mailNumberInput.current.value = "";
+    residentNumberInput.current.value = "";
+    remarkInput.current.value = "";
+    receiverSelect.current.style.boxShadow = "none";
+    setMailNumber("");
+    setResidentNumber("");
+    setReceiver("");
+    setFamilyMembers([]);
+    setMailType("普通平信");
+    setPlace("信箱");
+    updateReceiveDate(
+      new Date().getFullYear(),
+      new Date().getMonth() + 1,
+      new Date().getDate()
+    );
+    setRemark("");
+  }
+
   function prepareToUpload() {
     let data;
     const focusBoxShadow = "0px 0px 5px 3px rgba(243, 196, 95, 0.52)";
-    const inputs = document.querySelectorAll("input");
     const checkMailNumberResult = checkNumbers(mailNumberInput.current.value);
 
-    for (let i = 0; i < inputs.length; i++) {
-      inputs[i].style.boxShadow = "none";
-    }
+    initInputDisplay();
 
     const index = familyMembers.indexOf(receiver);
     const receiverEmail = familyMembersEmail[index];
@@ -165,10 +182,6 @@ export function UpdateMailList(props) {
       status: false,
       remark: remark,
     };
-
-    /********************* 
-      Check inputs format
-    **********************/
 
     if (checkMailNumberResult === false) {
       setShowAlert(true);
@@ -195,33 +208,8 @@ export function UpdateMailList(props) {
         setSuccessAlert(false);
       }, 2000);
 
-      // back to initial condition
-      for (let i = 0; i < inputs.length; i++) {
-        inputs[i].value = "";
-      }
-      receiverSelect.current.value = "";
-      receiverSelect.current.style.border = "1px solid #96bbbb";
-      setMailNumber("");
-      setResidentNumber("");
-      setReceiver("");
-      setFamilyMembers([]);
-      setMailType("普通平信");
-      setPlace("信箱");
-      updateReceiveDate(
-        new Date().getFullYear(),
-        new Date().getMonth() + 1,
-        new Date().getDate()
-      );
+      backToDefaultValue();
     }
-  }
-
-  function toggleEmailForm(e) {
-    e.preventDefault();
-    isEditingMail === true ? setIsEditingMail(false) : setIsEditingMail(true);
-  }
-
-  function closeForm() {
-    setIsEditingMail(false);
   }
 
   useEffect(() => {
@@ -293,7 +281,9 @@ export function UpdateMailList(props) {
             onChange={updateHook}
           >
             <option>請選擇</option>
-            {ReceiverOptions}
+            {familyMembers.map((member) => {
+              return <option key={nanoid()}>{member}</option>;
+            })}
           </select>
           <label
             className={`${styles.updateMailLabel} ${styles.itemTitleMailType}`}
@@ -345,6 +335,7 @@ export function UpdateMailList(props) {
             備註
           </label>
           <input
+            ref={remarkInput}
             id="remark"
             className={`${styles.item} ${styles.itemRemark}`}
             type="text"
@@ -356,7 +347,9 @@ export function UpdateMailList(props) {
           <button
             className={styles.informBtn}
             id="informBtn"
-            onClick={toggleEmailForm}
+            onClick={() => {
+              setIsEditingMail(true);
+            }}
           >
             通知收件人
             <div className={styles.imgWrapper}>
@@ -381,16 +374,18 @@ export function UpdateMailList(props) {
           )}
         </div>
       </div>
+      {isEditingMail && (
+        <EmailForm
+          receiver={receiver}
+          receiverEmail={receiverEmail}
+          mailType={mailType}
+          place={place}
+          closeForm={() => {
+            setIsEditingMail(false);
+          }}
+        />
+      )}
 
-      <EmailForm
-        receiver={receiver}
-        receiverEmail={receiverEmail}
-        mailType={mailType}
-        place={place}
-        isEditingMail={isEditingMail}
-        toggleEmailForm={toggleEmailForm}
-        closeForm={closeForm}
-      />
       {showSuccessAlert && <AlertSuccessMsg successMessage={successMessage} />}
     </div>
   );
