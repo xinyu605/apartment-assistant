@@ -30,10 +30,6 @@ export default function UpdateResident(props) {
   const remindFloor = useRef(null);
   const remindResidentNumbers = useRef(null);
 
-  /**************************************************
-  Create / Delete one more family member input form
-  ***************************************************/
-
   function createInputs(e) {
     e.preventDefault();
     setFamilyMemberForm([
@@ -49,9 +45,6 @@ export default function UpdateResident(props) {
     setFamilyMemberForm(newFamilyMembersForm);
   }
 
-  /*********************************
-  Check input when user input value
-  **********************************/
   function checkRemind(e) {
     switch (e.currentTarget.id) {
       case "floor":
@@ -86,10 +79,6 @@ export default function UpdateResident(props) {
         break;
     }
   }
-
-  /************************
-  Packing user's input value
-  **************************/
 
   function packingInfo(e) {
     e.preventDefault();

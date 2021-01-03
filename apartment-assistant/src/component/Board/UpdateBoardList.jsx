@@ -25,7 +25,6 @@ export default function UpdateBoardList() {
 
   function prepareToAnnounce(e) {
     e.preventDefault();
-    const inputs = updateForm.current.querySelectorAll("input");
     let dd = new Date();
     let updateTime = transferToFirebaseTimeStamp(
       dd.getFullYear(),
@@ -57,16 +56,19 @@ export default function UpdateBoardList() {
         setSuccessAlert(false);
       }, 2001);
 
-      inputs.forEach((input) => {
-        input.value = "";
-      });
-      content.current.value = "";
-      updateDate(
-        new Date().getFullYear(),
-        new Date().getMonth() + 1,
-        new Date().getDate()
-      );
+      backToDefaultValue();
     }
+  }
+
+  function backToDefaultValue() {
+    author.current.value = "";
+    topic.current.value = "";
+    content.current.value = "";
+    updateDate(
+      new Date().getFullYear(),
+      new Date().getMonth() + 1,
+      new Date().getDate()
+    );
   }
 
   function updateDate(year, month, date) {
