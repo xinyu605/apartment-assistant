@@ -54,11 +54,6 @@ export default function Board() {
     setShowDeleteConfirm(false);
   }
 
-  function cancelConfirm(e) {
-    e.preventDefault();
-    setShowDeleteConfirm(false);
-  }
-
   return (
     <div className={styles.boardPage}>
       <div className={styles.boardList}>
@@ -75,12 +70,16 @@ export default function Board() {
         <DetailArea details={details} deleteIssue={deleteIssue} />
       </div>
       <UpdateBoardList />
-      <ConfirmMsg
-        showConfirm={showDeleteConfirm}
-        confirmMessage={confirmMessage}
-        confirmAction={confirmDelete}
-        cancelConfirm={cancelConfirm}
-      />
+      {showDeleteConfirm && (
+        <ConfirmMsg
+          confirmMessage={confirmMessage}
+          confirmAction={confirmDelete}
+          cancelConfirm={() => {
+            setShowDeleteConfirm(false);
+          }}
+        />
+      )}
+
       <ScrollToTopBtn />
     </div>
   );

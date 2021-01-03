@@ -121,11 +121,8 @@ export default function SignUp(props) {
           emailSignUpInput.current.value = "";
           passwordSignUpInput.current.value = "";
 
-          //move image card
           window.setTimeout(() => {
-            const imageCard = document.querySelector("#imageCard");
-            imageCard.style.transform = "translateX(0px)";
-            imageCard.style.transition = "all 0.5s ease";
+            props.autoMoveImageCardToLeft();
           }, 500);
         } else {
           setAlertbox(true);

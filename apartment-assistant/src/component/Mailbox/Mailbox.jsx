@@ -70,11 +70,6 @@ export default function Mailbox() {
     setShowDeleteConfirm(false);
   }
 
-  function cancelConfirm(e) {
-    e.preventDefault();
-    setShowDeleteConfirm(false);
-  }
-
   return (
     <div className={styles.mailBox}>
       <MailList
@@ -85,12 +80,16 @@ export default function Mailbox() {
         deleteMail={deleteMail}
       />
       <UpdateMailList untakenMails={untakenData} residentList={residentList} />
-      <ConfirmMsg
-        showConfirm={showDeleteConfirm}
-        confirmMessage={confirmMessage}
-        confirmAction={confirmDelete}
-        cancelConfirm={cancelConfirm}
-      />
+      {showDeleteConfirm && (
+        <ConfirmMsg
+          confirmMessage={confirmMessage}
+          confirmAction={confirmDelete}
+          cancelConfirm={() => {
+            setShowDeleteConfirm(false);
+          }}
+        />
+      )}
+
       <ScrollToTopBtn />
     </div>
   );

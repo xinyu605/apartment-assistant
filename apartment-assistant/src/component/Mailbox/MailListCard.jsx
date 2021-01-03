@@ -2,6 +2,8 @@ import React from "react";
 import styles from "./MailList.module.scss";
 import { showDate } from "./../../utils/lib";
 import trashIcon from "./../../img/trash555.svg";
+import takeBox from "./../../img/takeBox555.svg";
+import noTakeBox from "./../../img/noTakeBox555.svg";
 
 export default function MailListCard(props) {
   let list = props.list;
@@ -30,7 +32,6 @@ export default function MailListCard(props) {
       <div className={`${styles.listItems} ${styles.itemReceiverName}`}>
         {list.receiverName}
       </div>
-      {/* {list.receiver ? list.receiver.name : ""} */}
       <div className={`${styles.listTitle} ${styles.titleMailType}`}>類型</div>
       <div className={`${styles.listItems} ${styles.itemMailType}`}>
         {list.mailType}
@@ -55,7 +56,11 @@ export default function MailListCard(props) {
           id={`status${list.mailId}`}
           onClick={props.changeMailStatus}
         >
-          <img src={props.stateController} title={props.description} />
+          <img
+            src={props.state ? noTakeBox : takeBox}
+            alt=""
+            title={props.state ? "改為未領取" : "改為已領取"}
+          />
         </button>
         <div
           className={styles.trashImg}

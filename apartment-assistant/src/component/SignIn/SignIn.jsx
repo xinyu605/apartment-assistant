@@ -149,6 +149,11 @@ export default function SignIn(props) {
     }
   }
 
+  function autoMoveImageCardToLeft() {
+    imageCard.current.style.transform = "translateX(0px)";
+    imageCard.current.style.transition = "all 0.5s ease";
+  }
+
   function exchangeCards(e) {
     if (e.currentTarget.id === "clickToSignUpMobile") {
       setDisplayMode("signUpMobile");
@@ -282,6 +287,7 @@ export default function SignIn(props) {
 
         <SignUp
           moveCard={moveCard}
+          autoMoveImageCardToLeft={autoMoveImageCardToLeft}
           exchangeCards={exchangeCards}
           displayMode={displayMode}
         />

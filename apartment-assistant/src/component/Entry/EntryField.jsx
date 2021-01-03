@@ -159,11 +159,6 @@ export default function EntryField(props) {
     }, 2001);
   }
 
-  function cancelConfirm(e) {
-    e.preventDefault();
-    setShowDeleteOrderConfirm(false);
-  }
-
   return (
     <div className={styles.field} id="fieldRecord">
       <div className={styles.title}>
@@ -228,12 +223,15 @@ export default function EntryField(props) {
         {showSuccessAlert && (
           <AlertSuccessMsg successMessage={successMessage} />
         )}
-        <ConfirmMsg
-          showConfirm={showDeleteOrderConfirm}
-          confirmMessage={confirmMessage}
-          confirmAction={confirmCancelOrder}
-          cancelConfirm={cancelConfirm}
-        />
+        {showDeleteOrderConfirm && (
+          <ConfirmMsg
+            confirmMessage={confirmMessage}
+            confirmAction={confirmCancelOrder}
+            cancelConfirm={() => {
+              setShowDeleteOrderConfirm(false);
+            }}
+          />
+        )}
       </div>
     </div>
   );

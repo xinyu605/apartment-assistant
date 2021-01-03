@@ -283,13 +283,16 @@ export default function Field(props) {
         />
       )}
       {showSuccessAlert && <AlertSuccessMsg successMessage={successMessage} />}
+      {showDeleteOrderConfirm && (
+        <ConfirmMsg
+          confirmMessage={confirmMessage}
+          confirmAction={confirmCancelOrder}
+          cancelConfirm={() => {
+            setShowDeleteOrderConfirm(false);
+          }}
+        />
+      )}
 
-      <ConfirmMsg
-        showConfirm={showDeleteOrderConfirm}
-        confirmMessage={confirmMessage}
-        confirmAction={confirmCancelOrder}
-        cancelConfirm={cancelConfirm}
-      />
       <ScrollToTopBtn />
     </div>
   );

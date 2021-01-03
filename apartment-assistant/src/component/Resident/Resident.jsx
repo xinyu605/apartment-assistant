@@ -60,11 +60,6 @@ export default function Resident() {
     setShowDeleteConfirm(false);
   }
 
-  function cancelConfirm(e) {
-    e.preventDefault();
-    setShowDeleteConfirm(false);
-  }
-
   return (
     <div className={styles.residentPage}>
       <div className={styles.header}>
@@ -109,12 +104,16 @@ export default function Resident() {
         deleteResident={deleteResident}
       />
       <UpdateResident residentList={residentList} />
-      <ConfirmMsg
-        showConfirm={showDeleteConfirm}
-        confirmMessage={confirmMessage}
-        confirmAction={confirmDelete}
-        cancelConfirm={cancelConfirm}
-      />
+      {showDeleteConfirm && (
+        <ConfirmMsg
+          confirmMessage={confirmMessage}
+          confirmAction={confirmDelete}
+          cancelConfirm={() => {
+            setShowDeleteConfirm(false);
+          }}
+        />
+      )}
+
       <ScrollToTopBtn />
     </div>
   );

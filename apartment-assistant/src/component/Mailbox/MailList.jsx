@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState } from "react";
 import MailListCard from "./MailListCard";
 import ConfirmMsg from "./../Common/ConfirmMsg";
 import inboxUntaken from "./../../img/inboxUntaken.svg";
 import inboxTaken from "./../../img/inboxTaken.svg";
-import takeBox from "./../../img/takeBox555.svg";
-import noTakeBox from "./../../img/noTakeBox555.svg";
 import styles from "./MailList.module.scss";
 import { scrollToTarget } from "./../../utils/lib";
 import { updateMailStatus } from "./../../firebase";
@@ -14,22 +12,7 @@ export function MailList(props) {
   const [changedMailId, setChangedMailId] = useState("");
   const [confirmMessage, setConfirmMessage] = useState("");
 
-  let lists = [];
-  let headerImg;
-  let stateController;
-  let description;
-
-  if (props.state === false) {
-    lists = props.untakenMails;
-    headerImg = inboxUntaken;
-    stateController = takeBox;
-    description = "改為已領取";
-  } else {
-    lists = props.takenMails;
-    headerImg = inboxTaken;
-    stateController = noTakeBox;
-    description = "改為未領取";
-  }
+  let lists = props.state ? props.takenMails : props.untakenMails;
 
   function changeMailStatus(e) {
     setChangedMailId(e.currentTarget.id);
@@ -39,16 +22,10 @@ export function MailList(props) {
 
   function confirmChangeStatus(e) {
     e.preventDefault();
-    let status;
+    let status = props.state ? false : true;
     const mailId = changedMailId.slice(6);
-    props.state ? (status = false) : (status = true);
     updateMailStatus(mailId, status);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    setShowChangeStatusConfirm(false);
-  }
-
-  function cancelConfirm(e) {
-    e.preventDefault();
     setShowChangeStatusConfirm(false);
   }
 
@@ -57,7 +34,7 @@ export function MailList(props) {
       <div className={styles.header}>
         <div className={styles.titleContainer}>
           <div className={styles.titleImg}>
-            <img src={headerImg} />
+            <img src={props.state ? inboxTaken : inboxUntaken} />
           </div>
           <h3 className={styles.title}>信件包裹列表</h3>
         </div>
@@ -106,16 +83,18 @@ export function MailList(props) {
       <ListBody
         lists={lists}
         changeMailStatus={changeMailStatus}
-        stateController={stateController}
-        description={description}
+        state={props.state}
         deleteMail={props.deleteMail}
       />
-      <ConfirmMsg
-        showConfirm={showChangeStatusConfirm}
-        confirmMessage={confirmMessage}
-        confirmAction={confirmChangeStatus}
-        cancelConfirm={cancelConfirm}
-      />
+      {showChangeStatusConfirm && (
+        <ConfirmMsg
+          confirmMessage={confirmMessage}
+          confirmAction={confirmChangeStatus}
+          cancelConfirm={() => {
+            setShowChangeStatusConfirm(false);
+          }}
+        />
+      )}
     </div>
   );
 }
@@ -154,9 +133,8 @@ function ListBody(props) {
             <MailListCard
               key={`mailListCard${list.mailId}`}
               list={list}
+              state={props.state}
               changeMailStatus={props.changeMailStatus}
-              stateController={props.stateController}
-              description={props.description}
               deleteMail={props.deleteMail}
             />
           );
