@@ -15,7 +15,10 @@ export default function SignIn(props) {
   let history = useHistory();
   const [emailSignIn, setEmailSignIn] = useState("");
   const [passwordSignIn, setPasswordSignIn] = useState("");
-  const [showSignInMobile, setSignInMobile] = useState(true);
+  const [displayMode, setDisplayMode] = useState("signIn"); //signIn, signUp, signInMobile, signUpMobile
+  const [viewWidth, setViewWidth] = useState(
+    document.documentElement.clientWidth
+  );
 
   const [showAlertbox, setAlertbox] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -136,9 +139,11 @@ export default function SignIn(props) {
 
   function moveCard(e) {
     if (e.currentTarget.id === "clickToSignUp") {
+      setDisplayMode("signUp");
       imageCard.current.style.transform = "translateX(360px)";
       imageCard.current.style.transition = "all 0.5s ease";
     } else {
+      setDisplayMode("signIn");
       imageCard.current.style.transform = "translateX(0px)";
       imageCard.current.style.transition = "all 0.5s ease";
     }
@@ -146,23 +151,38 @@ export default function SignIn(props) {
 
   function exchangeCards(e) {
     if (e.currentTarget.id === "clickToSignUpMobile") {
-      setSignInMobile(false);
+      setDisplayMode("signUpMobile");
     } else {
-      setSignInMobile(true);
+      setDisplayMode("signInMobile");
     }
   }
 
   useEffect(() => {
-    if (showSignInMobile) {
+    if (displayMode === "signInMobile") {
       signInCard.current.style.transform = "translateY(0px)";
       signInCard.current.style.opacity = "1";
-      signInCard.current.style.transition = "all 0.5s ease";
-    } else {
+    } else if (displayMode === "signUpMobile") {
       signInCard.current.style.transform = "translateY(410px)";
       signInCard.current.style.opacity = "0";
-      signInCard.current.style.transition = "all 0.5s ease";
+    } else {
+      signInCard.current.style.transform = "translateY(0px)";
+      signInCard.current.style.opacity = "1";
     }
-  }, [showSignInMobile]);
+  }, [displayMode]);
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      setViewWidth(document.documentElement.clientWidth);
+    });
+  });
+
+  useEffect(() => {
+    if (viewWidth > 920) {
+      setDisplayMode("signIn");
+    } else {
+      setDisplayMode("signInMobile");
+    }
+  }, [viewWidth]);
 
   return (
     <div className={styles.body}>
@@ -263,7 +283,7 @@ export default function SignIn(props) {
         <SignUp
           moveCard={moveCard}
           exchangeCards={exchangeCards}
-          showSignInMobile={showSignInMobile}
+          displayMode={displayMode}
         />
       </div>
       {showAlertbox && (

@@ -31,16 +31,20 @@ export default function SignUp(props) {
   const signUpCard = useRef(null);
 
   useEffect(() => {
-    if (props.showSignInMobile) {
+    if (props.displayMode === "signInMobile") {
       signUpCard.current.style.transform = "translateY(0px)";
       signUpCard.current.style.opacity = "0";
-      signUpCard.current.style.transition = "all 0.5s ease";
-    } else {
+    } else if (props.displayMode === "signUpMobile") {
       signUpCard.current.style.transform = "translateY(-410px)";
       signUpCard.current.style.opacity = "1";
-      signUpCard.current.style.transition = "all 0.5s ease";
+    } else if (props.displayMode === "signIn") {
+      signUpCard.current.style.transform = "translateY(0px)";
+      signUpCard.current.style.opacity = "0";
+    } else {
+      signUpCard.current.style.transform = "translateY(0px)";
+      signUpCard.current.style.opacity = "1";
     }
-  }, [props.showSignInMobile]);
+  }, [props.displayMode]);
 
   function checkSignUpInput(e) {
     const target = e.currentTarget;
@@ -106,7 +110,6 @@ export default function SignUp(props) {
       checkUserName(userName) === true
     ) {
       nativeSignUp(emailSignUp, passwordSignUp, userName).then((result) => {
-        console.log(result);
         if (result === "success") {
           setSuccessAlert(true);
           setSuccessMessage("註冊成功！請重新登入");
