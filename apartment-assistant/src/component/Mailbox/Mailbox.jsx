@@ -17,21 +17,29 @@ export default function Mailbox() {
   const [confirmMessage, setConfirmMessage] = useState("");
 
   useEffect(() => {
-    getMailList(false, getUntakenData);
+    const untakenMails = getMailList(false, getUntakenData);
     function getUntakenData(untakenMails) {
       setUntakenData(untakenMails);
     }
-    getMailList(true, getTakenData);
+    const takenMails = getMailList(true, getTakenData);
     function getTakenData(takenMails) {
       setTakenData(takenMails);
     }
+
+    return () => {
+      untakenMails();
+      takenMails();
+    };
   }, []);
 
   useEffect(() => {
-    getResidentList(setResidentData);
+    const residentList = getResidentList(setResidentData);
     function setResidentData(residents) {
       setResidentList(residents);
     }
+    return () => {
+      residentList();
+    };
   }, []);
 
   function toggleState(e) {

@@ -47,7 +47,7 @@ export function getUserProfile(uid) {
 }
 
 export function getBoardList(callback) {
-  refBoard.onSnapshot((querySnapshot) => {
+  return refBoard.onSnapshot((querySnapshot) => {
     let data = [];
     querySnapshot.forEach((doc) => {
       data = [...data, doc.data()];
@@ -57,7 +57,7 @@ export function getBoardList(callback) {
 }
 
 export function getResidentList(callback) {
-  refResident.orderBy("residentNumbers").onSnapshot((querySnapshot) => {
+  return refResident.orderBy("residentNumbers").onSnapshot((querySnapshot) => {
     let data = [];
     querySnapshot.forEach((doc) => {
       data = [...data, doc.data()];
@@ -67,7 +67,7 @@ export function getResidentList(callback) {
 }
 
 export function getMailList(status = false, callback) {
-  refMailbox
+  return refMailbox
     .where("status", "==", status) //status= true (taken) | false (untaken)
     .orderBy("mailNumbers", "asc")
     .onSnapshot(function (querySnapshot) {
@@ -93,7 +93,7 @@ export function getUserMailList(email, status = false, callback) {
 }
 
 export function getExistedOrders(year, month, date, field, callback) {
-  refField
+  return refField
     .where("date", "==", `${year}${month}${date}`)
     .where("field", "==", field)
     .onSnapshot((querySnapshot) => {

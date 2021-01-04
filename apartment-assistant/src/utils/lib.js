@@ -12,16 +12,9 @@ export function showCalendar(getYear, getMonth, blockPast = false) {
   const todayMonth = new Date().getMonth();
   const todayDate = new Date().getDate();
   const todayTime = new Date(todayYear, todayMonth, todayDate).getTime();
-  const monthNormal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  const monthOlympic = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const dateContainer = createDateElements("#date");
-  const firstDayInSelectedMonth = dayStartInSelectedMonth(getYear, getMonth); //return 0 means Sunday
-  const totalDaysThisMonth = daysInThisMonth(
-    getYear,
-    getMonth,
-    monthOlympic,
-    monthNormal
-  );
+  const firstDayInSelectedMonth = dayStartInSelectedMonth(getYear, getMonth);
+  const totalDaysThisMonth = daysInThisMonth(getYear, getMonth);
 
   //在當月第一天前面建立空白的<li>
   for (let i = 0; i < firstDayInSelectedMonth; i++) {
@@ -59,7 +52,9 @@ export function dayStartInSelectedMonth(year, month) {
   return tmpDate.getDay();
 }
 
-export function daysInThisMonth(year, month, monthOlympic, monthNormal) {
+export function daysInThisMonth(year, month) {
+  const monthNormal = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  const monthOlympic = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const tmpYear = year % 4;
   let daysInTheMonth = 0;
   if (tmpYear === 0) {

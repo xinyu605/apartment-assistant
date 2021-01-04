@@ -34,19 +34,17 @@ export default function EntryField(props) {
   const [showDeleteOrderConfirm, setShowDeleteOrderConfirm] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
 
-  /************************* 
-    show weekly date choice
-  **************************/
   useEffect(() => {
     const thisField = selectedField.current.value;
     setOrderRecord([]);
 
     const newWeeklyTableTitle = [];
+    const unsubscribes = [];
     for (let i = 0; i < 7; i++) {
       const newDay = createWeeklyTitle(i);
       newWeeklyTableTitle.push(newDay);
 
-      getExistedOrders(
+      unsubscribes[i] = getExistedOrders(
         `${newDay.year}`,
         `${newDay.month}`,
         `${newDay.date}`,
@@ -59,6 +57,11 @@ export default function EntryField(props) {
       }
     }
     setWeeklyTableTitle(newWeeklyTableTitle);
+    return () => {
+      unsubscribes.forEach((unsubscribe) => {
+        unsubscribe();
+      });
+    };
   }, [field, cancelOrderId]);
 
   useEffect(() => {

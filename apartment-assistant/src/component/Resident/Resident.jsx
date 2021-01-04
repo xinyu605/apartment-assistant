@@ -21,10 +21,13 @@ export default function Resident() {
   const searchInput = useRef(null);
 
   useEffect(() => {
-    getResidentList(setResidentData);
+    const residentList = getResidentList(setResidentData);
     function setResidentData(residents) {
       setResidentList(residents);
     }
+    return () => {
+      residentList();
+    };
   }, []);
 
   function searchResident(e) {

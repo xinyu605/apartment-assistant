@@ -19,7 +19,7 @@ export default function Board() {
   const [confirmMessage, setConfirmMessage] = useState("");
 
   useEffect(() => {
-    getBoardList(handleBoardList);
+    const issues = getBoardList(handleBoardList);
     function handleBoardList(boardList) {
       setMatters(boardList);
       setDetails(boardList[0]);
@@ -30,9 +30,10 @@ export default function Board() {
         setMatterStatus(currentMatterStatus);
       }
     }
+    return () => {
+      issues();
+    };
   }, []);
-
-  useEffect(() => {}, [issueIndex]);
 
   function updateMatterStatus(index) {
     const currentMatterStatus = [];

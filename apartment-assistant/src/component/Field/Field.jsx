@@ -46,11 +46,12 @@ export default function Field(props) {
     setOrderRecord([]);
 
     const newWeeklyTableTitle = [];
+    const unsubscribes = [];
     for (let i = 0; i < 7; i++) {
       const newDay = createWeeklyTitle(i);
       newWeeklyTableTitle.push(newDay);
 
-      getExistedOrders(
+      unsubscribes[i] = getExistedOrders(
         `${newDay.year}`,
         `${newDay.month}`,
         `${newDay.date}`,
@@ -63,6 +64,12 @@ export default function Field(props) {
       }
     }
     setWeeklyTableTitle(newWeeklyTableTitle);
+
+    return () => {
+      unsubscribes.forEach((unsubscribe) => {
+        unsubscribe();
+      });
+    };
   }, [field, cancelOrderId]);
 
   useEffect(() => {

@@ -38,16 +38,21 @@ export default function Entry(props) {
       }
     });
 
-    getUserMailList(userEmail, false, getMailListData);
+    const untakenMails = getUserMailList(userEmail, false, getMailListData);
     function getMailListData(mailList) {
       setUserMailList(mailList);
       setMailCount(mailList.length);
     }
 
-    getUserMailList(userEmail, true, getMailHistory);
+    const takenMails = getUserMailList(userEmail, true, getMailHistory);
     function getMailHistory(mailList) {
       setUserMailHistory(mailList);
     }
+
+    return () => {
+      untakenMails();
+      takenMails();
+    };
   }, [userEmail]);
 
   return (

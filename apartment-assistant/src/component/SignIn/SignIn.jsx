@@ -179,6 +179,11 @@ export default function SignIn(props) {
     window.addEventListener("resize", () => {
       setViewWidth(document.documentElement.clientWidth);
     });
+    return () => {
+      window.removeEventListener("resize", () => {
+        setViewWidth(document.documentElement.clientWidth);
+      });
+    };
   });
 
   useEffect(() => {

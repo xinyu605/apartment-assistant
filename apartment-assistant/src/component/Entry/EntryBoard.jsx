@@ -13,6 +13,9 @@ export default function EntryBoard() {
     function getIssues(boardList) {
       setIssues(boardList);
     }
+    return () => {
+      getBoardList(getIssues);
+    };
   }, []);
 
   return (
