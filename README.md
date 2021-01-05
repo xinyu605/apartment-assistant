@@ -41,11 +41,11 @@ https://apartment-assistant-project.web.app/
 * Version Control: Git/GitHub
 
 ## Flow Chart
-
+![flowChart](https://raw.githubusercontent.com/xinyu605/apartment-assistant/main/apartment-assistant/Apartment_Assistant_Flow_chart.v2.png)
 
 ## Website Demo
-* Manager creates new received mail/package information
+* Create new received mail/package information, and notify receiver by email
+![screenshot](https://raw.githubusercontent.com/xinyu605/apartment-assistant/main/apartment-assistant/createMailProcess.gif)
 
-* Manager notifies receiver by email
-
-* Residents get their own mail record
+## Contact
+Email: xinyuyan605@gmail.com
