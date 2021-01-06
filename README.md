@@ -6,6 +6,7 @@ An community management platform for managers and residents. With Apartment Assi
 ## Demo
 
 https://apartment-assistant-project.web.app/  
+
 * User (Manager): admin@apartment.com  
 * Password (Manager): apartment
 * User (Resident): test@apartment.com
@@ -13,30 +14,35 @@ https://apartment-assistant-project.web.app/
 
 ## Technologies
 
-#### Front-End Basic
+### Front-End Language
 
-* HTML/CSS/JavaScript (ES6)
+* HTML
+* CSS
+* JavaScript (ES6)
+
+### Layout
+
 * Responsive Web Design (RWD)
 * Flexbox & Grid Layout
 
-#### Front-End Frameworks
+### Front-End Frameworks
 
 * React
 * React Router
 * SCSS
 
-#### Back-End Frameworks
+### Back-End Frameworks
 * Node.js
 * Node Package Manager (NPM)
 
-#### Firebase Services
+### Firebase Services
 
 * Authentication
 * Cloud Firestore
 * Cloud Function
 * Hosting
 
-#### Other
+### Other
 * Compiler: Babel
 * Version Control: Git/GitHub
 
