@@ -14,7 +14,7 @@ https://apartment-assistant-project.web.app/
 
 ## Technologies
 
-### Front-End Language
+### Front-End Basic
 
 * HTML
 * CSS
@@ -31,16 +31,16 @@ https://apartment-assistant-project.web.app/
 * React Router
 * SCSS
 
-### Back-End Frameworks
-* Node.js
-* Node Package Manager (NPM)
-
 ### Firebase Services
 
 * Authentication
 * Cloud Firestore
 * Cloud Function
 * Hosting
+
+### Tool for Development
+
+* Node Package Manager (NPM)
 
 ### Other
 * Compiler: Babel
