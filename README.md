@@ -44,14 +44,20 @@ https://apartment-assistant-project.web.app/
 
 ### Other
 * Compiler: Babel
-* Version Control: Git/GitHub
 
 ## Flow Chart
 ![flowChart](https://raw.githubusercontent.com/xinyu605/apartment-assistant/main/apartment-assistant/Apartment_Assistant_Flow_chart.v2.png)
 
 ## Website Demo
+
 * Create new received mail/package information, and notify receiver by email
 ![screenshot](https://raw.githubusercontent.com/xinyu605/apartment-assistant/main/apartment-assistant/createMailProcess.gif)
+
+## Future Features
+
+* Create message board for residents to discuss or vote for public issues
+* Create facility maintenance record and providing the feature of uploading photos
+* Parking spaces rental management
 
 ## Contact
 Email: xinyuyan605@gmail.com
