@@ -1,7 +1,9 @@
 # Apartment Assistant
 
-An community management platform for managers and residents. With Apartment Assistant, it's convenient for manager to integrate residents information, mails collection and facility rental services.
-
+* A community management platform provided complete user flow and user friendly interface
+* The user could login as different roles from a manager to general residents to integrate trivial jobs of community management by access control
+* To realize intuitive user experiences, autofill form, animated popups, and input check has been taken care of
+* Put emphasis on data structure design to make it more accessible, like family member info
 
 ## Demo
 
@@ -41,6 +43,8 @@ https://apartment-assistant-project.web.app/
 ### Tool for Development
 
 * Node Package Manager (NPM)
+* ESLint
+* Prettier
 
 ### Other
 * Compiler: Babel
