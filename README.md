@@ -50,6 +50,9 @@ https://apartment-assistant-project.web.app/
 
 ## Website Demo
 
+* Login as Resident by general account (access control)
+![loginResident](https://github.com/xinyu605/apartment-assistant/blob/main/apartment-assistant/loginProcessResident.gif?raw=true)  
+
 * Create new received mail/package information, and notify receiver by email
 ![screenshot](https://raw.githubusercontent.com/xinyu605/apartment-assistant/main/apartment-assistant/createMailProcess.gif)
 
