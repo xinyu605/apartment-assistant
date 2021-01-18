@@ -20,29 +20,23 @@ export function EmailForm(props) {
   const subjectInput = useRef(null);
   const contentTextarea = useRef(null);
 
-  /******************************************* 
-    Put default values into email form inputs
-  ********************************************/
   useEffect(() => {
-    const emailDefault = document.querySelector("#recipientEmail");
-    const subjectDefault = document.querySelector("#subject");
-    const contentDefault = document.querySelector("#content");
-    if (emailDefault) {
+    if (recipientEmailInput.current) {
       if (props.receiverEmail) {
-        emailDefault.value = props.receiverEmail;
+        recipientEmailInput.current.value = props.receiverEmail;
       } else {
-        emailDefault.value = "";
+        recipientEmailInput.current.value = "";
       }
 
-      setRecipientEmail(emailDefault.value);
+      setRecipientEmail(recipientEmailInput.current.value);
     }
-    if (subjectDefault) {
-      subjectDefault.value = "您有一則新的信件/包裹通知";
-      setSubject(subjectDefault.value);
+    if (subjectInput.current) {
+      subjectInput.current.value = "您有一則新的信件/包裹通知";
+      setSubject(subjectInput.current.value);
     }
-    if (contentDefault) {
-      contentDefault.value = `${props.receiver}先生/小姐您好，您有一份${props.mailType}今日寄達，請撥空至${props.place}領取，謝謝！`;
-      setContent(contentDefault.value);
+    if (contentTextarea.current) {
+      contentTextarea.current.value = `${props.receiver}先生/小姐您好，您有一份${props.mailType}今日寄達，請撥空至${props.place}領取，謝謝！`;
+      setContent(contentTextarea.current.value);
     }
   }, [props]);
 
@@ -63,9 +57,6 @@ export function EmailForm(props) {
     }
   }
 
-  /*************************************************** 
-    Pass data to firebase cloud function to send email
-   ***************************************************/
   function prepareToSendEmail(e) {
     e.preventDefault();
     const data = {

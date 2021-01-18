@@ -130,8 +130,11 @@ export function scrollToTarget(targetId) {
 }
 
 export function checkUserName(string) {
+  const result = /^\s/.test(string);
   if (string.length === 0) {
     return "姓名欄位不可留空";
+  } else if (result === true) {
+    return "首字不可留空";
   } else {
     return true;
   }

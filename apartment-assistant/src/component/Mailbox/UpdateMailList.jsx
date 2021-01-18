@@ -47,7 +47,7 @@ export function UpdateMailList(props) {
     setDate(date);
   }
 
-  async function getResidentData(residentNumber) {
+  function getResidentData(residentNumber) {
     setResidentNumber(residentNumber);
     setFamilyMembers([]);
     setFamilyMembersEmail([]);

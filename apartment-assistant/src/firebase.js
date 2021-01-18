@@ -1,16 +1,6 @@
 import firebase from "firebase";
 import "firebase/functions";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDl0B2I0o0r4mptX5VyvBmZVChAXqCgnCE",
-  authDomain: "apartment-assistant-project.firebaseapp.com",
-  databaseURL: "https://apartment-assistant-project.firebaseio.com",
-  projectId: "apartment-assistant-project",
-  storageBucket: "apartment-assistant-project.appspot.com",
-  messagingSenderId: "532715045672",
-  appId: "1:532715045672:web:429583f6da1bcd4b6e461d",
-  measurementId: "G-W0TFBHTCR0",
-};
+import { firebaseConfig } from "./firebaseConfig";
 
 firebase.initializeApp(firebaseConfig);
 let db = firebase.firestore();

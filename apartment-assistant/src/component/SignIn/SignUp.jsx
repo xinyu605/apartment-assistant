@@ -52,7 +52,7 @@ export default function SignUp(props) {
     switch (target.id) {
       case "userName":
         const nameInput = checkUserName(target.value);
-        if (nameInput === "姓名欄位不可留空") {
+        if (nameInput === "姓名欄位不可留空" || nameInput === "首字不可留空") {
           remindNameSignUp.current.textContent = nameInput;
           remindNameSignUp.current.style.opacity = "1";
           remindNameSignUp.current.style.transition = "all 0.3s ease";

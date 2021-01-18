@@ -143,6 +143,9 @@ export default function Field(props) {
     ) {
       setAlertbox(true);
       setAlertMessage("欄位不可留空");
+    } else if (checkNameResult === "首字不可留空") {
+      setAlertbox(true);
+      setAlertMessage("使用者名稱首字不可留空");
     } else if (checkEmailResult === "Email格式錯誤") {
       setAlertbox(true);
       setAlertMessage(checkEmailResult);

@@ -5,6 +5,7 @@ import {
   Switch,
   Route,
   useHistory,
+  Redirect,
 } from "react-router-dom";
 import ScrollToTop from "./component/Common/ScrollToTop";
 import { Admin } from "./component/Admin";
@@ -48,6 +49,9 @@ function App() {
               render={(props) => <Admin {...props} logout={logout} />}
             />
             <Route path="/signin" component={SignIn} />
+            <Route path="*">
+              <Redirect to="/" />
+            </Route>
           </Switch>
           {showAlertbox && (
             <Alertbox
